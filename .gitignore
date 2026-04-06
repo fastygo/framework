@@ -11,5 +11,6 @@ static/css/app.css
 .manual/
 .roadmap/
 .gocache/
+.paas/
 **/*.exe
 **/*.log
