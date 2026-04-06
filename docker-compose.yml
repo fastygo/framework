@@ -1,0 +1,46 @@
+services:
+  framework:
+    # Universal starterpoint for PAAS: one-click run from a public repository.
+    # Uses only compose + existing repo files (no Dockerfile required).
+    image: golang:1.22
+    working_dir: /workspace
+    container_name: framework-paas
+    volumes:
+      - ./:/workspace
+    environment:
+      APP_BIND: "0.0.0.0:80"
+      APP_STATIC_DIR: "static"
+      APP_DEFAULT_LOCALE: "en"
+      APP_AVAILABLE_LOCALES: "en,ru"
+      APP_DATA_SOURCE: "fixture"
+    ports:
+      - "80"
+    restart: unless-stopped
+    command: |
+      bash -lc "
+        set -e
+
+        echo 'Installing build dependencies (Node + npm + certs)...'
+        apt-get update
+        apt-get install -y --no-install-recommends curl ca-certificates gnupg
+        curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
+        apt-get install -y --no-install-recommends nodejs
+
+        echo 'Installing project dependencies...'
+        npm ci
+
+        echo 'Preparing Go modules and code generation...'
+        go mod download
+        go mod download github.com/fastygo/ui8kit@v0.2.1
+        go run github.com/a-h/templ/cmd/templ@v0.3.1001 generate
+
+        echo 'Syncing ui8kit css and building Tailwind assets...'
+        npm run sync:ui8kit
+        npm run build:css
+
+        echo 'Building binary...'
+        go build -o /tmp/framework ./cmd/server
+
+        echo 'Running on :80'
+        /tmp/framework
+      "
