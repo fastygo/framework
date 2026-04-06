@@ -1,0 +1,15 @@
+bin/
+tmp/
+.task/
+node_modules/
+.vscode/
+.idea/
+*.exe
+*.log
+*.tmp
+static/css/app.css
+.manual/
+.roadmap/
+.gocache/
+**/*.exe
+**/*.log

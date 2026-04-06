@@ -1,0 +1,22 @@
+package views
+
+import (
+	ui "github.com/fastygo/ui8kit/ui"
+	"github.com/fastygo/ui8kit/utils"
+)
+
+templ WelcomePage(data WelcomePageData) {
+	<div class="app-page">
+		<div class="app-page-header">
+			@ui.Title(ui.TitleProps{}, data.Title)
+			@ui.Text(ui.TextProps{}, data.Description)
+		</div>
+		<div class="app-content-card">
+			<div class={ utils.CardVariant("default") }>
+				<div class="app-actions">
+					@ui.Button(ui.ButtonProps{Variant: "default", Type: "button"}, data.ButtonLabel)
+				</div>
+			</div>
+		</div>
+	</div>
+}

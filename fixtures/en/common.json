@@ -1,0 +1,27 @@
+{
+  "brand_name": "Framework",
+  "theme": {
+    "label": "Theme",
+    "switch_to_dark_label": "Switch to dark mode",
+    "switch_to_light_label": "Switch to light mode"
+  },
+  "language": {
+    "label": "Language",
+    "current_label": "EN",
+    "next_label": "RU",
+    "next_locale": "ru",
+    "available": ["en", "ru"],
+    "locale_labels": {
+      "en": "English",
+      "ru": "Русский"
+    }
+  },
+  "nav": [
+    {
+      "label": "Welcome",
+      "path": "/",
+      "icon": "home",
+      "order": 1
+    }
+  ]
+}

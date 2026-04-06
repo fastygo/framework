@@ -1,0 +1,15 @@
+package partials
+
+import "strings"
+
+templ LanguageToggle(data LanguageToggleData) {
+	<button
+		type="button"
+		id="app-language-toggle"
+		class="app-language-toggle kit-header-action-btn"
+		data-default-locale={ data.DefaultLocale }
+		data-current-locale={ data.CurrentLocale }
+		data-next-locale={ data.NextLocale }
+		data-available-locales={ strings.Join(data.AvailableLocales, ",") }
+	>{ data.Label } • { data.CurrentLabel }</button>
+}
