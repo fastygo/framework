@@ -33,7 +33,8 @@ Phase 0 provides a working baseline with zero domain business logic:
 
 Core parts:
 
-- `cmd/server/main.go` is the composition root
+ - `cmd/server/main.go` is the composition root
+ - `cmd/docs/main.go` is the docs composition root
 - `pkg/app` has config, app builder, and feature interfaces
 - `pkg/core/cqrs` has dispatcher, behaviors, and handler interfaces
 - `pkg/web` has middleware, templ render helper, and error handling
@@ -42,6 +43,11 @@ Core parts:
 - `internal/site/web/views` contains `layout`, `welcome` page, and language partial
 - `internal/site/web/i18n` stores embedded `en` / `ru` JSON content
 - `internal/site/web/static` stores Tailwind entry, UI8Kit CSS, and browser scripts
+- `internal/application/docs` handles docs query use-cases and pre-rendering
+- `internal/site/docs/content` contains docs markdown sources
+- `internal/site/docs/web/views` contains docs templates
+- `internal/site/docs/web/static` stores docs CSS and docs shell script
+- `internal/infra/features/docs` handles docs routes and rendering
 - `docs/QUICKSTART.md` has a shorter startup guide
 
 ## Prerequisites
@@ -82,6 +88,26 @@ make dev
 ```bash
 make build
 ./bin/framework
+```
+
+### Docs site (separate server on 8081)
+
+```bash
+npm run build:docs:css
+go run ./cmd/docs
+```
+
+If `make` is available:
+
+```bash
+make dev-docs
+```
+
+Build docs binary:
+
+```bash
+make build-docs
+./bin/docs
 ```
 
 ### Template generation only
@@ -143,6 +169,7 @@ make css-dev
 Open:
 
 - `http://127.0.0.1:8080`
+- `http://127.0.0.1:8081/docs`
 
 You should see:
 
@@ -155,6 +182,9 @@ You should see:
 
 - `APP_BIND` (default: `127.0.0.1:8080`)
 - `APP_STATIC_DIR` (default: `internal/site/web/static`)
+- Docs site defaults:
+  - `APP_BIND` (default: `127.0.0.1:8081` in docs entrypoint)
+  - `APP_STATIC_DIR` (default: `internal/site/docs/web/static`)
 - `APP_DEFAULT_LOCALE` (default: `en`)
 - `APP_AVAILABLE_LOCALES` (default: `en,ru`)
 - `APP_DATA_SOURCE` (default: `fixture`)

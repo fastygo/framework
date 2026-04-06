@@ -181,17 +181,11 @@ Current business-level capabilities:
 ## Directory map
 
 - `cmd/server/main.go` – app composition and run
-- `cmd/docs/main.go` – docs composition and run on `8081`
 - `pkg/core` – domain primitives (`Entity`, `DomainError`), CQRS
 - `pkg/app` – app builder/config/feature contracts
 - `pkg/web` – middleware, render and error helpers
 - `internal/application/welcome` – use-case/query-handler layer
 - `internal/infra/features/welcome` – HTTP/templ adapter
-- `internal/application/docs` – docs queries and pre-render cache
-- `internal/site/docs/content` – docs markdown sources
-- `internal/site/docs/web/views` – docs templates and layout
-- `internal/site/docs/web/static` – docs CSS and docs shell script
-- `internal/infra/features/docs` – docs routes and rendering module
 - `internal/site/web/views` – templ views and partials
 - `internal/site/web/i18n` – embedded JSON i18n content
 - `internal/site/web/static/css` – Tailwind + UI8Kit CSS pipeline
@@ -205,20 +199,9 @@ Current business-level capabilities:
 
 - `APP_BIND` (default: `127.0.0.1:8080`)
 - `APP_STATIC_DIR` (default: `internal/site/web/static`)
-- Docs site:
-  - `APP_BIND` (default: `127.0.0.1:8081` in docs entrypoint)
-  - `APP_STATIC_DIR` (default: `internal/site/docs/web/static`)
 - `APP_DEFAULT_LOCALE` (default: `en`)
 - `APP_AVAILABLE_LOCALES` (default: `en,ru`)
 - `APP_DATA_SOURCE` (default: `fixture`)
-
-### Docs site run/build commands
-
-- `npm run build:docs:css`
-- `make dev-docs` – run docs site in development mode on `8081`
-- `make build-docs` – build `./bin/docs`
-- `go run ./cmd/docs` – run docs site in place
-- `go run ./cmd/server` and `go run ./cmd/docs` for both apps in parallel
 
 ---
 
@@ -262,8 +245,6 @@ Because `AppBuilder` composes `NavItems` automatically, each feature contributes
     - `go run ./scripts/check-no-root-imports.go`
 - CSS watch:
   - `npm run dev:css`
-- Docs CSS watch:
-  - `npm run dev:docs:css`
 
 ---
 

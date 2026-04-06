@@ -2,6 +2,7 @@ SHELL := /bin/bash
 
 APP := bin/framework
 PKG := ./cmd/server
+DOCS_PKG := ./cmd/docs
 NO_ROOT_IMPORT_CHECK := go run ./scripts/check-no-root-imports.go
 
 dev:
@@ -13,6 +14,16 @@ build:
 	templ generate
 	npm run build:css
 	go build -o $(APP) $(PKG)
+
+dev-docs:
+	templ generate
+	npm run build:docs:css
+	go run $(DOCS_PKG)
+
+build-docs:
+	templ generate
+	npm run build:docs:css
+	go build -o bin/docs $(DOCS_PKG)
 
 css-dev:
 	npm run dev:css

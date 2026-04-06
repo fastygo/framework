@@ -8,6 +8,7 @@ node_modules/
 *.log
 *.tmp
 internal/site/web/static/css/app.css
+internal/site/docs/web/static/css/app.css
 .manual/
 .roadmap/
 .gocache/

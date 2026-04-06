@@ -8,3 +8,5 @@ require (
 )
 
 require github.com/fastygo/ui8kit v0.2.1
+
+require github.com/yuin/goldmark v1.8.2 // indirect

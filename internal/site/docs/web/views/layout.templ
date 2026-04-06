@@ -1,21 +1,19 @@
 package views
 
+import t "github.com/a-h/templ"
 import (
 	"github.com/fastygo/framework/pkg/app"
 	ui8layout "github.com/fastygo/ui8kit/layout"
-	"github.com/fastygo/framework/internal/site/web/views/partials"
-	templ2 "github.com/a-h/templ"
 )
 
-templ Layout(data LayoutData, headExtra templ2.Component, body templ2.Component) {
+templ DocsLayout(data DocsLayoutData, headExtra t.Component, body t.Component) {
 	@ui8layout.Shell(ui8layout.ShellProps{
-		Title:          data.Title,
-		Lang:           data.Locale,
-		BrandName:      data.BrandName,
-		Active:         data.Active,
-		NavItems:       asShellNavItems(data.NavItems),
-		HeadExtra:      layoutHeadExtra(headExtra),
-		HeaderExtra:    partials.HeaderActions(data.LanguageToggle, data.NavItems),
+		Title:       data.Title,
+		BrandName:   data.BrandName,
+		Active:      data.Active,
+		NavItems:    asShellNavItems(data.NavItems),
+		HeadExtra:   docsLayoutHeadExtra(headExtra),
+		HeaderExtra: nil,
 		ThemeToggle: ui8layout.ThemeToggleProps{
 			Label:              data.ThemeToggle.Label,
 			SwitchToDarkLabel:  data.ThemeToggle.SwitchToDarkLabel,
@@ -25,6 +23,11 @@ templ Layout(data LayoutData, headExtra templ2.Component, body templ2.Component)
 	}) {
 		@body
 	}
+}
+
+templ docsLayoutHeadExtra(extra t.Component) {
+	@extra
+	<script src="/static/js/docs-shell.js" defer></script>
 }
 
 func asShellNavItems(items []app.NavItem) []ui8layout.NavItem {

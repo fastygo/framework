@@ -26,10 +26,28 @@ func New(dispatcher *cqrs.Dispatcher, defaultLocale string, availableLocales []s
 		defaultLocale:    defaultLocale,
 		navItems: []app.NavItem{
 			{
-				Label: "Welcome",
-				Path:  "/",
+				Label: "Home",
+				Path:  "#",
 				Icon:  "home",
 				Order: 0,
+			},
+			{
+				Label: "Blog",
+				Path:  "#",
+				Icon:  "book-open",
+				Order: 1,
+			},
+			{
+				Label: "Showcase",
+				Path:  "#",
+				Icon:  "sparkles",
+				Order: 2,
+			},
+			{
+				Label: "Docs",
+				Path:  "#",
+				Icon:  "server",
+				Order: 3,
 			},
 		},
 	}

@@ -10,7 +10,6 @@ import templruntime "github.com/a-h/templ/runtime"
 
 import (
 	ui "github.com/fastygo/ui8kit/ui"
-	"github.com/fastygo/ui8kit/utils"
 )
 
 func WelcomePage(data WelcomePageData) templ.Component {
@@ -34,49 +33,28 @@ func WelcomePage(data WelcomePageData) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"app-page\"><div class=\"app-page-header\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"app-page\"><section class=\"hero\"><div class=\"hero-content\"><p class=\"hero-kicker\">Framework</p>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = ui.Title(ui.TitleProps{}, data.Title).Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = ui.Title(ui.TitleProps{Class: "text-4xl md:text-5xl"}, data.Title).Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = ui.Text(ui.TextProps{}, data.Description).Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "<p class=\"hero-description\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "</div><div class=\"app-content-card\">")
+		var templ_7745c5c3_Var2 string
+		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(data.Description)
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/site/web/views/welcome.templ`, Line: 13, Col: 50}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		var templ_7745c5c3_Var2 = []any{utils.CardVariant("default")}
-		templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var2...)
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "<div class=\"")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		var templ_7745c5c3_Var3 string
-		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(templ.CSSClasses(templ_7745c5c3_Var2).String())
-		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/site/web/views/welcome.templ`, Line: 1, Col: 0}
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "\"><div class=\"app-actions\">")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		templ_7745c5c3_Err = ui.Button(ui.ButtonProps{Variant: "default", Type: "button"}, data.ButtonLabel).Render(ctx, templ_7745c5c3_Buffer)
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "</div></div></div></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "</p><div class=\"hero-actions\"><a class=\"hero-cta hero-cta-primary\" href=\"https://github.com/fastygo/framework\" target=\"_blank\" rel=\"noopener noreferrer\">Github</a> <a class=\"hero-cta hero-cta-secondary\" href=\"https://docs.fastygo.ru\" target=\"_blank\" rel=\"noopener noreferrer\">Docs</a></div></div></section><div class=\"app-content-card\"><div class=\"hero-feature-grid\"><article class=\"hero-feature-card\"><h3 class=\"hero-feature-card-title\">Modular</h3><p>Feature modules split presentation, application logic, and infrastructure adapters.</p></article><article class=\"hero-feature-card\"><h3 class=\"hero-feature-card-title\">Fast bootstrap</h3><p>Clean layered foundation with ready-made CQRS pipeline and middleware stack.</p></article><article class=\"hero-feature-card\"><h3 class=\"hero-feature-card-title\">Production ready</h3><p>Server-side rendering, structured logs, and built-in observability-friendly boundaries.</p></article></div></div></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

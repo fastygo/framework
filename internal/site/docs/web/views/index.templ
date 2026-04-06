@@ -1,0 +1,21 @@
+package views
+
+import t "github.com/a-h/templ"
+
+templ DocsIndex(data DocsIndexData) {
+	<div class="docs-page app-page">
+		<div class="app-page-header">
+			<h1 class="text-2xl font-semibold tracking-tight">Framework Docs</h1>
+			<p class="app-subtle">Pick a document to read the section you need.</p>
+		</div>
+		<div class="app-content-card">
+			<div class="docs-index-grid">
+				for _, item := range data.Pages {
+					<a href={ t.URL("/" + item.Slug) } class="docs-index-item">
+						<h2 class="docs-index-title">{ item.Title }</h2>
+					</a>
+				}
+			</div>
+		</div>
+	</div>
+}

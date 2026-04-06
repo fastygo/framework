@@ -8,14 +8,13 @@ package views
 import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
+import t "github.com/a-h/templ"
 import (
-	templ2 "github.com/a-h/templ"
-	"github.com/fastygo/framework/internal/site/web/views/partials"
 	"github.com/fastygo/framework/pkg/app"
 	ui8layout "github.com/fastygo/ui8kit/layout"
 )
 
-func Layout(data LayoutData, headExtra templ2.Component, body templ2.Component) templ.Component {
+func DocsLayout(data DocsLayoutData, headExtra t.Component, body t.Component) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -56,12 +55,11 @@ func Layout(data LayoutData, headExtra templ2.Component, body templ2.Component) 
 		})
 		templ_7745c5c3_Err = ui8layout.Shell(ui8layout.ShellProps{
 			Title:       data.Title,
-			Lang:        data.Locale,
 			BrandName:   data.BrandName,
 			Active:      data.Active,
 			NavItems:    asShellNavItems(data.NavItems),
-			HeadExtra:   layoutHeadExtra(headExtra),
-			HeaderExtra: partials.HeaderActions(data.LanguageToggle, data.NavItems),
+			HeadExtra:   docsLayoutHeadExtra(headExtra),
+			HeaderExtra: nil,
 			ThemeToggle: ui8layout.ThemeToggleProps{
 				Label:              data.ThemeToggle.Label,
 				SwitchToDarkLabel:  data.ThemeToggle.SwitchToDarkLabel,
@@ -69,6 +67,39 @@ func Layout(data LayoutData, headExtra templ2.Component, body templ2.Component) 
 			},
 			HeaderTrailing: nil,
 		}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var2), templ_7745c5c3_Buffer)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		return nil
+	})
+}
+
+func docsLayoutHeadExtra(extra t.Component) templ.Component {
+	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
+		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
+		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
+			return templ_7745c5c3_CtxErr
+		}
+		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
+		if !templ_7745c5c3_IsBuffer {
+			defer func() {
+				templ_7745c5c3_BufErr := templruntime.ReleaseBuffer(templ_7745c5c3_Buffer)
+				if templ_7745c5c3_Err == nil {
+					templ_7745c5c3_Err = templ_7745c5c3_BufErr
+				}
+			}()
+		}
+		ctx = templ.InitializeContext(ctx)
+		templ_7745c5c3_Var3 := templ.GetChildren(ctx)
+		if templ_7745c5c3_Var3 == nil {
+			templ_7745c5c3_Var3 = templ.NopComponent
+		}
+		ctx = templ.ClearChildren(ctx)
+		templ_7745c5c3_Err = extra.Render(ctx, templ_7745c5c3_Buffer)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<script src=\"/static/js/docs-shell.js\" defer></script>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

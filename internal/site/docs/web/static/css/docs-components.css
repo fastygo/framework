@@ -1,0 +1,133 @@
+.docs-page {
+	@apply space-y-6;
+}
+
+.docs-index-grid {
+	display: grid;
+	gap: 0.75rem;
+	grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+}
+
+.docs-index-item {
+	border: 1px solid var(--border);
+	border-radius: var(--radius);
+	background: var(--card);
+	padding: 1rem;
+	color: var(--card-foreground);
+	text-decoration: none;
+}
+
+.docs-index-item:hover {
+	border-color: var(--ring);
+}
+
+.docs-index-title {
+	font-size: 1rem;
+	font-weight: 500;
+	margin: 0;
+}
+
+.kit-shell-nav-desktop {
+	display: flex;
+	flex-direction: column;
+	align-items: stretch;
+}
+
+.kit-shell-nav-desktop > * {
+	display: block;
+	width: 100%;
+}
+
+.kit-shell-nav-desktop > * + * {
+	margin-top: 0.25rem;
+}
+
+.kit-shell-nav-desktop a,
+.kit-shell-nav-desktop button {
+	width: 100%;
+	display: flex;
+	align-items: center;
+	padding: 0.5rem 0.75rem;
+	border-radius: var(--radius);
+	text-decoration: none;
+	color: inherit;
+}
+
+.kit-shell-nav-desktop a:hover,
+.kit-shell-nav-desktop button:hover {
+	background: var(--accent);
+	color: var(--accent-foreground);
+}
+
+.kit-shell-nav-mobile {
+	display: flex;
+	flex-direction: column;
+	align-items: stretch;
+}
+
+.kit-shell-nav-mobile > * {
+	display: block;
+	width: 100%;
+}
+
+.kit-shell-nav-mobile > * + * {
+	margin-top: 0.25rem;
+}
+
+.kit-shell-nav-mobile a,
+.kit-shell-nav-mobile button {
+	width: 100%;
+	display: flex;
+	align-items: center;
+	padding: 0.5rem 0.75rem;
+	border-radius: var(--radius);
+	text-decoration: none;
+	color: inherit;
+}
+
+.kit-shell-nav-mobile a:hover,
+.kit-shell-nav-mobile button:hover {
+	background: var(--accent);
+	color: var(--accent-foreground);
+}
+
+.docs-content {
+	color: var(--foreground);
+	max-width: 100%;
+}
+
+.docs-content h1 {
+	font-size: 1.5rem;
+	font-weight: 600;
+	margin-bottom: 0.75rem;
+}
+
+.docs-content h2 {
+	font-size: 1.2rem;
+	font-weight: 600;
+	margin-top: 1.5rem;
+	margin-bottom: 0.5rem;
+}
+
+.docs-content h3 {
+	font-size: 1.05rem;
+	font-weight: 600;
+	margin-top: 1.25rem;
+	margin-bottom: 0.5rem;
+}
+
+.docs-content p {
+	line-height: 1.6;
+}
+
+.docs-content pre {
+	padding: 0.75rem 0.9rem;
+	border-radius: var(--radius);
+	background: var(--muted);
+	overflow-x: auto;
+	font-size: 0.875rem;
+}
+
+.docs-content code {
+	font-family: var(--font-mono);
+}

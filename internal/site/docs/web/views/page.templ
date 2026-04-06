@@ -1,0 +1,13 @@
+package views
+
+import t "github.com/a-h/templ"
+
+templ DocsPage(data DocsPageData) {
+	<div class="docs-page app-page">
+		<div class="app-content-card">
+			<article class="docs-content docs-prose prose-slate dark:prose-invert">
+				@t.Raw(data.HTMLContent)
+			</article>
+		</div>
+	</div>
+}

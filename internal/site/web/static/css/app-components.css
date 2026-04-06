@@ -1,6 +1,6 @@
 @layer components {
   .app-page {
-    @apply space-y-6;
+    @apply space-y-8;
   }
 
   .app-page-header {
@@ -33,5 +33,144 @@
 
   .app-actions {
     @apply flex flex-wrap gap-3;
+  }
+
+  .kit-shell-desktop-aside {
+    display: none !important;
+  }
+
+  .kit-header {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+  }
+
+  .kit-header-actions {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .kit-header-nav-wrap {
+    display: flex;
+    justify-content: center;
+  }
+
+  .kit-header-nav {
+    @apply mx-auto flex flex-wrap items-center justify-center gap-4 md:gap-5;
+  }
+
+  .kit-header-language {
+    @apply flex-shrink-0;
+  }
+
+  .kit-header-title {
+    @apply pr-4;
+  }
+
+  .kit-header-nav-link {
+    @apply rounded-md px-2 py-1 text-sm font-medium text-muted-foreground transition-all hover:bg-accent hover:text-accent-foreground;
+  }
+
+  .kit-header-nav-link-active {
+    @apply text-foreground;
+  }
+
+  .kit-shell-nav-mobile {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .kit-shell-nav-mobile > * {
+    display: block;
+    width: 100%;
+  }
+
+  .kit-shell-nav-mobile > * + * {
+    margin-top: 0.25rem;
+  }
+
+  .kit-shell-nav-mobile a,
+  .kit-shell-nav-mobile button {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 0.75rem;
+    border-radius: var(--radius);
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .kit-shell-nav-mobile a:hover,
+  .kit-shell-nav-mobile button:hover {
+    background: var(--accent);
+    color: var(--accent-foreground);
+  }
+
+  .hero {
+    @apply rounded-3xl border border-border/70 bg-gradient-to-br from-card to-muted/40 p-10;
+  }
+
+  .hero-content {
+    @apply flex max-w-2xl flex-col gap-4;
+  }
+
+  .hero-kicker {
+    @apply text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground;
+  }
+
+  .hero-description {
+    @apply text-sm leading-6 text-muted-foreground;
+  }
+
+  .hero-actions {
+    @apply mt-2 flex flex-wrap gap-3 pt-2;
+  }
+
+  .hero-cta {
+    @apply inline-flex h-11 items-center justify-center rounded-md px-5 text-sm font-semibold transition-colors;
+  }
+
+  .hero-cta-primary {
+    @apply bg-foreground text-background shadow-sm hover:bg-foreground/80;
+  }
+
+  .hero-cta-secondary {
+    @apply border border-border bg-background text-foreground hover:bg-accent hover:text-accent-foreground;
+  }
+
+  .hero-feature-grid {
+    @apply grid gap-4 md:grid-cols-3;
+  }
+
+  .hero-feature-card-title {
+    @apply mb-2 text-base font-semibold;
+  }
+
+  .hero-feature-card {
+    @apply rounded-lg border bg-card p-4;
+  }
+
+  @media (max-width: 767px) {
+    .kit-header {
+      display: flex;
+      flex-wrap: wrap;
+    }
+
+    .kit-header-actions {
+      display: flex;
+      flex: 1;
+      justify-content: flex-end;
+    }
+
+    .kit-header-nav-wrap {
+      @apply hidden;
+    }
+
+    .kit-header-nav {
+      @apply hidden;
+    }
   }
 }
