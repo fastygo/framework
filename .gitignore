@@ -7,7 +7,7 @@ node_modules/
 *.exe
 *.log
 *.tmp
-static/css/app.css
+internal/site/web/static/css/app.css
 .manual/
 .roadmap/
 .gocache/

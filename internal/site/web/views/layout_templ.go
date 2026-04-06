@@ -10,8 +10,8 @@ import templruntime "github.com/a-h/templ/runtime"
 
 import (
 	templ2 "github.com/a-h/templ"
+	"github.com/fastygo/framework/internal/site/web/views/partials"
 	"github.com/fastygo/framework/pkg/app"
-	"github.com/fastygo/framework/views/partials"
 	ui8layout "github.com/fastygo/ui8kit/layout"
 )
 

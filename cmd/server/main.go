@@ -9,7 +9,8 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/fastygo/framework/internal/features/welcome"
+	appwelcome "github.com/fastygo/framework/internal/application/welcome"
+	welcomefeature "github.com/fastygo/framework/internal/infra/features/welcome"
 	"github.com/fastygo/framework/pkg/app"
 	"github.com/fastygo/framework/pkg/core/cqrs"
 	"github.com/fastygo/framework/pkg/core/cqrs/behaviors"
@@ -26,10 +27,10 @@ func main() {
 		&behaviors.Logging{Logger: slog.Default()},
 		&behaviors.Validation{},
 	)
-	cqrs.RegisterQuery(dispatcher, welcome.WelcomeQueryHandler{})
+	cqrs.RegisterQuery(dispatcher, appwelcome.WelcomeQueryHandler{})
 
 	application := app.New(cfg).
-		WithFeature(welcome.New(dispatcher, cfg.DefaultLocale, cfg.AvailableLocales)).
+		WithFeature(welcomefeature.New(dispatcher, cfg.DefaultLocale, cfg.AvailableLocales)).
 		Build()
 
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)

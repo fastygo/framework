@@ -1,4 +1,4 @@
-package fixtures
+package i18n
 
 import (
 	"embed"

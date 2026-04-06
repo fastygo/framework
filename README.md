@@ -1,5 +1,7 @@
 # Framework Phase 0 Boilerplate
 
+[![no-root-imports](https://github.com/fastygo/framework/actions/workflows/no-root-imports.yml/badge.svg)](https://github.com/fastygo/framework/actions/workflows/no-root-imports.yml)
+
 This repository is a minimal dashboard skeleton for the Universal Framework.
 
 ## What this project includes
@@ -35,10 +37,11 @@ Core parts:
 - `pkg/app` has config, app builder, and feature interfaces
 - `pkg/core/cqrs` has dispatcher, behaviors, and handler interfaces
 - `pkg/web` has middleware, templ render helper, and error handling
-- `internal/features/welcome` has one demo feature with query/handler
-- `views` contains `layout`, `welcome` page, and language partial
-- `fixtures` stores embedded `en` / `ru` JSON content
-- `static` stores Tailwind entry, UI8Kit CSS, and browser scripts
+- `internal/application/welcome` has welcome query/handler use-case
+- `internal/infra/features/welcome` has welcome HTTP/templ adapter
+- `internal/site/web/views` contains `layout`, `welcome` page, and language partial
+- `internal/site/web/i18n` stores embedded `en` / `ru` JSON content
+- `internal/site/web/static` stores Tailwind entry, UI8Kit CSS, and browser scripts
 - `docs/QUICKSTART.md` has a shorter startup guide
 
 ## Prerequisites
@@ -93,10 +96,32 @@ npm run generate
 make test
 ```
 
-or
+Or run static checks:
+
+```bash
+make lint
+```
+
+CI-friendly:
+
+```bash
+make ci
+```
+
+`make ci` is the preferred command for local or CI parity.
+
+Or equivalent alias:
+
+```bash
+make lint-ci
+```
+
+
+On environments without `make` (for example, plain Windows shell), run:
 
 ```bash
 go test ./...
+go run ./scripts/check-no-root-imports.go
 ```
 
 ### CSS build/watch
@@ -129,7 +154,7 @@ You should see:
 ## Important environment variables
 
 - `APP_BIND` (default: `127.0.0.1:8080`)
-- `APP_STATIC_DIR` (default: `static`)
+- `APP_STATIC_DIR` (default: `internal/site/web/static`)
 - `APP_DEFAULT_LOCALE` (default: `en`)
 - `APP_AVAILABLE_LOCALES` (default: `en,ru`)
 - `APP_DATA_SOURCE` (default: `fixture`)

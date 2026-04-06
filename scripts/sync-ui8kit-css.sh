@@ -2,7 +2,7 @@
 set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-TARGET_DIR="$ROOT_DIR/static/css/ui8kit"
+TARGET_DIR="$ROOT_DIR/internal/site/web/static/css/ui8kit"
 
 GOMODCACHE="$(go env GOMODCACHE)"
 UI8KIT_VERSION="v0.2.1"

@@ -2,6 +2,7 @@ SHELL := /bin/bash
 
 APP := bin/framework
 PKG := ./cmd/server
+NO_ROOT_IMPORT_CHECK := go run ./scripts/check-no-root-imports.go
 
 dev:
 	templ generate
@@ -24,6 +25,16 @@ test:
 
 lint:
 	go test ./...
+	$(NO_ROOT_IMPORT_CHECK)
+
+lint-ci:
+	$(MAKE) lint
+
+ci:
+	$(MAKE) lint-ci
+
+lint-bash:
+	./scripts/check-no-root-imports.sh
 
 generate:
 	templ generate

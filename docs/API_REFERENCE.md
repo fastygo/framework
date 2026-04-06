@@ -8,7 +8,7 @@ This document is a concise but complete API map of the current Phase 0 implement
 
 ### Short version
 BFF (Backend for Frontend) in this framework is a thin server-side layer that:
-- prepares data for the UI (via CQRS and fixtures),
+- prepares data for the UI (via CQRS and i18n content),
 - renders pages with `templ`,
 - acts as a single HTTP entry point (`net/http`),
 - owns cross-cutting concerns (request ID, panic recovery, logging, localization, theme state),
@@ -16,20 +16,54 @@ BFF (Backend for Frontend) in this framework is a thin server-side layer that:
 
 ### Why this is useful here
 - Fast path to an MVP dashboard without SPA complexity.
-- Clear separation: frontend components in `views`, domain features in `internal/features/*`, and platform core in `pkg/*`.
+- Clear separation: presentation in `internal/site/web/*`, use-cases in `internal/application/*`, and infrastructure adapters in `internal/infra/*`, plus platform core in `pkg/*`.
 - Unified entry point for future JSON/SPA/API endpoints (Phase 1+).
 
 ### Current request flow
-`HTTP -> middleware chain -> feature route -> CQRS query -> fixtures -> templ layout/page -> Render`
+`HTTP -> middleware chain -> feature route -> CQRS query -> i18n -> templ layout/page -> Render`
 
 ### Where to find layer boundaries
 - `pkg/app`, `pkg/core`, `pkg/web`: framework core and platform API.
-- `internal/features/*`: feature module examples.
-- `views/*`: presentation layer (templ components).
+- `internal/application/*` and `internal/infra/features/*`: use-case + adapter examples.
+- `internal/site/web/views/*`: presentation layer (templ components).
 
 ---
 
-## 2) File-by-file API map
+## 2) Application vs Infra feature contract
+
+Feature code in this repository is split into two contracts:
+
+### `internal/application/<feature>`
+- Contains CQRS use cases and business orchestration for the feature.
+- Owns query/command types, handlers, and local DTOs returned to the transport layer.
+- Must not depend on `pkg/web`, `internal/site/web/views`, or generated `*_templ.go` files.
+- Example:
+  - `internal/application/welcome/handler.go`
+  - exports `WelcomeQuery`, `WelcomeQueryResult`, `WelcomeQueryHandler`
+
+### `internal/infra/features/<feature>`
+- Contains HTTP/templ transport adapters and feature registration.
+- Implements `pkg/app.Feature` (`Routes`, `NavItems`, optional `NavProvider`).
+- Accepts a `*cqrs.Dispatcher` in constructor and dispatches application queries/commands.
+- May import `pkg/web` and `internal/site/web/views` for transport concerns (rendering, localization switches, route handling).
+- Example:
+  - `internal/infra/features/welcome/module.go`
+  - calls `cqrs.DispatchQuery[appwelcome.WelcomeQuery, appwelcome.WelcomeQueryResult](...)`
+
+### Wiring rule (root composition)
+- `cmd/server/main.go` owns registration:
+  - register application handlers in `cqrs` first (`cqrs.RegisterQuery` / `RegisterCommand`);
+  - create feature adapters and pass them into `app.New(...).WithFeature(...).Build()`.
+- `Feature` code should not contain direct persistence or presentation logic beyond route handling.
+
+### New feature checklist
+1. Add use-case files in `internal/application/<feature>/`.
+2. Add transport adapter in `internal/infra/features/<feature>/` implementing `pkg/app.Feature`.
+3. Import and register handler and adapter in `cmd/server/main.go`.
+4. Add templates and static assets under `internal/site/web/*` as needed.
+5. Keep import direction one-way: `main -> infra -> application -> core/platform`.
+
+## 3) File-by-file API map
 
 Below is the API you can use as a quick reference.
 
@@ -346,9 +380,9 @@ Used for passing view-state into templates.
 
 ---
 
-### `fixtures/embed.go`
+### `internal/site/web/i18n/embed.go`
 
-`package fixtures`
+`package i18n`
 
 #### Types
 - `type Localized struct { Common CommonFixture; Welcome WelcomeFixture }`
@@ -365,21 +399,21 @@ Used for passing view-state into templates.
 
 ---
 
-### `internal/features/welcome/handler.go`
+### `internal/application/welcome/handler.go`
 
 `package welcome`
 
 #### Types
 - `type WelcomeQuery struct { Locale string }`
   - `func (q WelcomeQuery) Validate() error`
-- `type WelcomeQueryResult struct { Layout fixtures.Localized }`
+- `type WelcomeQueryResult struct { Layout i18n.Localized }`
 - `type WelcomeQueryHandler struct{}`
   - `func (h WelcomeQueryHandler) Handle(_ context.Context, query WelcomeQuery) (WelcomeQueryResult, error)`
-    - Loads fixtures and returns localized payload.
+    - Loads i18n fixtures and returns localized payload.
 
 ---
 
-### `internal/features/welcome/module.go`
+### `internal/infra/features/welcome/module.go`
 
 `package welcome`
 
@@ -404,7 +438,7 @@ Used for passing view-state into templates.
 
 ---
 
-### `views/models.go`
+### `internal/site/web/views/models.go`
 
 `package views`
 
@@ -415,7 +449,7 @@ Used for passing view-state into templates.
 
 ---
 
-### `views/partials/models.go`
+### `internal/site/web/views/partials/models.go`
 
 `package partials`
 
@@ -424,7 +458,7 @@ Used for passing view-state into templates.
 
 ---
 
-### `views/layout_templ.go` (generated)
+### `internal/site/web/views/layout_templ.go` (generated)
 
 `package views`
 
@@ -437,7 +471,7 @@ Used for passing view-state into templates.
 
 ---
 
-### `views/welcome_templ.go` (generated)
+### `internal/site/web/views/welcome_templ.go` (generated)
 
 `package views`
 
@@ -446,7 +480,7 @@ Used for passing view-state into templates.
 
 ---
 
-### `views/nav_templ.go` (generated)
+### `internal/site/web/views/nav_templ.go` (generated)
 
 `package views`
 
@@ -455,7 +489,7 @@ Used for passing view-state into templates.
 
 ---
 
-### `views/partials/language_toggle_templ.go` (generated)
+### `internal/site/web/views/partials/language_toggle_templ.go` (generated)
 
 `package partials`
 
@@ -464,23 +498,23 @@ Used for passing view-state into templates.
 
 ---
 
-## 3) How to use this API map during development
+## 4) How to use this API map during development
 
 - To add a new feature:
-  1. Define query/command and handler.
+  1. Define query/command and handler in `internal/application/<name>/`.
   2. Register the handler in `main.go` using `cqrs.RegisterQuery` / `cqrs.RegisterCommand`.
-  3. Implement `Feature` with `Routes` and `NavItems`.
-  4. Add DTOs/fixtures and templates.
-  5. Integrate localization and error handling via `fixtures` + `web.HandleError`.
+  3. Implement `Feature` adapter in `internal/infra/features/<name>/` with `Routes` and `NavItems`.
+  4. Add DTOs/i18n resources and templates.
+  5. Integrate localization and error handling via `internal/site/web/i18n` + `web.HandleError`.
 
 - For troubleshooting:
-  1. Follow flow: `features -> handler -> query -> fixtures -> views`.
+  1. Follow flow: `features -> handler -> query -> i18n -> views`.
   2. Middleware chain always starts with request ID for traceability.
   3. Prefer returning business errors as `core.DomainError`.
 
 ---
 
-## 4) Extension notes
+## 5) Extension notes
 
 - In Phase 1, expected next API work includes:
   - health/readiness endpoints,

@@ -4,11 +4,12 @@ import (
 	"net/http"
 
 	"github.com/a-h/templ"
+	appwelcome "github.com/fastygo/framework/internal/application/welcome"
 	"github.com/fastygo/framework/pkg/app"
 	"github.com/fastygo/framework/pkg/core/cqrs"
 	"github.com/fastygo/framework/pkg/web"
-	"github.com/fastygo/framework/views"
-	"github.com/fastygo/framework/views/partials"
+	"github.com/fastygo/framework/internal/site/web/views"
+	"github.com/fastygo/framework/internal/site/web/views/partials"
 )
 
 type Module struct {
@@ -52,7 +53,7 @@ func (m *Module) Routes(mux *http.ServeMux) {
 
 func (m *Module) handleWelcome(w http.ResponseWriter, r *http.Request) {
 	locale := resolveLocale(r, m.defaultLocale, m.availableLocales)
-	result, err := cqrs.DispatchQuery[WelcomeQuery, WelcomeQueryResult](r.Context(), m.dispatcher, WelcomeQuery{Locale: locale})
+	result, err := cqrs.DispatchQuery[appwelcome.WelcomeQuery, appwelcome.WelcomeQueryResult](r.Context(), m.dispatcher, appwelcome.WelcomeQuery{Locale: locale})
 	if err != nil {
 		web.HandleError(w, err)
 		return

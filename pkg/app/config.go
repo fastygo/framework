@@ -18,7 +18,7 @@ func LoadConfig() (Config, error) {
 	cfg := Config{
 		AppBind:          getEnv("APP_BIND", "127.0.0.1:8080"),
 		DataSource:       getEnv("APP_DATA_SOURCE", "fixture"),
-		StaticDir:        getEnv("APP_STATIC_DIR", "static"),
+		StaticDir:        getEnv("APP_STATIC_DIR", "internal/site/web/static"),
 		DefaultLocale:    getEnv("APP_DEFAULT_LOCALE", "en"),
 		AvailableLocales: parseLocales(getEnv("APP_AVAILABLE_LOCALES", "en,ru")),
 	}

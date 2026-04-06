@@ -2,12 +2,13 @@
   "name": "framework",
   "private": true,
   "scripts": {
-    "dev:css": "tailwindcss -i ./static/css/input.css -o ./static/css/app.css --watch",
-    "build:css": "tailwindcss -i ./static/css/input.css -o ./static/css/app.css --minify",
+    "dev:css": "tailwindcss -i ./internal/site/web/static/css/input.css -o ./internal/site/web/static/css/app.css --watch",
+    "build:css": "tailwindcss -i ./internal/site/web/static/css/input.css -o ./internal/site/web/static/css/app.css --minify",
     "sync:ui8kit": "bash ./scripts/sync-ui8kit-css.sh",
     "ui8kit:build": "npm run sync:ui8kit && npm run build:css",
     "generate": "templ generate",
-    "build": "npm run build:css && npm run generate"
+    "build": "npm run build:css && npm run generate",
+    "preview": "npm run build:css && npm run generate && go run ./cmd/server"
   },
   "dependencies": {
     "@tailwindcss/cli": "^4.2.1",

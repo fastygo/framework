@@ -3,7 +3,7 @@ package welcome
 import (
 	"context"
 
-	"github.com/fastygo/framework/fixtures"
+	"github.com/fastygo/framework/internal/site/web/i18n"
 )
 
 type WelcomeQuery struct {
@@ -18,13 +18,13 @@ func (q WelcomeQuery) Validate() error {
 }
 
 type WelcomeQueryResult struct {
-	Layout  fixtures.Localized
+	Layout  i18n.Localized
 }
 
 type WelcomeQueryHandler struct{}
 
 func (h WelcomeQueryHandler) Handle(_ context.Context, query WelcomeQuery) (WelcomeQueryResult, error) {
-	content, err := fixtures.Load(query.Locale)
+	content, err := i18n.Load(query.Locale)
 	if err != nil {
 		return WelcomeQueryResult{}, err
 	}

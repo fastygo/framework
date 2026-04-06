@@ -31,7 +31,7 @@ FROM debian:bookworm-slim AS runtime
 WORKDIR /app
 
 COPY --from=build /out/framework /app/framework
-COPY --from=build /src/static /app/static
+COPY --from=build /src/internal/site/web/static /app/static
 
 ENV APP_BIND=0.0.0.0:80
 ENV APP_STATIC_DIR=static

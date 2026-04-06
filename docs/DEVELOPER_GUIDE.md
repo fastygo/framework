@@ -83,7 +83,7 @@ This is intentionally minimal but fully wired and used in runtime.
 
 ### 5) View Layer (templ)
 
-`views/` contains SSR templates:
+`internal/site/web/views/` contains SSR templates:
 
 - `layout.templ`
   - wraps all pages into `ui8layout.Shell`
@@ -101,14 +101,14 @@ Generated files (`*_templ.go`) are produced by `templ generate`.
 
 ### 6) I18N / Content layer
 
-`fixtures/` contains embedded content:
+`internal/site/web/i18n/` contains embedded content:
 
 - `en/common.json`
 - `en/welcome.json`
 - `ru/common.json`
 - `ru/welcome.json`
 
-`fixtures/embed.go`:
+`internal/site/web/i18n/embed.go`:
 - uses `go:embed` for JSON files
 - decodes locale-specific content by section
 - provides:
@@ -119,14 +119,14 @@ Business data (Phase 0) is currently static content, not external service-based.
 
 ### 7) Frontend behavior layer
 
-`static/js/app-shell.js` handles:
+`internal/site/web/static/js/app-shell.js` handles:
 
 - persisted theme toggle (`dark` / `light`) in `localStorage`
 - locale preference persistence in `localStorage`
 - redirect-on-load behavior to align browser/local stored/default locale
 - click-to-switch locale handler
 
-`static/css/input.css` imports Tailwind and UI8Kit styles.
+`internal/site/web/static/css/input.css` imports Tailwind and UI8Kit styles.
 
 ---
 
@@ -134,12 +134,12 @@ Business data (Phase 0) is currently static content, not external service-based.
 
 Phase 0 has a single feature and one public interaction:
 
-### Welcome Feature (`internal/features/welcome`)
+### Welcome Feature (`internal/infra/features/welcome`, `internal/application/welcome`)
 
-- `WelcomeQuery` + `WelcomeQueryHandler` (`handler.go`)
+- `WelcomeQuery` + `WelcomeQueryHandler` (`internal/application/welcome/handler.go`)
   - loads data from fixtures
   - validates locale
-- `welcome.Module` (`module.go`)
+- `welcome.Module` (`internal/infra/features/welcome/module.go`)
   - registers route `/`
   - provides one nav item `Welcome`
   - resolves effective locale (from query string or defaults)
@@ -184,11 +184,12 @@ Current business-level capabilities:
 - `pkg/core` – domain primitives (`Entity`, `DomainError`), CQRS
 - `pkg/app` – app builder/config/feature contracts
 - `pkg/web` – middleware, render and error helpers
-- `internal/features/welcome` – demo feature module
-- `views` – templ views and partials
-- `fixtures` – embedded JSON i18n content
-- `static/css` – Tailwind + UI8Kit CSS pipeline
-- `static/js/app-shell.js` – theme/locale behavior
+- `internal/application/welcome` – use-case/query-handler layer
+- `internal/infra/features/welcome` – HTTP/templ adapter
+- `internal/site/web/views` – templ views and partials
+- `internal/site/web/i18n` – embedded JSON i18n content
+- `internal/site/web/static/css` – Tailwind + UI8Kit CSS pipeline
+- `internal/site/web/static/js/app-shell.js` – theme/locale behavior
 - `scripts/sync-ui8kit-css.sh` – copies UI8Kit CSS from module cache
 - `docs/QUICKSTART.md` – quick run instructions
 
@@ -197,7 +198,7 @@ Current business-level capabilities:
 ## Environment variables
 
 - `APP_BIND` (default: `127.0.0.1:8080`)
-- `APP_STATIC_DIR` (default: `static`)
+- `APP_STATIC_DIR` (default: `internal/site/web/static`)
 - `APP_DEFAULT_LOCALE` (default: `en`)
 - `APP_AVAILABLE_LOCALES` (default: `en,ru`)
 - `APP_DATA_SOURCE` (default: `fixture`)
@@ -206,13 +207,13 @@ Current business-level capabilities:
 
 ## Adding a new feature (recommended)
 
-1. Create `internal/features/<name>/`
+1. Create `internal/application/<name>/` and `internal/infra/features/<name>/`
 2. Add:
    - feature module implementing `pkg/app.Feature`
    - query/handler pair if you need CQRS style flow
 3. Register feature in `cmd/server/main.go`:
    - `WithFeature(newFeature)`
-4. Add templates under `views/` and wire model DTOs
+4. Add templates under `internal/site/web/views/` and wire model DTOs
 5. Add fixtures or dedicated data source integration
 
 Because `AppBuilder` composes `NavItems` automatically, each feature contributes its own menu items.
@@ -235,6 +236,13 @@ Because `AppBuilder` composes `NavItems` automatically, each feature contributes
   - `make build` and run `./bin/framework`
 - Tests:
   - `go test ./...`
+- Lint + architecture checks:
+  - `make lint` (runs tests and no-root import check)
+  - `make ci` (same as CI pipeline command)
+  - `make lint-ci` (same as `make ci`, alias)
+  - Windows fallback without `make`:
+    - `go test ./...`
+    - `go run ./scripts/check-no-root-imports.go`
 - CSS watch:
   - `npm run dev:css`
 

@@ -2,7 +2,7 @@ package views
 
 import (
 	"github.com/fastygo/framework/pkg/app"
-	"github.com/fastygo/framework/views/partials"
+	"github.com/fastygo/framework/internal/site/web/views/partials"
 )
 
 type ThemeToggleData struct {
