@@ -63,7 +63,7 @@ func (r *RateLimiter) Allow(ip string) bool {
 	visitor, exists := shard.visitors[ip]
 	if !exists {
 		visitor = &rateLimiterVisitor{
-			tokens:   r.burst,
+			tokens:   r.burst - 1,
 			lastSeen: now,
 		}
 		shard.visitors[ip] = visitor
