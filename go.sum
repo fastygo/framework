@@ -1,7 +1,5 @@
 github.com/a-h/templ v0.3.1001 h1:yHDTgexACdJttyiyamcTHXr2QkIeVF1MukLy44EAhMY=
 github.com/a-h/templ v0.3.1001/go.mod h1:oCZcnKRf5jjsGpf2yELzQfodLphd2mwecwG4Crk5HBo=
-github.com/fastygo/ui8kit v0.2.1 h1:K32iuaH46rlvrY763+Ejn1Yjd3TMXu1McpwYH0QJDs0=
-github.com/fastygo/ui8kit v0.2.1/go.mod h1:x/dtiyMHkubzZOoFd4FovZuAnhMzNljTBygUiVXwnvM=
 github.com/google/go-cmp v0.6.0 h1:ofyhxvXcZhMsU5ulbFiLKl/XBFqE1GSq7atu8tAmTRI=
 github.com/google/go-cmp v0.6.0/go.mod h1:17dUlkBOakJ0+DkrSSNjCkIjxS6bF9zb3elmeNGIjoY=
 github.com/google/uuid v1.6.0 h1:NIvaJDMOsjHA8n1jAhLSgzrAzy1Hgr+hNrb57e+94F0=

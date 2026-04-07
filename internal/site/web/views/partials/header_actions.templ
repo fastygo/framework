@@ -3,16 +3,16 @@ package partials
 import "github.com/fastygo/framework/pkg/app"
 
 templ HeaderActions(languageToggleData LanguageToggleData, navItems []app.NavItem) {
-	<div class="kit-header-nav-wrap">
-		<nav class="kit-header-nav" aria-label="Main navigation">
+	<div class="ui-header-nav-wrap">
+		<nav class="ui-header-nav" aria-label="Main navigation">
 			for _, item := range navItems {
-				<a href={ item.Path } class="kit-header-nav-link">
+				<a href={ item.Path } class="ui-header-nav-link">
 					{ item.Label }
 				</a>
 			}
 		</nav>
 	</div>
-	<div class="kit-header-language">
+	<div class="ui-header-language">
 		@LanguageToggle(languageToggleData)
 	</div>
 }

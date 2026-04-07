@@ -10,6 +10,7 @@ node_modules/
 internal/site/web/static/css/app.css
 internal/site/docs/web/static/css/app.css
 .manual/
+.project/
 .roadmap/
 .gocache/
 .paas/

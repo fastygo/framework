@@ -27,23 +27,23 @@
 	margin: 0;
 }
 
-.kit-shell-nav-desktop {
+.ui-shell-nav-desktop {
 	display: flex;
 	flex-direction: column;
 	align-items: stretch;
 }
 
-.kit-shell-nav-desktop > * {
+.ui-shell-nav-desktop > * {
 	display: block;
 	width: 100%;
 }
 
-.kit-shell-nav-desktop > * + * {
+.ui-shell-nav-desktop > * + * {
 	margin-top: 0.25rem;
 }
 
-.kit-shell-nav-desktop a,
-.kit-shell-nav-desktop button {
+.ui-shell-nav-desktop a,
+.ui-shell-nav-desktop button {
 	width: 100%;
 	display: flex;
 	align-items: center;
@@ -53,29 +53,29 @@
 	color: inherit;
 }
 
-.kit-shell-nav-desktop a:hover,
-.kit-shell-nav-desktop button:hover {
+.ui-shell-nav-desktop a:hover,
+.ui-shell-nav-desktop button:hover {
 	background: var(--accent);
 	color: var(--accent-foreground);
 }
 
-.kit-shell-nav-mobile {
+.ui-shell-nav-mobile {
 	display: flex;
 	flex-direction: column;
 	align-items: stretch;
 }
 
-.kit-shell-nav-mobile > * {
+.ui-shell-nav-mobile > * {
 	display: block;
 	width: 100%;
 }
 
-.kit-shell-nav-mobile > * + * {
+.ui-shell-nav-mobile > * + * {
 	margin-top: 0.25rem;
 }
 
-.kit-shell-nav-mobile a,
-.kit-shell-nav-mobile button {
+.ui-shell-nav-mobile a,
+.ui-shell-nav-mobile button {
 	width: 100%;
 	display: flex;
 	align-items: center;
@@ -85,8 +85,8 @@
 	color: inherit;
 }
 
-.kit-shell-nav-mobile a:hover,
-.kit-shell-nav-mobile button:hover {
+.ui-shell-nav-mobile a:hover,
+.ui-shell-nav-mobile button:hover {
 	background: var(--accent);
 	color: var(--accent-foreground);
 }

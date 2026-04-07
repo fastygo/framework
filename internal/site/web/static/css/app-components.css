@@ -35,65 +35,65 @@
     @apply flex flex-wrap gap-3;
   }
 
-  .kit-shell-desktop-aside {
+  .ui-shell-desktop-aside {
     display: none !important;
   }
 
-  .kit-header {
+  .ui-header {
     display: grid;
     grid-template-columns: auto 1fr;
     align-items: center;
   }
 
-  .kit-header-actions {
+  .ui-header-actions {
     display: grid;
     grid-template-columns: 1fr auto auto;
     align-items: center;
     gap: 1rem;
   }
 
-  .kit-header-nav-wrap {
+  .ui-header-nav-wrap {
     display: flex;
     justify-content: center;
   }
 
-  .kit-header-nav {
+  .ui-header-nav {
     @apply mx-auto flex flex-wrap items-center justify-center gap-4 md:gap-5;
   }
 
-  .kit-header-language {
+  .ui-header-language {
     @apply flex-shrink-0;
   }
 
-  .kit-header-title {
+  .ui-header-title {
     @apply pr-4;
   }
 
-  .kit-header-nav-link {
+  .ui-header-nav-link {
     @apply rounded-md px-2 py-1 text-sm font-medium text-muted-foreground transition-all hover:bg-accent hover:text-accent-foreground;
   }
 
-  .kit-header-nav-link-active {
+  .ui-header-nav-link-active {
     @apply text-foreground;
   }
 
-  .kit-shell-nav-mobile {
+  .ui-shell-nav-mobile {
     display: flex;
     flex-direction: column;
     align-items: stretch;
   }
 
-  .kit-shell-nav-mobile > * {
+  .ui-shell-nav-mobile > * {
     display: block;
     width: 100%;
   }
 
-  .kit-shell-nav-mobile > * + * {
+  .ui-shell-nav-mobile > * + * {
     margin-top: 0.25rem;
   }
 
-  .kit-shell-nav-mobile a,
-  .kit-shell-nav-mobile button {
+  .ui-shell-nav-mobile a,
+  .ui-shell-nav-mobile button {
     width: 100%;
     display: flex;
     align-items: center;
@@ -103,8 +103,8 @@
     color: inherit;
   }
 
-  .kit-shell-nav-mobile a:hover,
-  .kit-shell-nav-mobile button:hover {
+  .ui-shell-nav-mobile a:hover,
+  .ui-shell-nav-mobile button:hover {
     background: var(--accent);
     color: var(--accent-foreground);
   }
@@ -154,22 +154,22 @@
   }
 
   @media (max-width: 767px) {
-    .kit-header {
+    .ui-header {
       display: flex;
       flex-wrap: wrap;
     }
 
-    .kit-header-actions {
+    .ui-header-actions {
       display: flex;
       flex: 1;
       justify-content: flex-end;
     }
 
-    .kit-header-nav-wrap {
+    .ui-header-nav-wrap {
       @apply hidden;
     }
 
-    .kit-header-nav {
+    .ui-header-nav {
       @apply hidden;
     }
   }

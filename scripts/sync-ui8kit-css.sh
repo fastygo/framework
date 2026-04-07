@@ -2,23 +2,36 @@
 set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-TARGET_DIR="$ROOT_DIR/internal/site/web/static/css/ui8kit"
+SOURCE_DIR="$ROOT_DIR/.project/styles"
+WEB_TARGET_DIR="$ROOT_DIR/internal/site/web/static/css/ui8kit"
+DOCS_TARGET_DIR="$ROOT_DIR/internal/site/docs/web/static/css/ui8kit"
 
-GOMODCACHE="$(go env GOMODCACHE)"
-UI8KIT_VERSION="v0.2.1"
-UI8KIT_MODULE_PATH="$GOMODCACHE/github.com/fastygo/ui8kit@$UI8KIT_VERSION"
-
-if [ ! -d "$UI8KIT_MODULE_PATH" ]; then
-  echo "Go module cache does not contain github.com/fastygo/ui8kit@$UI8KIT_VERSION."
-  echo "Run: go mod download github.com/fastygo/ui8kit@$UI8KIT_VERSION"
+if [ ! -d "$SOURCE_DIR" ]; then
+  echo "Source styles directory not found: $SOURCE_DIR"
   exit 1
 fi
 
-mkdir -p "$TARGET_DIR"
+for target in "$WEB_TARGET_DIR" "$DOCS_TARGET_DIR"; do
+  mkdir -p "$target"
 
-cp "$UI8KIT_MODULE_PATH/styles/base.css" "$TARGET_DIR/base.css"
-cp "$UI8KIT_MODULE_PATH/styles/shell.css" "$TARGET_DIR/shell.css"
-cp "$UI8KIT_MODULE_PATH/styles/components.css" "$TARGET_DIR/components.css"
-cp "$UI8KIT_MODULE_PATH/styles/latty.css" "$TARGET_DIR/latty.css"
+  cp "$SOURCE_DIR/base.css" "$target/base.css"
+  cp "$SOURCE_DIR/shell.css" "$target/shell.css"
+  cp "$SOURCE_DIR/components.css" "$target/components.css"
+  cp "$SOURCE_DIR/latty.css" "$target/latty.css"
 
-echo "ui8kit CSS synced to $TARGET_DIR"
+  INPUT_FILE="$ROOT_DIR/.tmp-ui8kit-input.css"
+  cat > "$INPUT_FILE" <<EOF
+@import "tailwindcss";
+@import "./.project/styles/base.css";
+@import "./.project/styles/shell.css";
+@import "./.project/styles/components.css";
+@import "./.project/styles/latty.css";
+EOF
+
+  npx tailwindcss -i "$INPUT_FILE" -o "$target/ui8kit.css" --minify
+  rm -f "$INPUT_FILE"
+done
+
+echo "ui8kit CSS synced from $SOURCE_DIR"
+echo " - web:  $WEB_TARGET_DIR"
+echo " - docs: $DOCS_TARGET_DIR"
