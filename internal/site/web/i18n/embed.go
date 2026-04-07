@@ -4,6 +4,7 @@ import (
 	"embed"
 	"encoding/json"
 	"fmt"
+	"sync"
 )
 
 //go:embed en/*.json ru/*.json
@@ -50,9 +51,54 @@ type WelcomeFixture struct {
 }
 
 var supportedLocales = []string{"en", "ru"}
+var preloadOnce sync.Once
+var preloadErr error
+var cachedLocales map[string]Localized
+
+func init() {
+	preload()
+}
 
 func Locales() []string {
 	return append([]string{}, supportedLocales...)
+}
+
+func Load(locale string) (Localized, error) {
+	preload()
+	if preloadErr != nil {
+		return Localized{}, preloadErr
+	}
+
+	cachedLocale := normalizeLocale(locale)
+	loaded, ok := cachedLocales[cachedLocale]
+	if !ok {
+		return Localized{}, fmt.Errorf("unsupported locale: %s", locale)
+	}
+
+	return loaded, nil
+}
+
+func preload() {
+	preloadOnce.Do(func() {
+		cachedLocales = make(map[string]Localized, len(supportedLocales))
+
+		for _, locale := range supportedLocales {
+			common, err := Decode[CommonFixture](locale, "common")
+			if err != nil {
+				preloadErr = err
+				return
+			}
+			welcome, err := Decode[WelcomeFixture](locale, "welcome")
+			if err != nil {
+				preloadErr = err
+				return
+			}
+			cachedLocales[locale] = Localized{
+				Common:  common,
+				Welcome: welcome,
+			}
+		}
+	})
 }
 
 func Decode[T any](locale string, section string) (T, error) {
@@ -73,23 +119,6 @@ func Decode[T any](locale string, section string) (T, error) {
 	}
 
 	return decoded, nil
-}
-
-func Load(locale string) (Localized, error) {
-	common, err := Decode[CommonFixture](normalizeLocale(locale), "common")
-	if err != nil {
-		return Localized{}, err
-	}
-
-	welcome, err := Decode[WelcomeFixture](normalizeLocale(locale), "welcome")
-	if err != nil {
-		return Localized{}, err
-	}
-
-	return Localized{
-		Common:  common,
-		Welcome: welcome,
-	}, nil
 }
 
 func normalizeLocale(locale string) string {

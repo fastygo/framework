@@ -1,8 +1,9 @@
 package middleware
 
 import (
-	"fmt"
+	"log/slog"
 	"net/http"
+	"runtime/debug"
 )
 
 func RecoverMiddleware() Middleware {
@@ -10,7 +11,13 @@ func RecoverMiddleware() Middleware {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			defer func() {
 				if recovered := recover(); recovered != nil {
-					http.Error(w, fmt.Sprintf("internal error: %v", recovered), http.StatusInternalServerError)
+					slog.Error(
+						"http.panic",
+						"error", recovered,
+						"request_id", r.Header.Get(RequestIDHeader),
+						"stack", string(debug.Stack()),
+					)
+					http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 				}
 			}()
 			next.ServeHTTP(w, r)

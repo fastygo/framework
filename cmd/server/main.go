@@ -12,6 +12,7 @@ import (
 	appwelcome "github.com/fastygo/framework/internal/application/welcome"
 	welcomefeature "github.com/fastygo/framework/internal/infra/features/welcome"
 	"github.com/fastygo/framework/pkg/app"
+	"github.com/fastygo/framework/pkg/web/security"
 	"github.com/fastygo/framework/pkg/core/cqrs"
 	"github.com/fastygo/framework/pkg/core/cqrs/behaviors"
 )
@@ -30,6 +31,7 @@ func main() {
 	cqrs.RegisterQuery(dispatcher, appwelcome.WelcomeQueryHandler{})
 
 	application := app.New(cfg).
+		WithSecurity(security.DefaultConfig()).
 		WithFeature(welcomefeature.New(dispatcher, cfg.DefaultLocale, cfg.AvailableLocales)).
 		Build()
 

@@ -3,11 +3,13 @@ package docs
 import (
 	"net/http"
 	"strings"
+	"time"
 
 	"github.com/a-h/templ"
 	appdocs "github.com/fastygo/framework/internal/application/docs"
 	"github.com/fastygo/framework/internal/site/docs/web/views"
 	"github.com/fastygo/framework/pkg/app"
+	"github.com/fastygo/framework/pkg/cache"
 	"github.com/fastygo/framework/pkg/core/cqrs"
 	"github.com/fastygo/framework/pkg/web"
 )
@@ -15,6 +17,7 @@ import (
 type Module struct {
 	dispatcher     *cqrs.Dispatcher
 	navItems       []app.NavItem
+	htmlCache      *cache.Cache[[]byte]
 }
 
 func New(dispatcher *cqrs.Dispatcher) *Module {
@@ -39,6 +42,7 @@ func New(dispatcher *cqrs.Dispatcher) *Module {
 	return &Module{
 		dispatcher:     dispatcher,
 		navItems:       navItems,
+		htmlCache:      cache.New[[]byte](10 * time.Minute),
 	}
 }
 
@@ -99,9 +103,12 @@ func (m *Module) renderDocsIndex(w http.ResponseWriter, r *http.Request) {
 		},
 	}
 
-	if err = web.Render(
+	if err = web.CachedRender(
 		r.Context(),
 		w,
+		r,
+		m.htmlCache,
+		"docs:index",
 		views.DocsLayout(layout, templ.NopComponent, views.DocsIndex(pagesToViewModel(pages))),
 	); err != nil {
 		web.HandleError(w, err)
@@ -136,9 +143,12 @@ func (m *Module) renderDocsPage(w http.ResponseWriter, r *http.Request, slug str
 		HTMLContent: result.HTML,
 	}
 
-	if err = web.Render(
+	if err = web.CachedRender(
 		r.Context(),
 		w,
+		r,
+		m.htmlCache,
+		"docs:"+slug,
 		views.DocsLayout(layout, templ.NopComponent, views.DocsPage(pageData)),
 	); err != nil {
 		web.HandleError(w, err)

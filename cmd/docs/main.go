@@ -13,6 +13,7 @@ import (
 	docscontent "github.com/fastygo/framework/internal/site/docs/content"
 	docsfeature "github.com/fastygo/framework/internal/infra/features/docs"
 	"github.com/fastygo/framework/pkg/app"
+	"github.com/fastygo/framework/pkg/web/security"
 	"github.com/fastygo/framework/pkg/core/cqrs"
 	"github.com/fastygo/framework/pkg/core/cqrs/behaviors"
 )
@@ -46,6 +47,7 @@ func main() {
 	cqrs.RegisterQuery(dispatcher, pagesHandler)
 
 	application := app.New(cfg).
+		WithSecurity(security.DefaultConfig()).
 		WithFeature(docsfeature.New(dispatcher)).
 		Build()
 

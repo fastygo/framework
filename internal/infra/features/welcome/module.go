@@ -2,10 +2,12 @@ package welcome
 
 import (
 	"net/http"
+	"time"
 
 	"github.com/a-h/templ"
 	appwelcome "github.com/fastygo/framework/internal/application/welcome"
 	"github.com/fastygo/framework/pkg/app"
+	"github.com/fastygo/framework/pkg/cache"
 	"github.com/fastygo/framework/pkg/core/cqrs"
 	"github.com/fastygo/framework/pkg/web"
 	"github.com/fastygo/framework/internal/site/web/views"
@@ -17,6 +19,7 @@ type Module struct {
 	navItems       []app.NavItem
 	defaultLocale  string
 	availableLocales []string
+	htmlCache      *cache.Cache[[]byte]
 }
 
 func New(dispatcher *cqrs.Dispatcher, defaultLocale string, availableLocales []string) *Module {
@@ -24,6 +27,7 @@ func New(dispatcher *cqrs.Dispatcher, defaultLocale string, availableLocales []s
 		dispatcher:      dispatcher,
 		availableLocales: availableLocales,
 		defaultLocale:    defaultLocale,
+		htmlCache:      cache.New[[]byte](5 * time.Minute),
 		navItems: []app.NavItem{
 			{
 				Label: "Home",
@@ -127,7 +131,14 @@ func (m *Module) handleWelcome(w http.ResponseWriter, r *http.Request) {
 		ButtonLabel: welcome.ButtonLabel,
 	}
 
-	renderErr := web.Render(r.Context(), w, views.Layout(layout, templ.NopComponent, views.WelcomePage(page)))
+	renderErr := web.CachedRender(
+		r.Context(),
+		w,
+		r,
+		m.htmlCache,
+		"welcome:"+locale,
+		views.Layout(layout, templ.NopComponent, views.WelcomePage(page)),
+	)
 	if renderErr != nil {
 		web.HandleError(w, renderErr)
 	}
