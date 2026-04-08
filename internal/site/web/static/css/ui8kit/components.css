@@ -75,55 +75,75 @@
     @apply inline-flex rounded-full border border-border px-3 py-1 text-xs;
   }
 
-  .card {
+  .ui-sidebar-item {
+    @apply flex items-center gap-2 rounded px-4 py-2 text-sm;
+  }
+
+  .ui-sidebar-item-active {
+    @apply bg-accent text-accent-foreground;
+  }
+
+  .ui-sidebar-item-inactive {
+    @apply text-muted-foreground hover:bg-accent;
+  }
+
+  .ui-sidebar-item-icon {
+    @apply h-4 w-4;
+  }
+
+  .ui-sidebar-item-label {
+    @apply min-w-0;
+  }
+
+  .ui-card-surface {
     @apply rounded-lg border border-border bg-card;
   }
 
-  .card-header {
+  .ui-card-header {
     @apply border-b border-border px-4 py-2;
   }
 
-  .card-title {
+  .ui-card-title {
     @apply text-sm font-semibold;
   }
 
-  .card-content {
+  .ui-card-content {
     @apply p-4;
   }
 
-  .form-label {
+  .ui-form-label {
     @apply block text-sm text-muted-foreground;
   }
 
-  .form-label-inline {
+  .ui-form-label-inline {
     @apply flex items-center gap-2 text-sm;
   }
 
-  .table {
+  .ui-table-basic {
     @apply w-full;
   }
 
-  .table-header {
+  .ui-table-header {
     @apply bg-muted;
   }
 
-  .table-header-cell {
+  .ui-table-header-cell {
     @apply min-w-0 px-4 py-2 text-left text-xs font-semibold text-muted-foreground;
   }
 
-  .table-body {
+  .ui-table-body {
     @apply divide-y divide-border;
   }
 
-  .table-cell {
+  .ui-table-body-cell {
     @apply min-w-0 px-4 py-2 text-sm;
   }
 
-  .table-cell-muted {
+  .ui-table-body-cell-muted {
     @apply min-w-0 px-4 py-2 text-sm text-muted-foreground;
   }
 
-  .pre-code {
+  .ui-pre-code {
     @apply overflow-x-auto whitespace-pre-wrap rounded border border-border bg-muted px-4 py-2 text-xs;
   }
 

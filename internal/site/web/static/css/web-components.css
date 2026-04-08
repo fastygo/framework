@@ -1,37 +1,41 @@
 @layer components {
-  .app-page {
+  .web-page {
     @apply space-y-8;
   }
 
-  .app-page-header {
+  .web-page-header {
     @apply space-y-2;
   }
 
-  .app-subtle {
+  .web-subtle {
     @apply text-muted-foreground;
   }
 
-  .app-alert-error {
+  .web-alert-error {
     @apply rounded-lg border border-destructive/30 bg-destructive/10 p-4 text-sm text-destructive;
   }
 
-  .app-alert-success {
+  .web-alert-success {
     @apply rounded-lg border border-emerald-500/30 bg-emerald-500/10 p-4 text-sm text-emerald-700 dark:text-emerald-300;
   }
 
-  .app-language-toggle-current {
+  .web-language-toggle-current {
     @apply text-[10px] font-semibold leading-none;
   }
 
-  .app-content-card {
+  .web-language-toggle {
+    @apply min-w-10;
+  }
+
+  .web-content-card {
     @apply space-y-3;
   }
 
-  .app-form {
+  .web-form {
     @apply space-y-4;
   }
 
-  .app-actions {
+  .web-actions {
     @apply flex flex-wrap gap-3;
   }
 
@@ -62,7 +66,7 @@
   }
 
   .ui-header-language {
-    @apply flex-shrink-0;
+    @apply shrink-0;
   }
 
   .ui-header-title {
@@ -109,47 +113,51 @@
     color: var(--accent-foreground);
   }
 
-  .hero {
-    @apply rounded-3xl border border-border/70 bg-gradient-to-br from-card to-muted/40 p-10;
+  .web-hero {
+    @apply rounded-3xl border border-border/70 bg-linear-to-br from-card to-muted/40 p-10;
   }
 
-  .hero-content {
+  .web-hero-content {
     @apply flex max-w-2xl flex-col gap-4;
   }
 
-  .hero-kicker {
+  .web-hero-kicker {
     @apply text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground;
   }
 
-  .hero-description {
+  .web-hero-title {
+    @apply text-4xl md:text-5xl;
+  }
+
+  .web-hero-description {
     @apply text-sm leading-6 text-muted-foreground;
   }
 
-  .hero-actions {
+  .web-hero-actions {
     @apply mt-2 flex flex-wrap gap-3 pt-2;
   }
 
-  .hero-cta {
+  .web-hero-cta {
     @apply inline-flex h-11 items-center justify-center rounded-md px-5 text-sm font-semibold transition-colors;
   }
 
-  .hero-cta-primary {
+  .web-hero-cta-primary {
     @apply bg-foreground text-background shadow-sm hover:bg-foreground/80;
   }
 
-  .hero-cta-secondary {
+  .web-hero-cta-secondary {
     @apply border border-border bg-background text-foreground hover:bg-accent hover:text-accent-foreground;
   }
 
-  .hero-feature-grid {
+  .web-hero-feature-grid {
     @apply grid gap-4 md:grid-cols-3;
   }
 
-  .hero-feature-card-title {
+  .web-hero-feature-card-title {
     @apply mb-2 text-base font-semibold;
   }
 
-  .hero-feature-card {
+  .web-hero-feature-card {
     @apply rounded-lg border bg-card p-4;
   }
 

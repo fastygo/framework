@@ -112,8 +112,8 @@
 
     if (icon) {
       icon.className = dark
-        ? "latty latty-sun h-4 w-4"
-        : "latty latty-moon h-4 w-4";
+        ? "ui-theme-icon latty latty-sun"
+        : "ui-theme-icon latty latty-moon";
     }
 
     if (button) {
@@ -175,7 +175,7 @@
 
   ready(function () {
     var themeButton = document.getElementById("ui8kit-theme-toggle");
-    var toggle = document.getElementById("app-language-toggle");
+    var toggle = document.getElementById("web-language-toggle");
 
     if (themeButton) {
       themeButton.addEventListener("click", function () {

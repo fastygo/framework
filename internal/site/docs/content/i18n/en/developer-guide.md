@@ -246,6 +246,31 @@ Because `AppBuilder` composes `NavItems` automatically, each feature contributes
 - CSS watch:
   - `npm run dev:css`
 
+## CI and lint checks
+
+- `scripts/check-no-root-imports.go` validates package import boundaries:
+  - It parses all Go files with AST and forbids imports from:
+    - `github.com/fastygo/framework/internal/features`
+    - `github.com/fastygo/framework/internal/site/features`
+    - `github.com/fastygo/framework/views`
+    - `github.com/fastygo/framework/fixtures`
+  - If a forbidden import is found, the checker exits with code `1` and prints file + line.
+- `.github/workflows/no-root-imports.yml` runs this check in CI:
+  - Triggered on `push` to `main` and pull requests.
+  - Executes `make ci`, which resolves to:
+    - `make lint-ci`
+    - `make lint`
+    - `go test ./...`
+    - `go run ./scripts/check-no-root-imports.go`
+- On environments without `make`, run the same check locally with:
+
+```bash
+go test ./...
+go run ./scripts/check-no-root-imports.go
+```
+
+- Docs site checks are covered by the same root targets because the same Makefile and script set is used.
+
 ---
 
 ## Troubleshooting

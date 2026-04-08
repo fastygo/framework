@@ -1,0 +1,30 @@
+{
+  "brand_name": "Документация Framework",
+  "theme": {
+    "label": "Тема",
+    "switch_to_dark_label": "Переключить на темную тему",
+    "switch_to_light_label": "Переключить на светлую тему"
+  },
+  "language": {
+    "label": "Язык",
+    "current_label": "RU",
+    "next_label": "EN",
+    "next_locale": "en",
+    "available": ["en", "ru"],
+    "locale_labels": {
+      "en": "EN",
+      "ru": "RU"
+    }
+  },
+  "index_title": "Документация Framework",
+  "index_description": "Выберите документ, чтобы прочитать нужный раздел.",
+  "pages": {
+    "quickstart": "Быстрый старт",
+    "developer-guide": "Руководство разработчика",
+    "api-reference": "Справочник API"
+  },
+  "locale_name": {
+    "en": "English",
+    "ru": "Русский"
+  }
+}

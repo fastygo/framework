@@ -10,6 +10,7 @@ import templruntime "github.com/a-h/templ/runtime"
 
 import t "github.com/a-h/templ"
 import (
+	"github.com/fastygo/framework/internal/site/web/views/partials"
 	"github.com/fastygo/framework/pkg/app"
 	ui8layout "github.com/fastygo/ui8kit/layout"
 )
@@ -59,7 +60,7 @@ func DocsLayout(data DocsLayoutData, headExtra t.Component, body t.Component) te
 			Active:      data.Active,
 			NavItems:    asShellNavItems(data.NavItems),
 			HeadExtra:   docsLayoutHeadExtra(headExtra),
-			HeaderExtra: nil,
+			HeaderExtra: partials.HeaderActions(data.LanguageToggle, data.NavItems),
 			ThemeToggle: ui8layout.ThemeToggleProps{
 				Label:              data.ThemeToggle.Label,
 				SwitchToDarkLabel:  data.ThemeToggle.SwitchToDarkLabel,

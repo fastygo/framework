@@ -79,6 +79,10 @@
     @apply flex h-15 items-center border-b border-border px-4;
   }
 
+  .ui-shell-brand-title {
+    @apply text-sm font-semibold;
+  }
+
   .ui-shell-nav-desktop {
     @apply space-y-1 p-2;
   }
@@ -120,6 +124,10 @@
 
   .ui-header-theme-btn {
     @apply inline-flex h-8 w-8 items-center justify-center rounded border-0 bg-transparent p-0 text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground;
+  }
+
+  .ui-theme-icon {
+    @apply h-4 w-4;
   }
 
   .ui-header-title {

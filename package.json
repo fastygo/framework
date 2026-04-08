@@ -7,11 +7,11 @@
     "dev:docs:css": "tailwindcss -i ./internal/site/docs/web/static/css/input.css -o ./internal/site/docs/web/static/css/app.css --watch",
     "build:docs:css": "tailwindcss -i ./internal/site/docs/web/static/css/input.css -o ./internal/site/docs/web/static/css/app.css --minify",
     "sync:ui8kit": "bash ./scripts/sync-ui8kit-css.sh",
-    "ui8kit:build": "npm run sync:ui8kit && npm run build:css",
+    "ui8kit:build": "npm run sync:ui8kit && npm run build:css && npm run build:docs:css",
     "generate": "templ generate",
-    "build": "npm run build:css && npm run generate",
-    "preview": "npm run build:css && npm run generate && go run ./cmd/server",
-    "preview:docs": "npm run build:docs:css && npm run generate && go run ./cmd/docs"
+    "build": "npm run ui8kit:build && npm run generate",
+    "preview": "npm run build && go run ./cmd/server",
+    "preview:docs": "npm run build && go run ./cmd/docs"
   },
   "dependencies": {
     "@tailwindcss/cli": "^4.2.1",

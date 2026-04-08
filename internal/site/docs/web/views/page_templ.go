@@ -31,7 +31,7 @@ func DocsPage(data DocsPageData) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"docs-page app-page\"><div class=\"app-content-card\"><article class=\"docs-content docs-prose prose-slate dark:prose-invert\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"docs-page\"><div class=\"docs-content-card\"><article class=\"docs-content docs-prose\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

@@ -33,28 +33,28 @@ func WelcomePage(data WelcomePageData) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"app-page\"><section class=\"hero\"><div class=\"hero-content\"><p class=\"hero-kicker\">Framework</p>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"web-page\"><section class=\"web-hero\"><div class=\"web-hero-content\"><p class=\"web-hero-kicker\">Framework</p>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = ui.Title(ui.TitleProps{Class: "text-4xl md:text-5xl"}, data.Title).Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = ui.Title(ui.TitleProps{Class: "web-hero-title"}, data.Title).Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "<p class=\"hero-description\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "<p class=\"web-hero-description\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var2 string
 		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(data.Description)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/site/web/views/welcome.templ`, Line: 13, Col: 50}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/site/web/views/welcome.templ`, Line: 13, Col: 54}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "</p><div class=\"hero-actions\"><a class=\"hero-cta hero-cta-primary\" href=\"https://github.com/fastygo/framework\" target=\"_blank\" rel=\"noopener noreferrer\">Github</a> <a class=\"hero-cta hero-cta-secondary\" href=\"https://docs.fastygo.ru\" target=\"_blank\" rel=\"noopener noreferrer\">Docs</a></div></div></section><div class=\"app-content-card\"><div class=\"hero-feature-grid\"><article class=\"hero-feature-card\"><h3 class=\"hero-feature-card-title\">Modular</h3><p>Feature modules split presentation, application logic, and infrastructure adapters.</p></article><article class=\"hero-feature-card\"><h3 class=\"hero-feature-card-title\">Fast bootstrap</h3><p>Clean layered foundation with ready-made CQRS pipeline and middleware stack.</p></article><article class=\"hero-feature-card\"><h3 class=\"hero-feature-card-title\">Production ready</h3><p>Server-side rendering, structured logs, and built-in observability-friendly boundaries.</p></article></div></div></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "</p><div class=\"web-hero-actions\"><a class=\"web-hero-cta web-hero-cta-primary\" href=\"https://github.com/fastygo/framework\" target=\"_blank\" rel=\"noopener noreferrer\">Github</a> <a class=\"web-hero-cta web-hero-cta-secondary\" href=\"https://docs.fastygo.ru\" target=\"_blank\" rel=\"noopener noreferrer\">Docs</a></div></div></section><div class=\"web-content-card\"><div class=\"web-hero-feature-grid\"><article class=\"web-hero-feature-card\"><h3 class=\"web-hero-feature-card-title\">Modular</h3><p>Feature modules split presentation, application logic, and infrastructure adapters.</p></article><article class=\"web-hero-feature-card\"><h3 class=\"web-hero-feature-card-title\">Fast bootstrap</h3><p>Clean layered foundation with ready-made CQRS pipeline and middleware stack.</p></article><article class=\"web-hero-feature-card\"><h3 class=\"web-hero-feature-card-title\">Production ready</h3><p>Server-side rendering, structured logs, and built-in observability-friendly boundaries.</p></article></div></div></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

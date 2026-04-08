@@ -1,6 +1,7 @@
 package views
 
 import (
+	"github.com/fastygo/framework/internal/site/web/views/partials"
 	"github.com/fastygo/framework/pkg/app"
 	"github.com/fastygo/framework/pkg/web"
 )
@@ -11,11 +12,12 @@ type DocsListItem struct {
 }
 
 type DocsLayoutData struct {
-	Title       string
-	BrandName   string
-	Active      string
-	NavItems    []app.NavItem
-	ThemeToggle web.ThemeToggleData
+	Title          string
+	BrandName      string
+	Active         string
+	NavItems       []app.NavItem
+	ThemeToggle    web.ThemeToggleData
+	LanguageToggle partials.LanguageToggleData
 }
 
 type DocsPageData struct {
@@ -24,5 +26,7 @@ type DocsPageData struct {
 }
 
 type DocsIndexData struct {
-	Pages []DocsListItem
+	Title       string
+	Description string
+	Pages       []DocsListItem
 }

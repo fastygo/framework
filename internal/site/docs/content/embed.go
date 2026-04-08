@@ -2,5 +2,5 @@ package content
 
 import "embed"
 
-//go:embed *.md
+//go:embed i18n/*/*.md
 var FS embed.FS

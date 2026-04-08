@@ -37,6 +37,18 @@ Alternatively, if `make` is available:
 make dev
 ```
 
+Run docs application:
+
+```bash
+make dev-docs
+```
+
+Build docs statically:
+
+```bash
+make build-docs
+```
+
 ## 4) Open in your browser
 
 Go to:
@@ -50,12 +62,20 @@ You should see the dashboard shell with:
 - Theme toggle in the header
 - Language switcher in the header
 - Welcome page with title, description and button
+- Documentation index and article pages at `/` and `/quickstart`, `/developer-guide`, `/api-reference`
 
 ## Optional production build
 
 ```bash
 make build
 ./bin/framework
+```
+
+To run both app and docs in production build:
+
+```bash
+make build-docs
+./bin/docs
 ```
 
 ## Environment
@@ -67,3 +87,20 @@ The app reads these defaults in `pkg/app/config.go`:
 - `APP_DEFAULT_LOCALE` (default: `en`)
 - `APP_AVAILABLE_LOCALES` (default: `en,ru`)
 - `APP_DATA_SOURCE` (default: `fixture`)
+
+## CI and lint checks
+
+The repository runs the no-root-import policy in CI via `.github/workflows/no-root-imports.yml`.
+It executes `make ci` on pushes to `main` and pull requests.
+
+`make ci` -> `make lint-ci` -> `make lint`:
+
+- `go test ./...`
+- `go run ./scripts/check-no-root-imports.go`
+
+Without `make`, run the same checks manually:
+
+```bash
+go test ./...
+go run ./scripts/check-no-root-imports.go
+```

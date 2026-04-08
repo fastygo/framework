@@ -10,12 +10,12 @@ import (
 	"syscall"
 
 	"github.com/fastygo/framework/internal/application/docs"
-	docscontent "github.com/fastygo/framework/internal/site/docs/content"
 	docsfeature "github.com/fastygo/framework/internal/infra/features/docs"
+	docscontent "github.com/fastygo/framework/internal/site/docs/content"
 	"github.com/fastygo/framework/pkg/app"
-	"github.com/fastygo/framework/pkg/web/security"
 	"github.com/fastygo/framework/pkg/core/cqrs"
 	"github.com/fastygo/framework/pkg/core/cqrs/behaviors"
+	"github.com/fastygo/framework/pkg/web/security"
 )
 
 func main() {
@@ -37,7 +37,7 @@ func main() {
 		&behaviors.Validation{},
 	)
 
-	pagesHandler, err := docs.NewDocsPageQueryHandler(docscontent.FS)
+	pagesHandler, err := docs.NewDocsPageQueryHandler(docscontent.FS, cfg.AvailableLocales, cfg.DefaultLocale)
 	if err != nil {
 		slog.Error("failed to initialize docs pages", "error", err)
 		os.Exit(1)
@@ -48,7 +48,7 @@ func main() {
 
 	application := app.New(cfg).
 		WithSecurity(security.DefaultConfig()).
-		WithFeature(docsfeature.New(dispatcher)).
+		WithFeature(docsfeature.New(dispatcher, cfg.DefaultLocale, cfg.AvailableLocales)).
 		Build()
 
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
