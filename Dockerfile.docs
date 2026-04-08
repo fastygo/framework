@@ -14,6 +14,7 @@ RUN apt-get update \
 
 COPY go.mod go.sum package.json package-lock.json ./
 COPY scripts ./scripts
+COPY pkg/ui8kit ./pkg/ui8kit
 
 RUN npm ci
 RUN go mod download
