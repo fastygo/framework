@@ -1,0 +1,71 @@
+package layout
+
+templ Shell(props ShellProps) {
+	<!DOCTYPE html>
+	<html lang={ shellLang(props.Lang) }>
+		<head>
+			<meta charset="UTF-8"/>
+			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+			<link rel="icon" href="/static/img/favicon-32x32.png" type="image/png" sizes="32x32"/>
+			<link rel="icon" href="/static/img/favicon-192x192.png" type="image/png" sizes="192x192"/>
+			<link rel="apple-touch-icon" href="/static/img/favicon-192x192.png"/>
+			<title>{ props.Title }</title>
+			<link rel="stylesheet" href={ shellCSS(props.CSSPath) }/>
+			<script src={ shellJS(props.JSPath) } defer></script>
+			if props.HeadExtra != nil {
+				@props.HeadExtra
+			}
+		</head>
+		<body class="ui-shell-body">
+			<div
+				id={ MobileSheetPanelID }
+				class="ui-shell-mobile-sheet-panel"
+				data-ui8kit="sheet"
+				data-ui8kit-dialog
+				role="dialog"
+				aria-modal="true"
+				aria-label="Navigation menu"
+				aria-labelledby="ui8kit-mobile-sheet-title"
+				data-state="closed"
+				hidden
+			>
+				<div class="ui-shell-mobile-sheet-overlay" data-ui8kit-dialog-overlay data-ui8kit-dialog-close data-ui8kit-dialog-target={ MobileSheetPanelID } aria-label="Close overlay"></div>
+				<div class="ui-shell-mobile-sheet-content-wrap">
+					<div class="ui-shell-mobile-sheet-header">
+						<span id="ui8kit-mobile-sheet-title" class="ui-shell-mobile-sheet-title">{ shellBrand(props.BrandName) }</span>
+						<button
+							type="button"
+							class="ui-shell-mobile-sheet-close"
+							data-ui8kit-dialog-close
+							data-ui8kit-dialog-target={ MobileSheetPanelID }
+							aria-label="Close navigation menu"
+						>
+							✕
+						</button>
+					</div>
+					<div class="ui-shell-mobile-sheet-content">
+						<nav class="ui-shell-nav-mobile">
+							@Sidebar(SidebarProps{Items: props.NavItems, Active: props.Active, Mobile: true})
+						</nav>
+					</div>
+				</div>
+			</div>
+			<div class="ui-shell-layout-row">
+				<aside class="ui-shell-desktop-aside">
+					<div class="ui-shell-desktop-brand-row">
+						<p class="ui-shell-brand-title">{ shellBrand(props.BrandName) }</p>
+					</div>
+					<nav class="ui-shell-nav-desktop">
+						@Sidebar(SidebarProps{Items: props.NavItems, Active: props.Active})
+					</nav>
+				</aside>
+				<div class="ui-shell-main-column">
+					@Header(HeaderProps{Title: props.Title, Extra: props.HeaderExtra, Trailing: props.HeaderTrailing, ThemeToggle: props.ThemeToggle})
+					<main class="ui-shell-main">
+						{ children... }
+					</main>
+				</div>
+			</div>
+		</body>
+	</html>
+}

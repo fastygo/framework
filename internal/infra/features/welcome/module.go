@@ -126,9 +126,18 @@ func (m *Module) handleWelcome(w http.ResponseWriter, r *http.Request) {
 	}
 
 	page := views.WelcomePageData{
-		Title:       welcome.Title,
-		Description: welcome.Description,
-		ButtonLabel: welcome.ButtonLabel,
+		Title:                welcome.Title,
+		Description:          welcome.Description,
+		ButtonLabel:          welcome.ButtonLabel,
+		Kicker:               welcome.Kicker,
+		ModularTitle:         welcome.ModularTitle,
+		ModularDescription:    welcome.ModularDescription,
+		BootstrapTitle:       welcome.BootstrapTitle,
+		BootstrapDescription:  welcome.BootstrapDescription,
+		ProductionTitle:      welcome.ProductionTitle,
+		ProductionDescription: welcome.ProductionDescription,
+		GithubLabel:          welcome.GithubLabel,
+		DocsLabel:            welcome.DocsLabel,
 	}
 
 	renderErr := web.CachedRender(

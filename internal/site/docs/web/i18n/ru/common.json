@@ -23,6 +23,16 @@
     "developer-guide": "Руководство разработчика",
     "api-reference": "Справочник API"
   },
+  "header_nav_items": [
+    {
+      "label": "FastY Go",
+      "path": "https://fastygo.ru"
+    },
+    {
+      "label": "GitHub",
+      "path": "https://github.com/fastygo/ui8kit"
+    }
+  ],
   "locale_name": {
     "en": "English",
     "ru": "Русский"

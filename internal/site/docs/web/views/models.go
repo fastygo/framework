@@ -16,6 +16,7 @@ type DocsLayoutData struct {
 	BrandName      string
 	Active         string
 	NavItems       []app.NavItem
+	HeaderNavItems []app.NavItem
 	ThemeToggle    web.ThemeToggleData
 	LanguageToggle partials.LanguageToggleData
 }

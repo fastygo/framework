@@ -60,7 +60,7 @@ func DocsLayout(data DocsLayoutData, headExtra t.Component, body t.Component) te
 			Active:      data.Active,
 			NavItems:    asShellNavItems(data.NavItems),
 			HeadExtra:   docsLayoutHeadExtra(headExtra),
-			HeaderExtra: partials.HeaderActions(data.LanguageToggle, data.NavItems),
+			HeaderExtra: partials.HeaderActions(data.LanguageToggle, data.HeaderNavItems),
 			ThemeToggle: ui8layout.ThemeToggleProps{
 				Label:              data.ThemeToggle.Label,
 				SwitchToDarkLabel:  data.ThemeToggle.SwitchToDarkLabel,
@@ -97,10 +97,6 @@ func docsLayoutHeadExtra(extra t.Component) templ.Component {
 		}
 		ctx = templ.ClearChildren(ctx)
 		templ_7745c5c3_Err = extra.Render(ctx, templ_7745c5c3_Buffer)
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<script src=\"/static/js/docs-shell.js\" defer></script>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

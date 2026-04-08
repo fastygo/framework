@@ -25,4 +25,17 @@ type WelcomePageData struct {
 	Title       string
 	Description string
 	ButtonLabel string
+	Kicker      string
+
+	ModularTitle       string
+	ModularDescription string
+
+	BootstrapTitle       string
+	BootstrapDescription string
+
+	ProductionTitle       string
+	ProductionDescription string
+
+	GithubLabel string
+	DocsLabel   string
 }

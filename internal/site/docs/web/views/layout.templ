@@ -14,7 +14,7 @@ templ DocsLayout(data DocsLayoutData, headExtra t.Component, body t.Component) {
 		Active:      data.Active,
 		NavItems:    asShellNavItems(data.NavItems),
 		HeadExtra:   docsLayoutHeadExtra(headExtra),
-		HeaderExtra: partials.HeaderActions(data.LanguageToggle, data.NavItems),
+		HeaderExtra: partials.HeaderActions(data.LanguageToggle, data.HeaderNavItems),
 		ThemeToggle: ui8layout.ThemeToggleProps{
 			Label:              data.ThemeToggle.Label,
 			SwitchToDarkLabel:  data.ThemeToggle.SwitchToDarkLabel,
@@ -28,7 +28,6 @@ templ DocsLayout(data DocsLayoutData, headExtra t.Component, body t.Component) {
 
 templ docsLayoutHeadExtra(extra t.Component) {
 	@extra
-	<script src="/static/js/docs-shell.js" defer></script>
 }
 
 func asShellNavItems(items []app.NavItem) []ui8layout.NavItem {

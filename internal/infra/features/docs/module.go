@@ -116,10 +116,11 @@ func (m *Module) renderDocsIndex(w http.ResponseWriter, r *http.Request, locale 
 	}
 
 	layout := views.DocsLayoutData{
-		Title:     localized.Common.IndexTitle,
-		BrandName: localized.Common.BrandName,
-		Active:    "/",
-		NavItems:  m.localizedNavItems(localized),
+		Title:          localized.Common.IndexTitle,
+		BrandName:      localized.Common.BrandName,
+		Active:         "/",
+		NavItems:       m.localizedNavItems(localized),
+		HeaderNavItems: docsHeaderNavItems(localized),
 		ThemeToggle: web.ThemeToggleData{
 			Label:              localized.Common.Theme.Label,
 			SwitchToDarkLabel:  localized.Common.Theme.SwitchToDarkLabel,
@@ -167,10 +168,11 @@ func (m *Module) renderDocsPage(w http.ResponseWriter, r *http.Request, slug str
 	pageTitle := localizePageTitle(result.Slug, result.Title, localized.Common.Pages)
 
 	layout := views.DocsLayoutData{
-		Title:     pageTitle,
-		BrandName: localized.Common.BrandName,
-		Active:    "/" + result.Slug,
-		NavItems:  m.localizedNavItems(localized),
+		Title:          pageTitle,
+		BrandName:      localized.Common.BrandName,
+		Active:         "/" + result.Slug,
+		NavItems:       m.localizedNavItems(localized),
+		HeaderNavItems: docsHeaderNavItems(localized),
 		ThemeToggle: web.ThemeToggleData{
 			Label:              localized.Common.Theme.Label,
 			SwitchToDarkLabel:  localized.Common.Theme.SwitchToDarkLabel,
@@ -206,23 +208,57 @@ func (m *Module) loadLocalized(locale string) (docsi18n.Localized, error) {
 }
 
 func (m *Module) localizedNavItems(localized docsi18n.Localized) []app.NavItem {
-	navItems := make([]app.NavItem, len(m.navItems))
-	for i, item := range m.navItems {
+	navItems := make([]app.NavItem, 0, len(m.navItems)+2)
+	for _, item := range m.navItems {
 		label := item.Label
 		slug := strings.TrimPrefix(item.Path, "/")
 		if localizedTitle, ok := localized.Common.Pages[slug]; ok && localizedTitle != "" {
 			label = localizedTitle
 		}
 
-		navItems[i] = app.NavItem{
+		navItems = append(navItems, app.NavItem{
 			Label: label,
 			Path:  item.Path,
 			Icon:  item.Icon,
 			Order: item.Order,
-		}
+		})
+	}
+
+	for _, link := range localized.Common.HeaderNavItems {
+		navItems = append(navItems, app.NavItem{
+			Label: link.Label,
+			Path:  link.Path,
+			Icon:  "",
+			Order: len(navItems),
+		})
 	}
 
 	return navItems
+}
+
+func docsHeaderNavItems(localized docsi18n.Localized) []app.NavItem {
+	if len(localized.Common.HeaderNavItems) == 0 {
+		return []app.NavItem{
+			{
+				Label: "FastY Go",
+				Path:  "https://fastygo.ru",
+			},
+			{
+				Label: "GitHub",
+				Path:  "https://github.com/fastygo/ui8kit",
+			},
+		}
+	}
+
+	items := make([]app.NavItem, 0, len(localized.Common.HeaderNavItems))
+	for _, item := range localized.Common.HeaderNavItems {
+		items = append(items, app.NavItem{
+			Label: item.Label,
+			Path:  item.Path,
+		})
+	}
+
+	return items
 }
 
 func localizePageTitle(slug, fallback string, localized map[string]string) string {

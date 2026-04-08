@@ -4,28 +4,26 @@
   }
 
   /*
-   * Mobile sheet (ui8kit-core Sheet.tsx pattern): hidden checkbox + label[for] trigger,
-   * fixed portal, overlay label closes on click, panel absolute left full height.
+   * Mobile sheet: JavaScript-driven dialog behavior.
    */
-  .ui-shell-mobile-sheet-input {
-    @apply sr-only;
-  }
-
-  .ui-shell-mobile-sheet-portal {
-    @apply fixed inset-0 z-50 md:hidden;
+  .ui-shell-mobile-sheet-panel {
+    @apply fixed inset-y-0 left-0 z-50 md:hidden;
     top: 0;
     left: 0;
-    right: 0;
-    bottom: 0;
+    width: 100%;
+    display: none;
+  }
+
+  .ui-shell-mobile-sheet-panel[data-state="open"] {
+    display: block;
+  }
+
+  .ui-shell-mobile-sheet-panel[data-state="closed"] {
     display: none;
   }
 
   @media (max-width: 47.999rem) {
-    .ui-shell-mobile-sheet-input:checked ~ .ui-shell-mobile-sheet-portal {
-      display: block;
-    }
-
-    body.ui-shell-body:has(.ui-shell-mobile-sheet-input:checked) {
+    body.ui-shell-body:has(.ui-shell-mobile-sheet-panel[data-state="open"]) {
       overflow: hidden;
     }
   }
@@ -36,18 +34,18 @@
     transition: opacity 180ms ease;
   }
 
-  .ui-shell-mobile-sheet-input:checked ~ .ui-shell-mobile-sheet-portal .ui-shell-mobile-sheet-overlay {
+  .ui-shell-mobile-sheet-panel[data-state="open"] .ui-shell-mobile-sheet-overlay {
     opacity: 1;
   }
 
-  .ui-shell-mobile-sheet-panel {
+  .ui-shell-mobile-sheet-content-wrap {
     @apply absolute left-0 top-0 h-full max-h-dvh max-w-full overflow-y-auto border-r border-border bg-card p-4;
-    width: 20rem; /* Sheet size md (w-80) */
+    width: 20rem;
     transform: translateX(-100%);
     transition: transform 180ms ease;
   }
 
-  .ui-shell-mobile-sheet-input:checked ~ .ui-shell-mobile-sheet-portal .ui-shell-mobile-sheet-panel {
+  .ui-shell-mobile-sheet-panel[data-state="open"] .ui-shell-mobile-sheet-content-wrap {
     transform: translateX(0);
   }
 

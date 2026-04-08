@@ -48,6 +48,17 @@ type WelcomeFixture struct {
 	Title       string `json:"title"`
 	Description string `json:"description"`
 	ButtonLabel string `json:"button_label"`
+	Kicker      string `json:"kicker"`
+
+	ModularTitle         string `json:"modular_title"`
+	ModularDescription   string `json:"modular_description"`
+	BootstrapTitle       string `json:"bootstrap_title"`
+	BootstrapDescription string `json:"bootstrap_description"`
+	ProductionTitle      string `json:"production_title"`
+	ProductionDescription string `json:"production_description"`
+
+	GithubLabel string `json:"github_label"`
+	DocsLabel   string `json:"docs_label"`
 }
 
 var supportedLocales = []string{"en", "ru"}

@@ -95,6 +95,10 @@
     @apply min-w-0;
   }
 
+  .ui-sidebar-divider {
+    @apply my-2 border-t border-border;
+  }
+
   .ui-card-surface {
     @apply rounded-lg border border-border bg-card;
   }
@@ -245,5 +249,155 @@
 
   .ui-sheet-content {
     @apply mt-4;
+  }
+
+  .ui-dialog {
+    @apply fixed inset-0 z-50;
+  }
+
+  .ui-dialog[data-state="open"] {
+    @apply block;
+  }
+
+  .ui-dialog[data-state="closed"] {
+    @apply hidden;
+  }
+
+  .ui-dialog-overlay {
+    @apply absolute inset-0 cursor-pointer bg-card/50;
+  }
+
+  .ui-dialog-content {
+    @apply relative h-full max-h-dvh w-full overflow-y-auto border-r border-border bg-card p-4;
+    width: 20rem;
+  }
+
+  .ui-dialog-title {
+    @apply text-sm font-semibold;
+  }
+
+  .ui-dialog-description {
+    @apply text-sm text-muted-foreground;
+  }
+
+  .ui-dialog-close {
+    @apply inline-flex h-8 w-8 items-center justify-center rounded-md border border-border;
+  }
+
+  .ui-alert-dialog {
+    @apply fixed inset-0 z-50;
+  }
+
+  .ui-alert-dialog-content {
+    @apply absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-lg border border-border bg-card p-4 shadow-lg;
+  }
+
+  .ui-alert-dialog-cancel {
+    @apply inline-flex h-9 rounded-md border border-border px-3 py-2 text-sm;
+  }
+
+  .ui-alert {
+    @apply rounded-lg border border-border p-4;
+  }
+
+  .ui-alert-default {
+    @apply bg-card text-card-foreground;
+  }
+
+  .ui-alert-success {
+    @apply border-green-500/30 bg-green-500/10 text-green-500;
+  }
+
+  .ui-alert-warning {
+    @apply border-yellow-500/30 bg-yellow-500/10 text-yellow-500;
+  }
+
+  .ui-alert-destructive {
+    @apply border-destructive bg-destructive/10 text-destructive;
+  }
+
+  .ui-breadcrumb {
+    @apply text-sm;
+  }
+
+  .ui-breadcrumb-list {
+    @apply flex flex-wrap items-center gap-2;
+  }
+
+  .ui-breadcrumb-item {
+    @apply inline-flex items-center;
+  }
+
+  .ui-breadcrumb-item::after {
+    content: "/";
+    @apply ml-2 text-muted-foreground;
+  }
+
+  .ui-breadcrumb-item:last-child::after {
+    @apply hidden;
+  }
+
+  .ui-breadcrumb-link {
+    @apply hover:underline;
+  }
+
+  .ui-breadcrumb-current {
+    @apply text-sm font-medium;
+  }
+
+  .ui-tabs {
+    @apply grid gap-2;
+  }
+
+  .ui-tab-trigger {
+    @apply inline-flex items-center justify-center rounded-md px-3 py-2 text-sm;
+  }
+
+  .ui-tab-trigger[aria-selected="true"] {
+    @apply bg-accent text-accent-foreground;
+  }
+
+  .ui-tab-panel {
+    @apply mt-2;
+  }
+
+  .ui-combobox {
+    @apply grid gap-2;
+  }
+
+  .ui-combobox-label {
+    @apply text-sm text-muted-foreground;
+  }
+
+  .ui-combobox-control {
+    @apply relative flex;
+  }
+
+  .ui-combobox-input {
+    @apply flex-1 border border-input bg-background px-3 py-2 text-sm;
+  }
+
+  .ui-combobox-toggle {
+    @apply border border-input bg-background px-3 py-2;
+  }
+
+  .ui-combobox-options {
+    @apply mt-1 max-h-60 overflow-auto border border-border bg-card p-1;
+  }
+
+  .ui-combobox-options li {
+    @apply cursor-pointer rounded px-2 py-2 text-sm;
+  }
+
+  .ui-combobox-option-active {
+    @apply bg-accent text-accent-foreground;
+  }
+
+  .ui-tooltip {
+    @apply relative inline-flex;
+  }
+
+  .ui-tooltip-content {
+    @apply absolute z-40 hidden rounded-md border border-border bg-popover px-3 py-2 text-xs text-popover-foreground shadow;
   }
 }

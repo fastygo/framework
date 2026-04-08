@@ -1,5 +1,14 @@
 {
   "title": "Welcome to Framework",
   "description": "This is a starter dashboard skeleton with UI8Kit and a compact BFF baseline.",
-  "button_label": "Start Now"
+  "button_label": "Start Now",
+  "kicker": "Framework",
+  "modular_title": "Modular",
+  "modular_description": "Feature modules split presentation, application logic, and infrastructure adapters.",
+  "bootstrap_title": "Fast bootstrap",
+  "bootstrap_description": "Clean layered foundation with ready-made CQRS pipeline and middleware stack.",
+  "production_title": "Production ready",
+  "production_description": "Server-side rendering, structured logs, and built-in observability-friendly boundaries.",
+  "github_label": "GitHub",
+  "docs_label": "Docs"
 }

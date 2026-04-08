@@ -1,5 +1,14 @@
 {
   "title": "Добро пожаловать в Framework",
   "description": "Это стартовый шаблон дашборда с UI8Kit и базовым слоем BFF.",
-  "button_label": "Начать"
+  "button_label": "Начать",
+  "kicker": "Framework",
+  "modular_title": "Модульность",
+  "modular_description": "Модульная структура разделяет представление, бизнес-логику и инфраструктурные адаптеры.",
+  "bootstrap_title": "Быстрый старт",
+  "bootstrap_description": "Чистая слоистая архитектура с готовым CQRS пайплайном и стеком middleware.",
+  "production_title": "Готово к продакшену",
+  "production_description": "Серверный рендеринг, структурированные логи и встроенные удобные для наблюдаемости границы.",
+  "github_label": "GitHub",
+  "docs_label": "Документация"
 }
