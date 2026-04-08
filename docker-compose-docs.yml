@@ -9,4 +9,11 @@ services:
       APP_STATIC_DIR: "static"
     expose:
       - "80"
+    networks:
+      - default
+      - paas-network
     restart: unless-stopped
+
+networks:
+  paas-network:
+    external: true
