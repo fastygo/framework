@@ -63,7 +63,7 @@ From repository root:
 ```bash
 npm install
 go mod download
-go mod download github.com/fastygo/ui8kit@v0.2.1
+go mod download github.com/fastygo/ui8kit@v0.2.5
 npm run sync:ui8kit
 ```
 

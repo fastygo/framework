@@ -19,7 +19,7 @@ go mod download
 ## 2) Prepare UI8Kit CSS
 
 ```bash
-go mod download github.com/fastygo/ui8kit@v0.2.1
+go mod download github.com/fastygo/ui8kit@v0.2.5
 npm run sync:ui8kit
 ```
 

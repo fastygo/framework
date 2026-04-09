@@ -14,11 +14,10 @@ RUN apt-get update \
 
 COPY go.mod go.sum package.json package-lock.json ./
 COPY scripts ./scripts
-COPY pkg/ui8kit ./pkg/ui8kit
 
 RUN npm ci
 RUN go mod download
-RUN go mod download github.com/fastygo/ui8kit@v0.2.1
+RUN go mod download github.com/fastygo/ui8kit@v0.2.5
 
 COPY . .
 
