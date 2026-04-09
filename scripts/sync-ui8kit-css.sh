@@ -11,8 +11,40 @@ if ! command -v go >/dev/null 2>&1; then
   exit 1
 fi
 
-# Resolves to local module dir or GOMODCACHE copy; works with go.work and plain require.
-UI8KIT_DIR="$(go list -m -f '{{.Dir}}' github.com/fastygo/ui8kit)"
+resolve_ui8kit_dir() {
+  local dir=""
+  local download_json=""
+
+  # First prefer the current module/workspace resolution.
+  dir="$(go list -m -f '{{.Dir}}' github.com/fastygo/ui8kit 2>/dev/null || true)"
+  dir="$(printf '%s' "$dir" | tr -d '\r\n')"
+  if [ -n "$dir" ] && [ -d "$dir/styles" ] && [ -d "$dir/js" ]; then
+    printf '%s\n' "$dir"
+    return 0
+  fi
+
+  # In Docker/CI, .Dir may be empty even though the module is required.
+  # Force a download and read the extracted directory from JSON output.
+  download_json="$(go mod download -json github.com/fastygo/ui8kit 2>/dev/null || true)"
+  dir="$(printf '%s\n' "$download_json" | sed -n 's/^[[:space:]]*"Dir":[[:space:]]*"\(.*\)",$/\1/p' | head -n 1)"
+  dir="$(printf '%s' "$dir" | tr -d '\r\n')"
+  dir="${dir//\\\\/\\}"
+  if [ -n "$dir" ] && [ -d "$dir/styles" ] && [ -d "$dir/js" ]; then
+    printf '%s\n' "$dir"
+    return 0
+  fi
+
+  return 1
+}
+
+# Resolves to local module dir or GOMODCACHE copy; works with go.work, replace, and plain require.
+UI8KIT_DIR="$(resolve_ui8kit_dir || true)"
+if [ -z "$UI8KIT_DIR" ]; then
+  echo "Failed to resolve github.com/fastygo/ui8kit." >&2
+  echo "Expected either a local workspace module or a downloadable dependency from go.mod." >&2
+  exit 1
+fi
+
 STYLES_SOURCE_DIR="$UI8KIT_DIR/styles"
 JS_SOURCE_DIR="$UI8KIT_DIR/js"
 FONT_SOURCE_DIR="$ROOT_DIR/pkg/fonts"
