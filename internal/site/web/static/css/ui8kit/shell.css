@@ -109,7 +109,7 @@
   }
 
   .ui-header-menu-btn {
-    @apply inline-flex h-8 w-8 items-center justify-center rounded border border-border text-foreground md:hidden;
+    @apply inline-flex h-8 w-8 items-center justify-center rounded-md border border-border text-foreground md:hidden;
   }
 
   .ui-header-actions {
@@ -117,11 +117,11 @@
   }
 
   .ui-header-action-btn {
-    @apply inline-flex h-8 w-8 items-center justify-center gap-1 rounded border-0 bg-transparent p-0 text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground;
+    @apply inline-flex h-8 w-8 items-center justify-center gap-1 rounded-md border-0 bg-transparent p-0 text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground;
   }
 
   .ui-header-theme-btn {
-    @apply inline-flex h-8 w-8 items-center justify-center rounded border-0 bg-transparent p-0 text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground;
+    @apply inline-flex h-8 w-8 items-center justify-center rounded-md border-0 bg-transparent p-0 text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground;
   }
 
   .ui-theme-icon {
@@ -130,5 +130,21 @@
 
   .ui-header-title {
     @apply flex-1 truncate px-2 text-base font-bold;
+  }
+
+  .ui-header-nav-wrap {
+    @apply flex justify-center;
+  }
+
+  .ui-header-nav {
+    @apply mx-auto flex flex-wrap items-center justify-center gap-3 md:gap-4;
+  }
+
+  .ui-header-nav-link {
+    @apply rounded-md px-2 py-1 text-sm font-medium text-muted-foreground transition-all hover:bg-accent hover:text-accent-foreground;
+  }
+
+  .ui-header-nav-link-active {
+    @apply text-foreground;
   }
 }

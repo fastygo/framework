@@ -1,26 +1,8 @@
 @layer components {
+  /* Site-specific "web-*" blocks (welcome). Shell ui-* styles live in ui8kit/components.css (synced). */
+
   .web-page {
     @apply space-y-8;
-  }
-
-  .web-page-header {
-    @apply space-y-2;
-  }
-
-  .web-subtle {
-    @apply text-muted-foreground;
-  }
-
-  .web-alert-error {
-    @apply rounded-lg border border-destructive/30 bg-destructive/10 p-4 text-sm text-destructive;
-  }
-
-  .web-alert-success {
-    @apply rounded-lg border border-emerald-500/30 bg-emerald-500/10 p-4 text-sm text-emerald-700 dark:text-emerald-300;
-  }
-
-  .web-language-toggle-current {
-    @apply text-[10px] font-semibold leading-none;
   }
 
   .web-language-toggle {
@@ -31,90 +13,8 @@
     @apply space-y-3;
   }
 
-  .web-form {
-    @apply space-y-4;
-  }
-
-  .web-actions {
-    @apply flex flex-wrap gap-3;
-  }
-
-  .ui-shell-desktop-aside {
-    display: none !important;
-  }
-
-  .ui-header {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    align-items: center;
-  }
-
-  .ui-header-actions {
-    display: grid;
-    grid-template-columns: 1fr auto auto;
-    align-items: center;
-    gap: 1rem;
-  }
-
-  .ui-header-nav-wrap {
-    display: flex;
-    justify-content: center;
-  }
-
-  .ui-header-nav {
-    @apply mx-auto flex flex-wrap items-center justify-center gap-4 md:gap-5;
-  }
-
-  .ui-header-language {
-    @apply shrink-0;
-  }
-
-  .ui-header-title {
-    @apply pr-4;
-  }
-
-  .ui-header-nav-link {
-    @apply rounded-md px-2 py-1 text-sm font-medium text-muted-foreground transition-all hover:bg-accent hover:text-accent-foreground;
-  }
-
-  .ui-header-nav-link-active {
-    @apply text-foreground;
-  }
-
-  .ui-shell-nav-mobile {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .ui-shell-nav-mobile > * {
-    display: block;
-    width: 100%;
-  }
-
-  .ui-shell-nav-mobile > * + * {
-    margin-top: 0.25rem;
-  }
-
-  .ui-shell-nav-mobile a,
-  .ui-shell-nav-mobile button {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    padding: 0.5rem 0.75rem;
-    border-radius: var(--radius);
-    text-decoration: none;
-    color: inherit;
-  }
-
-  .ui-shell-nav-mobile a:hover,
-  .ui-shell-nav-mobile button:hover {
-    background: var(--accent);
-    color: var(--accent-foreground);
-  }
-
   .web-hero {
-    @apply rounded-3xl border border-border/70 bg-linear-to-br from-card to-muted/40 p-10;
+    @apply rounded-xl border border-border/70 bg-linear-to-br from-card to-muted/40 p-10;
   }
 
   .web-hero-content {
@@ -158,27 +58,6 @@
   }
 
   .web-hero-feature-card {
-    @apply rounded-lg border bg-card p-4;
-  }
-
-  @media (max-width: 767px) {
-    .ui-header {
-      display: flex;
-      flex-wrap: wrap;
-    }
-
-    .ui-header-actions {
-      display: flex;
-      flex: 1;
-      justify-content: flex-end;
-    }
-
-    .ui-header-nav-wrap {
-      @apply hidden;
-    }
-
-    .ui-header-nav {
-      @apply hidden;
-    }
+    @apply rounded-xl border bg-card p-4;
   }
 }

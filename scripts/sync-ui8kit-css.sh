@@ -1,10 +1,22 @@
 #!/usr/bin/env bash
+# Syncs ui8kit CSS/JS from the resolved github.com/fastygo/ui8kit module (local go.work/replace or module cache).
+# Framework-owned fonts remain under pkg/fonts.
 set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-STYLES_SOURCE_DIR="$ROOT_DIR/pkg/ui8kit/styles"
+cd "$ROOT_DIR"
+
+if ! command -v go >/dev/null 2>&1; then
+  echo "go is required to locate github.com/fastygo/ui8kit (go list -m)." >&2
+  exit 1
+fi
+
+# Resolves to local module dir or GOMODCACHE copy; works with go.work and plain require.
+UI8KIT_DIR="$(go list -m -f '{{.Dir}}' github.com/fastygo/ui8kit)"
+STYLES_SOURCE_DIR="$UI8KIT_DIR/styles"
+JS_SOURCE_DIR="$UI8KIT_DIR/js"
 FONT_SOURCE_DIR="$ROOT_DIR/pkg/fonts"
-JS_SOURCE_DIR="$ROOT_DIR/pkg/ui8kit/js"
+
 WEB_TARGET_DIR="$ROOT_DIR/internal/site/web/static/css/ui8kit"
 DOCS_TARGET_DIR="$ROOT_DIR/internal/site/docs/web/static/css/ui8kit"
 WEB_JS_TARGET_DIR="$ROOT_DIR/internal/site/web/static/js"
@@ -21,16 +33,18 @@ JS_BUNDLE_ORDER=(
   "$JS_SOURCE_DIR/locale.js"
 )
 
+echo "ui8kit module: $UI8KIT_DIR"
+
 if [ ! -d "$STYLES_SOURCE_DIR" ]; then
-  echo "Source styles directory not found: $STYLES_SOURCE_DIR"
+  echo "Source styles directory not found: $STYLES_SOURCE_DIR" >&2
   exit 1
 fi
 if [ ! -d "$JS_SOURCE_DIR" ]; then
-  echo "Source js directory not found: $JS_SOURCE_DIR"
+  echo "Source js directory not found: $JS_SOURCE_DIR" >&2
   exit 1
 fi
 if [ ! -d "$FONT_SOURCE_DIR" ]; then
-  echo "Source fonts directory not found: $FONT_SOURCE_DIR"
+  echo "Source fonts directory not found: $FONT_SOURCE_DIR" >&2
   exit 1
 fi
 

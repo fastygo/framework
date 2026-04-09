@@ -11,9 +11,9 @@
   --primary-foreground: hsl(0 0% 100%);
   --secondary: hsl(24.0000 5.7471% 82.9412%);
   --secondary-foreground: hsl(215 13.7931% 34.1176%);
-  --muted: hsl(20 5.8824% 90%);
+  --muted: hsl(0 0% 87.0588%);
   --muted-foreground: hsl(220 8.9362% 46.0784%);
-  --accent: hsl(292.5000 44.4444% 92.9412%);
+  --accent: hsl(240 42.8571% 89.0196%);
   --accent-foreground: hsl(216.9231 19.1176% 26.6667%);
   --destructive: hsl(0 84.2365% 60.1961%);
   --destructive-foreground: hsl(0 0% 100%);
@@ -36,7 +36,7 @@
   --font-sans: Plus Jakarta Sans, sans-serif;
   --font-serif: Lora, serif;
   --font-mono: Roboto Mono, monospace;
-  --radius: 1.25rem;
+  --radius: 0.925rem;
   --shadow-x: 2px;
   --shadow-y: 2px;
   --shadow-blur: 10px;
@@ -66,9 +66,9 @@
   --primary-foreground: hsl(30 11.1111% 10.5882%);
   --secondary: hsl(25.7143 6.4220% 21.3725%);
   --secondary-foreground: hsl(216.0000 12.1951% 83.9216%);
-  --muted: hsl(30 10.7143% 10.9804%);
+  --muted: hsl(30 4.3478% 9.0196%);
   --muted-foreground: hsl(217.8947 10.6145% 64.9020%);
-  --accent: hsl(25.7143 5.1095% 26.8627%);
+  --accent: hsl(230.7692 7.9755% 31.9608%);
   --accent-foreground: hsl(216.0000 12.1951% 83.9216%);
   --destructive: hsl(0 84.2365% 60.1961%);
   --destructive-foreground: hsl(30 11.1111% 10.5882%);
@@ -91,7 +91,7 @@
   --font-sans: Plus Jakarta Sans, sans-serif;
   --font-serif: Lora, serif;
   --font-mono: Roboto Mono, monospace;
-  --radius: 1.25rem;
+  --radius: 0.925rem;
   --shadow-x: 2px;
   --shadow-y: 2px;
   --shadow-blur: 10px;

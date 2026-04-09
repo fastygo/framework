@@ -8,8 +8,8 @@
 .prose ol { @apply list-decimal pl-6 my-4; }
 .prose li { @apply my-1; }
 .prose blockquote { @apply border-l-4 border-muted pl-4 italic my-4 text-secondary-foreground; }
-.prose img { @apply my-4 rounded-md; }
-.prose code { @apply px-1 py-0.5 rounded bg-muted text-foreground; }
+.prose img { @apply my-4 rounded; }
+.prose code { @apply px-1 py-0.5 rounded bg-muted font-mono text-sm text-foreground; }
 .prose pre { @apply p-3 rounded bg-muted overflow-x-auto my-4; }
 .prose pre code { @apply px-0 py-0 bg-transparent; }
 .prose hr { @apply my-6 border-border; }

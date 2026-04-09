@@ -55,13 +55,14 @@ func Layout(data LayoutData, headExtra templ2.Component, body templ2.Component) 
 			return nil
 		})
 		templ_7745c5c3_Err = ui8layout.Shell(ui8layout.ShellProps{
-			Title:       data.Title,
-			Lang:        data.Locale,
-			BrandName:   data.BrandName,
-			Active:      data.Active,
-			NavItems:    asShellNavItems(data.NavItems),
-			HeadExtra:   layoutHeadExtra(headExtra),
-			HeaderExtra: partials.HeaderActions(data.LanguageToggle, data.NavItems),
+			Title:          data.Title,
+			Lang:           data.Locale,
+			BrandName:      data.BrandName,
+			Active:         data.Active,
+			NavItems:       asShellNavItems(data.NavItems),
+			MarketingShell: true,
+			HeadExtra:      layoutHeadExtra(headExtra),
+			HeaderExtra:    partials.HeaderActions(data.LanguageToggle, data.NavItems),
 			ThemeToggle: ui8layout.ThemeToggleProps{
 				Label:              data.ThemeToggle.Label,
 				SwitchToDarkLabel:  data.ThemeToggle.SwitchToDarkLabel,

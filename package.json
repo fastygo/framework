@@ -2,6 +2,7 @@
   "name": "framework",
   "private": true,
   "scripts": {
+    "preflight": "bash ./scripts/preflight.sh",
     "dev:css": "tailwindcss -i ./internal/site/web/static/css/input.css -o ./internal/site/web/static/css/app.css --watch",
     "build:css": "tailwindcss -i ./internal/site/web/static/css/input.css -o ./internal/site/web/static/css/app.css --minify",
     "dev:docs:css": "tailwindcss -i ./internal/site/docs/web/static/css/input.css -o ./internal/site/docs/web/static/css/app.css --watch",

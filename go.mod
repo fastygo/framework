@@ -7,8 +7,6 @@ require (
 	github.com/google/uuid v1.6.0
 )
 
-require github.com/fastygo/ui8kit v0.2.1
+require github.com/fastygo/ui8kit v0.2.5
 
 require github.com/yuin/goldmark v1.8.2
-
-replace github.com/fastygo/ui8kit => ./pkg/ui8kit
