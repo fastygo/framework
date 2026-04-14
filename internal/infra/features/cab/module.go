@@ -102,5 +102,12 @@ func (m *Module) handleCallback(w http.ResponseWriter, r *http.Request) {
 
 func (m *Module) handleLogout(w http.ResponseWriter, r *http.Request) {
 	clearSiteSession(w)
-	http.Redirect(w, r, "/", http.StatusFound)
+	clearOAuthState(w)
+
+	returnTo := "/"
+	if origin := m.oidc.AppOrigin(); origin != "" {
+		returnTo = origin + "/"
+	}
+
+	http.Redirect(w, r, m.oidc.LogoutURL(returnTo), http.StatusFound)
 }

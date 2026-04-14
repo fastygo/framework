@@ -99,6 +99,22 @@ func (c *OIDCClient) AuthorizationURL(state, nonce string) (string, error) {
 	return u.String(), nil
 }
 
+func (c *OIDCClient) LogoutURL(returnTo string) string {
+	logoutURL := c.issuer + "/logout"
+	if returnTo == "" {
+		return logoutURL
+	}
+	return logoutURL + "?return_to=" + url.QueryEscape(returnTo)
+}
+
+func (c *OIDCClient) AppOrigin() string {
+	u, err := url.Parse(c.redirectURI)
+	if err != nil || u.Scheme == "" || u.Host == "" {
+		return ""
+	}
+	return u.Scheme + "://" + u.Host
+}
+
 func (c *OIDCClient) Discovery() (*ProviderConfig, error) {
 	c.mu.RLock()
 	if c.provider != nil && time.Since(c.fetched) < 10*time.Minute {
