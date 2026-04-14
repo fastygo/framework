@@ -10,6 +10,7 @@ import (
 	"syscall"
 
 	appwelcome "github.com/fastygo/framework/internal/application/welcome"
+	cabfeature "github.com/fastygo/framework/internal/infra/features/cab"
 	welcomefeature "github.com/fastygo/framework/internal/infra/features/welcome"
 	"github.com/fastygo/framework/pkg/app"
 	"github.com/fastygo/framework/pkg/web/security"
@@ -30,10 +31,16 @@ func main() {
 	)
 	cqrs.RegisterQuery(dispatcher, appwelcome.WelcomeQueryHandler{})
 
-	application := app.New(cfg).
+	builder := app.New(cfg).
 		WithSecurity(security.DefaultConfig()).
-		WithFeature(welcomefeature.New(dispatcher, cfg.DefaultLocale, cfg.AvailableLocales)).
-		Build()
+		WithFeature(welcomefeature.New(dispatcher, cfg.DefaultLocale, cfg.AvailableLocales))
+
+	if cfg.OIDCIssuer != "" && cfg.OIDCClientID != "" {
+		builder = builder.WithFeature(cabfeature.New(cfg))
+		slog.Info("OIDC cab feature enabled", "issuer", cfg.OIDCIssuer, "client_id", cfg.OIDCClientID)
+	}
+
+	application := builder.Build()
 
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	defer stop()

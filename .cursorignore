@@ -1,2 +1,30 @@
-# Add directories or file patterns to ignore during indexing (e.g. foo/ or *.csv)
+# Secrets and local env
+.env
+.env.*
+!.env.example
+
+# Dependencies and tool caches
+node_modules/
+.gocache/
+.task/
+
+# Build outputs
+bin/
+tmp/
+*.exe
+*.log
+*.tmp
+
+# IDE / OS
+.vscode/
+.idea/
+
+# Repo-local docs not meant for broad indexing
 .manual/
+.project/
+.roadmap/
+.paas/
+
+# Generated CSS (large, rebuilt often)
+internal/site/web/static/css/app.css
+internal/site/docs/web/static/css/app.css

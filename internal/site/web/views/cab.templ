@@ -1,0 +1,15 @@
+package views
+
+templ CabPage(email string) {
+	<div class="web-page">
+		<section class="web-hero">
+			<div class="web-hero-content">
+				<h1 class="web-hero-title">Welcome, { email }</h1>
+				<p class="web-hero-description">You are authenticated via SSO.</p>
+				<div class="web-hero-actions">
+					<a class="web-hero-cta web-hero-cta-secondary" href="/auth/logout">Sign out</a>
+				</div>
+			</div>
+		</section>
+	</div>
+}

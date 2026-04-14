@@ -7,11 +7,17 @@ import (
 )
 
 type Config struct {
-	AppBind         string
-	DataSource      string
-	StaticDir       string
-	DefaultLocale   string
+	AppBind          string
+	DataSource       string
+	StaticDir        string
+	DefaultLocale    string
 	AvailableLocales []string
+
+	OIDCIssuer       string
+	OIDCClientID     string
+	OIDCClientSecret string
+	OIDCRedirectURI  string
+	SessionKey       string
 }
 
 func LoadConfig() (Config, error) {
@@ -21,6 +27,12 @@ func LoadConfig() (Config, error) {
 		StaticDir:        getEnv("APP_STATIC_DIR", "internal/site/web/static"),
 		DefaultLocale:    getEnv("APP_DEFAULT_LOCALE", "en"),
 		AvailableLocales: parseLocales(getEnv("APP_AVAILABLE_LOCALES", "en,ru")),
+
+		OIDCIssuer:       os.Getenv("OIDC_ISSUER"),
+		OIDCClientID:     os.Getenv("OIDC_CLIENT_ID"),
+		OIDCClientSecret: os.Getenv("OIDC_CLIENT_SECRET"),
+		OIDCRedirectURI:  os.Getenv("OIDC_REDIRECT_URI"),
+		SessionKey:       os.Getenv("SESSION_KEY"),
 	}
 
 	if len(cfg.AvailableLocales) == 0 {
