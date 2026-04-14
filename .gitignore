@@ -14,5 +14,7 @@ internal/site/docs/web/static/css/app.css
 .roadmap/
 .gocache/
 .paas/
+docker-compose.override.yml
+C:\\Users\\alexe/
 **/*.exe
 **/*.log
