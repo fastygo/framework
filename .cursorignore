@@ -23,7 +23,6 @@ tmp/
 .manual/
 .project/
 .roadmap/
-.paas/
 
 # Generated CSS (large, rebuilt often)
 internal/site/web/static/css/app.css
