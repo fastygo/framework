@@ -5,10 +5,12 @@ import (
 	"testing"
 )
 
+type ctxMarkerKey struct{}
+
 func TestNoopTracer_StartReturnsSameContext(t *testing.T) {
 	t.Parallel()
 
-	ctx := context.WithValue(context.Background(), struct{}{}, "marker")
+	ctx := context.WithValue(context.Background(), ctxMarkerKey{}, "marker")
 	got, span := NoopTracer{}.Start(ctx, "op")
 
 	if got != ctx {

@@ -34,9 +34,7 @@ func SecureFileServer(root string, maxAge int) http.Handler {
 		if cleanPath == "." {
 			cleanPath = "/"
 		}
-		if strings.HasPrefix(cleanPath, "/") {
-			cleanPath = cleanPath[1:]
-		}
+		cleanPath = strings.TrimPrefix(cleanPath, "/")
 		if strings.Contains(cleanPath, "..") {
 			http.NotFound(w, r)
 			return

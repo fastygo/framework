@@ -557,7 +557,10 @@ func (a *App) Run(ctx context.Context) error {
 
 	select {
 	case <-ctx.Done():
-		shutdownCtx, cancelShutdown := context.WithTimeout(context.Background(), shutdownTimeout)
+		// ctx is already cancelled — derive a non-cancellable child so we
+		// can run the shutdown deadline on top while still inheriting any
+		// trace/log values plumbed through the parent.
+		shutdownCtx, cancelShutdown := context.WithTimeout(context.WithoutCancel(ctx), shutdownTimeout)
 		defer cancelShutdown()
 		shutdownErr := server.Shutdown(shutdownCtx)
 		if a.workers != nil {
@@ -569,14 +572,15 @@ func (a *App) Run(ctx context.Context) error {
 		return shutdownErr
 	case err := <-errCh:
 		cancel()
+		stopParent := context.WithoutCancel(ctx)
 		if a.workers != nil {
-			stopCtx, cancelStop := context.WithTimeout(context.Background(), shutdownTimeout)
+			stopCtx, cancelStop := context.WithTimeout(stopParent, shutdownTimeout)
 			if stopErr := a.workers.Stop(stopCtx); stopErr != nil {
 				logger.Warn("workers stop", "error", stopErr)
 			}
 			cancelStop()
 		}
-		a.closeFeatures(context.Background(), logger)
+		a.closeFeatures(stopParent, logger)
 		return err
 	}
 }

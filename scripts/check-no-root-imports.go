@@ -46,8 +46,12 @@ func main() {
 			return nil
 		}
 
-		file, err := parser.ParseFile(fset, path, nil, parser.ImportsOnly)
-		if err != nil {
+		file, parseErr := parser.ParseFile(fset, path, nil, parser.ImportsOnly)
+		if parseErr != nil {
+			// Skip unparseable files — they are typically generated stubs
+			// (e.g. _templ.go before `templ generate` runs). Surface in
+			// stderr so a real syntax error is still visible.
+			fmt.Fprintf(os.Stderr, "warning: %s: %v\n", path, parseErr)
 			return nil
 		}
 

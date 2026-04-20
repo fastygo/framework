@@ -57,10 +57,20 @@ linters:
     # Keep v1 behavior: skip standard generated-file headers, plus our own.
     generated: lax
     rules:
-      # Tests may use fmt.Sprintf for table-driven names without security risk.
+      # Tests get a relaxed ruleset:
+      #   - gosec: fmt.Sprintf for table-driven names is fine.
+      #   - noctx: httptest.NewRequest is the canonical Go convention.
+      #   - bodyclose: fire-and-forget HTTP probes are common in lifecycle
+      #     tests where the response is never inspected.
+      #   - errcheck: ignored close errors on listeners/Cleanup are normal.
+      # Production code under pkg/ is still fully linted.
       - path: _test\.go
         linters:
           - gosec
+          - noctx
+          - bodyclose
+          - errcheck
+          - errorlint
 
       # Generated templ files are not our code.
       - path: _templ\.go
@@ -69,6 +79,16 @@ linters:
           - gosec
           - gocritic
           - staticcheck
+
+      # Build/CI scripts under scripts/ run on developer machines (not
+      # in production), read paths from argv, and write reports to
+      # stdout/stderr. Standard gosec/errcheck noise (G304 path-from-var,
+      # G703 path-traversal, fmt.Fprintln to stdout) does not apply here.
+      - path: scripts/
+        linters:
+          - errcheck
+          - gosec
+          - gocritic
 
 issues:
   max-issues-per-linter: 0

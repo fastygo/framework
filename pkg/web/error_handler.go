@@ -1,6 +1,7 @@
 package web
 
 import (
+	"errors"
 	"log/slog"
 	"net/http"
 
@@ -22,7 +23,8 @@ func HandleError(w http.ResponseWriter, err error) {
 	code := http.StatusInternalServerError
 	message := http.StatusText(http.StatusInternalServerError)
 
-	if domainError, ok := err.(core.DomainError); ok {
+	var domainError core.DomainError
+	if errors.As(err, &domainError) {
 		code = domainError.StatusCode()
 		message = domainError.Message
 	}

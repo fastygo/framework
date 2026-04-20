@@ -1,12 +1,14 @@
 package auth
 
 import (
+	"context"
 	"crypto"
 	"crypto/rsa"
 	"crypto/sha256"
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
+	"io"
 	"math/big"
 	"net/http"
 	"net/url"
@@ -14,6 +16,13 @@ import (
 	"sync"
 	"time"
 )
+
+// drainBody drains the remaining bytes so the connection can be
+// returned to the keep-alive pool. The body must still be Close()d
+// explicitly afterwards (bodyclose linter requirement).
+func drainBody(body io.ReadCloser) {
+	_, _ = io.Copy(io.Discard, body)
+}
 
 // ProviderConfig is the subset of OpenID Connect discovery metadata used by
 // OIDCClient.
@@ -179,11 +188,15 @@ func (c *OIDCClient) Discovery() (*ProviderConfig, error) {
 	}
 	c.mu.RUnlock()
 
-	resp, err := c.httpClient.Get(c.issuer + "/.well-known/openid-configuration")
+	req, err := http.NewRequestWithContext(context.Background(), http.MethodGet, c.issuer+"/.well-known/openid-configuration", nil)
+	if err != nil {
+		return nil, fmt.Errorf("auth: build discovery request: %w", err)
+	}
+	resp, err := c.httpClient.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("auth: fetch discovery: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func() { drainBody(resp.Body); _ = resp.Body.Close() }()
 
 	if resp.StatusCode != http.StatusOK {
 		return nil, fmt.Errorf("auth: discovery returned status %d", resp.StatusCode)
@@ -217,11 +230,16 @@ func (c *OIDCClient) ExchangeCode(code string) (*TokenResponse, error) {
 		"client_secret": {c.clientSecret},
 	}
 
-	resp, err := c.httpClient.PostForm(provider.TokenEndpoint, form)
+	req, err := http.NewRequestWithContext(context.Background(), http.MethodPost, provider.TokenEndpoint, strings.NewReader(form.Encode()))
+	if err != nil {
+		return nil, fmt.Errorf("auth: build token request: %w", err)
+	}
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	resp, err := c.httpClient.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("auth: token request: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func() { drainBody(resp.Body); _ = resp.Body.Close() }()
 
 	if resp.StatusCode != http.StatusOK {
 		return nil, fmt.Errorf("auth: token endpoint returned status %d", resp.StatusCode)
@@ -255,7 +273,7 @@ func (c *OIDCClient) VerifyIDToken(idToken string) (*IDTokenClaims, error) {
 		Kid string `json:"kid"`
 		Alg string `json:"alg"`
 	}
-	if err := json.Unmarshal(headerJSON, &header); err != nil {
+	if err = json.Unmarshal(headerJSON, &header); err != nil {
 		return nil, fmt.Errorf("auth: parse header: %w", err)
 	}
 
@@ -271,7 +289,7 @@ func (c *OIDCClient) VerifyIDToken(idToken string) (*IDTokenClaims, error) {
 
 	signed := parts[0] + "." + parts[1]
 	h := sha256.Sum256([]byte(signed))
-	if err := rsa.VerifyPKCS1v15(pubKey, crypto.SHA256, h[:], sigBytes); err != nil {
+	if err = rsa.VerifyPKCS1v15(pubKey, crypto.SHA256, h[:], sigBytes); err != nil {
 		return nil, fmt.Errorf("auth: invalid signature: %w", err)
 	}
 
@@ -281,7 +299,7 @@ func (c *OIDCClient) VerifyIDToken(idToken string) (*IDTokenClaims, error) {
 	}
 
 	var claims IDTokenClaims
-	if err := json.Unmarshal(payloadJSON, &claims); err != nil {
+	if err = json.Unmarshal(payloadJSON, &claims); err != nil {
 		return nil, fmt.Errorf("auth: parse claims: %w", err)
 	}
 	if claims.Iss != c.issuer {
@@ -298,11 +316,15 @@ func (c *OIDCClient) VerifyIDToken(idToken string) (*IDTokenClaims, error) {
 }
 
 func (c *OIDCClient) fetchPublicKey(jwksURI, kid string) (*rsa.PublicKey, error) {
-	resp, err := c.httpClient.Get(jwksURI)
+	req, err := http.NewRequestWithContext(context.Background(), http.MethodGet, jwksURI, nil)
+	if err != nil {
+		return nil, fmt.Errorf("auth: build JWKS request: %w", err)
+	}
+	resp, err := c.httpClient.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("auth: fetch JWKS: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func() { drainBody(resp.Body); _ = resp.Body.Close() }()
 
 	var ks jwkSet
 	if err := json.NewDecoder(resp.Body).Decode(&ks); err != nil {

@@ -23,8 +23,8 @@ func (Validation) Handle(ctx context.Context, request any, next cqrs.HandlerFunc
 		return next(ctx, request)
 	}
 
-	if validator, ok := request.(validator); ok {
-		if err := validator.Validate(); err != nil {
+	if v, ok := request.(validator); ok {
+		if err := v.Validate(); err != nil {
 			return nil, core.WrapDomainError(core.ErrorCodeValidation, "validation failed", err)
 		}
 	}

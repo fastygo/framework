@@ -375,7 +375,7 @@ func TestWorkerService_Stop_NilContext_WaitsIndefinitely(t *testing.T) {
 	// Nothing started → wg.Wait() returns immediately, Stop must not block.
 	// We deliberately pass nil to exercise the documented "nil ctx
 	// means wait indefinitely" branch in WorkerService.Stop.
-	//lint:ignore SA1012 verifying explicit nil-context support
+	//nolint:staticcheck // SA1012: verifying explicit nil-context support
 	if err := w.Stop(nil); err != nil {
 		t.Errorf("Stop(nil) on idle service: got %v, want nil", err)
 	}
