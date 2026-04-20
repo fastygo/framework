@@ -1,59 +1,146 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Local preflight aligned with CI:
-#   .github/workflows/no-root-imports.yml → go mod download && make ci
+# Local preflight aligned with .github/workflows/ci.yml.
 #
-# Mirrors Makefile `ci` / `lint`: go test ./... && go run ./scripts/check-no-root-imports.go
+# Mirrors every step the `framework / lint+test` job runs, in the same
+# order, so a green preflight ≈ a green CI run. Optionally also mirrors
+# the `examples` matrix job and a few extras (race, go.work parity).
 #
 # Usage:
-#   ./scripts/preflight.sh
-#   PREFLIGHT_CI_PARITY=1 ./scripts/preflight.sh
-#   PREFLIGHT_RUN_RACE=1 ./scripts/preflight.sh
+#   ./scripts/preflight.sh                         # full local CI parity
+#   PREFLIGHT_CI_PARITY=1 ./scripts/preflight.sh   # also unset go.work like CI
+#   PREFLIGHT_RUN_RACE=1  ./scripts/preflight.sh   # add `go test -race`
+#   PREFLIGHT_BUILD_EXAMPLES=1 ./scripts/preflight.sh
+#                                                  # build every example/* (needs templ)
+#   PREFLIGHT_SKIP_LINT=1 ./scripts/preflight.sh   # skip golangci-lint (e.g. when not installed)
+#   PREFLIGHT_FAIL_FAST=0 ./scripts/preflight.sh   # collect every failure instead of stopping at first
 #
-# Optional:
-#   PREFLIGHT_CI_PARITY=1 — set GOWORK=off so resolution matches CI (no local go.work).
-#   PREFLIGHT_RUN_RACE=1 — run go test -race after make ci (extra; not in CI workflow today).
+# Exit codes:
+#   0  – everything passed
+#   1  – at least one step failed (look at the summary at the bottom)
 
 RUN_RACE="${PREFLIGHT_RUN_RACE:-0}"
+BUILD_EXAMPLES="${PREFLIGHT_BUILD_EXAMPLES:-0}"
+SKIP_LINT="${PREFLIGHT_SKIP_LINT:-0}"
+FAIL_FAST="${PREFLIGHT_FAIL_FAST:-1}"
 
-echo "Running go mod download..."
-go mod download
-
-if [[ "${PREFLIGHT_CI_PARITY:-}" == "1" ]]; then
+# CI uses GOWORK=off so the framework module resolves dependencies the
+# same way it does in actions/setup-go. PREFLIGHT_CI_PARITY=1 turns this
+# on locally too, which catches go.work-only issues before pushing.
+if [[ "${PREFLIGHT_CI_PARITY:-0}" == "1" ]]; then
 	export GOWORK=off
 	echo "PREFLIGHT_CI_PARITY=1: GOWORK=off (same as CI without go.work)"
 fi
 
-# Same as `make ci` / `make lint` — explicit so it runs without GNU make (e.g. Windows).
-echo "Running go test ./..."
-go test ./...
+# Pretty step runner. Each step prints a banner, runs, records pass/fail.
+declare -a FAILURES=()
 
-echo "Running check-no-root-imports..."
-go run ./scripts/check-no-root-imports.go
+step() {
+	local name="$1"
+	shift
+	echo
+	echo "=== preflight: $name ==="
+	if "$@"; then
+		echo "--- preflight: $name OK ---"
+		return 0
+	fi
+	local rc=$?
+	echo "!!! preflight: $name FAILED (exit $rc) !!!" >&2
+	FAILURES+=("$name")
+	if [[ "$FAIL_FAST" == "1" ]]; then
+		summary
+		exit 1
+	fi
+	return 0
+}
 
-# Coverage gate: produce a profile for pkg/ and verify per-package
-# thresholds (security-critical >=90%, core >=80%, see
-# scripts/coverage-gate/main.go for the full table).
-echo "Running coverage gate..."
-go test -covermode=atomic -coverprofile=coverage.out ./pkg/...
-go run ./scripts/coverage-gate -profile=coverage.out
+summary() {
+	echo
+	echo "=== preflight summary ==="
+	if [[ ${#FAILURES[@]} -eq 0 ]]; then
+		echo "All steps passed."
+		return 0
+	fi
+	echo "FAILED steps:"
+	local f
+	for f in "${FAILURES[@]}"; do
+		echo "  - $f"
+	done
+	return 1
+}
+
+# ----- Mirror of .github/workflows/ci.yml: framework / lint+test -----
+
+step "go mod download"            go mod download
+
+# `make ci` = `make lint-ci` (= `make lint` + `make vet`) + `make coverage-gate`.
+# We expand it explicitly so this script also works on Windows where GNU
+# make may not be available.
+step "go test ./..."              go test ./...
+step "no-root-imports check"      go run ./scripts/check-no-root-imports.go
+step "go vet ./..."               go vet ./...
+
+# Coverage gate uses the same profile path the CI job uploads (coverage.out).
+step "coverage profile (./pkg/...)" \
+	go test -covermode=atomic -coverprofile=coverage.out ./pkg/...
+step "coverage gate"              go run ./scripts/coverage-gate -profile=coverage.out
+
+# golangci-lint runs in CI via golangci/golangci-lint-action@v6.
+# Locally it's optional: skip cleanly if the binary is missing so the
+# preflight stays usable on fresh checkouts.
+if [[ "$SKIP_LINT" != "1" ]]; then
+	if command -v golangci-lint >/dev/null 2>&1; then
+		step "golangci-lint run"  golangci-lint run --timeout=5m ./...
+	else
+		echo
+		echo "=== preflight: golangci-lint SKIPPED ==="
+		echo "Install with: go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.64.5"
+		echo "Or set PREFLIGHT_SKIP_LINT=1 to silence this notice."
+	fi
+fi
+
+# ----- Optional: mirror of the `examples` matrix job -----
+#
+# Catches API breaks that only show up when an example consumes the
+# framework via its own go.mod (the matrix runs `templ generate` then
+# `go build ./...` for each example).
+if [[ "$BUILD_EXAMPLES" == "1" ]]; then
+	if ! command -v templ >/dev/null 2>&1; then
+		echo
+		echo "=== preflight: examples SKIPPED ==="
+		echo "templ not found. Install with:"
+		echo "  go install github.com/a-h/templ/cmd/templ@v0.3.1001"
+	else
+		for example in examples/*/; do
+			[[ -f "${example}go.mod" ]] || continue
+			step "example: ${example} (templ generate)" \
+				bash -c "cd '${example}' && templ generate ./..."
+			step "example: ${example} (go build ./...)" \
+				bash -c "cd '${example}' && go mod download && go build ./..."
+		done
+	fi
+fi
+
+# ----- Optional extras (not in CI today, but cheap to run locally) -----
 
 if [[ "$RUN_RACE" == "1" ]]; then
 	if [[ "$(go env CGO_ENABLED)" == "1" ]]; then
-		echo "Running race tests..."
-		go test ./... -race -count=1
+		step "go test -race"      go test ./... -race -count=1
 	else
-		echo "Warning: PREFLIGHT_RUN_RACE=1 but CGO is disabled; skipping race tests."
+		echo
+		echo "=== preflight: race tests SKIPPED ==="
+		echo "PREFLIGHT_RUN_RACE=1 but CGO is disabled; race detector requires CGO."
 	fi
-else
-	echo "Skipping race tests (set PREFLIGHT_RUN_RACE=1 to enable)."
 fi
 
+# Catches the classic "I forgot to commit generated files" footgun.
 if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
-	echo "Checking for uncommitted changes..."
-	git diff --exit-code
-	git diff --cached --exit-code
+	step "no uncommitted changes" bash -c "git diff --exit-code && git diff --cached --exit-code"
 fi
 
-echo "Preflight OK."
+if summary; then
+	echo "Preflight OK."
+	exit 0
+fi
+exit 1

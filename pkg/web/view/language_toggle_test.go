@@ -119,6 +119,75 @@ func TestBuildLanguageToggleFromContextPath(t *testing.T) {
 	Middleware(handler).ServeHTTP(httptest.NewRecorder(), req)
 }
 
+// TestLanguageToggleOptionsApplyToConfig pins the With* helper behaviour so the
+// builder API stays stable for downstream templates.
+func TestLanguageToggleOptionsApplyToConfig(t *testing.T) {
+	cfg := LanguageToggleConfig{}
+	opts := []LanguageToggleOption{
+		WithLabel("Language"),
+		WithCurrentLabel("EN"),
+		WithNextLocale("ru"),
+		WithNextLabel("RU"),
+		WithEnhanceWithJS(true),
+		WithSPATarget("  #app  "),
+		WithDefaultLocale("en"),
+		WithAvailable([]string{"en", "ru", "de"}),
+		WithLocaleLabels(map[string]string{"en": "EN", "ru": "RU"}),
+	}
+	for _, opt := range opts {
+		opt(&cfg)
+	}
+
+	if cfg.Label != "Language" {
+		t.Fatalf("WithLabel: got %q", cfg.Label)
+	}
+	if cfg.CurrentLabel != "EN" {
+		t.Fatalf("WithCurrentLabel: got %q", cfg.CurrentLabel)
+	}
+	if cfg.NextLocale != "ru" {
+		t.Fatalf("WithNextLocale: got %q", cfg.NextLocale)
+	}
+	if cfg.NextLabel != "RU" {
+		t.Fatalf("WithNextLabel: got %q", cfg.NextLabel)
+	}
+	if !cfg.EnhanceWithJS {
+		t.Fatalf("WithEnhanceWithJS: expected true")
+	}
+	if cfg.SPATarget != "#app" {
+		t.Fatalf("WithSPATarget: expected trimmed value, got %q", cfg.SPATarget)
+	}
+	if cfg.DefaultLocale != "en" {
+		t.Fatalf("WithDefaultLocale: got %q", cfg.DefaultLocale)
+	}
+	if len(cfg.Available) != 3 || cfg.Available[2] != "de" {
+		t.Fatalf("WithAvailable: got %#v", cfg.Available)
+	}
+	if cfg.LocaleLabels["ru"] != "RU" {
+		t.Fatalf("WithLocaleLabels: got %#v", cfg.LocaleLabels)
+	}
+}
+
+// TestNormalizeStringSliceEdgeCases covers the trimming/de-duplication logic so
+// regressions surface as failing unit tests rather than rendering quirks.
+func TestNormalizeStringSliceEdgeCases(t *testing.T) {
+	if got := normalizeStringSlice(nil); got != nil {
+		t.Fatalf("nil slice: expected nil, got %#v", got)
+	}
+	if got := normalizeStringSlice([]string{"  ", "\t"}); len(got) != 0 {
+		t.Fatalf("blank entries: expected empty slice, got %#v", got)
+	}
+	got := normalizeStringSlice([]string{"EN", " en ", "RU", "ru", "", "de"})
+	want := []string{"en", "ru", "de"}
+	if len(got) != len(want) {
+		t.Fatalf("dedupe: got %#v want %#v", got, want)
+	}
+	for i := range want {
+		if got[i] != want[i] {
+			t.Fatalf("dedupe[%d]: got %q want %q", i, got[i], want[i])
+		}
+	}
+}
+
 func TestBuildLanguageToggleFromContextPathSpaEnabled(t *testing.T) {
 	handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		got := BuildLanguageToggleFromContext(r.Context())
