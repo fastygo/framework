@@ -1,0 +1,34 @@
+# examples/landing
+
+Single-page landing site with no i18n, no CQRS, and a hand-typed feature
+struct directly inside `cmd/server/main.go`. This is the "hello world" of
+the framework.
+
+Use it to learn:
+
+- The shape of a `Feature` (`ID`, `Routes`, `NavItems`).
+- How to render a templ component through `web.CachedRender`.
+- The minimum viable Tailwind + UI8Kit pipeline (`web/static/css/input.css`).
+
+## Quick start
+
+```bash
+cd examples/landing
+npm install
+go mod download
+npm run sync:ui8kit
+npm run build:css
+templ generate ./...
+go run ./cmd/server
+```
+
+Open <http://127.0.0.1:8080>.
+
+## What it does NOT include
+
+- No locale negotiation. If you need i18n, copy the loader pattern from
+  `examples/web/internal/site/i18n`.
+- No CQRS dispatcher. If you need command/query handlers, see
+  `examples/web/internal/site/welcome/feature.go`.
+- No content management. If you serve markdown, look at `examples/docs`
+  and `examples/blog`.

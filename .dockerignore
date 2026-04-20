@@ -1,9 +1,0 @@
-.git
-.github
-.paas
-.for_framework
-bin
-dist
-node_modules
-npm-debug.log
-*.log

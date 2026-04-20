@@ -1,0 +1,10 @@
+go 1.25.0
+
+use (
+	.
+	./examples/web
+	./examples/docs
+	./examples/landing
+	./examples/blog
+	./examples/dashboard
+)

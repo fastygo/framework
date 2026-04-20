@@ -6,12 +6,19 @@ import (
 	"github.com/fastygo/framework/pkg/core"
 )
 
+// Dispatcher routes a request to the registered command or query
+// handler and runs every PipelineBehavior around the call. It is
+// not safe to register handlers concurrently with Dispatch — wire
+// it up at startup, freeze it, then share across goroutines.
 type Dispatcher struct {
 	commandHandlers map[string]HandlerFunc
 	queryHandlers   map[string]HandlerFunc
 	behaviors       []PipelineBehavior
 }
 
+// NewDispatcher returns a Dispatcher with the supplied pipeline
+// behaviors applied in order: behaviors[0] is the outermost wrapper
+// (sees the request first, the response last).
 func NewDispatcher(behaviors ...PipelineBehavior) *Dispatcher {
 	return &Dispatcher{
 		commandHandlers: make(map[string]HandlerFunc),
@@ -20,14 +27,23 @@ func NewDispatcher(behaviors ...PipelineBehavior) *Dispatcher {
 	}
 }
 
+// RegisterCommandHandler associates a low-level HandlerFunc with the
+// given request type key. Prefer the typed RegisterCommand helper
+// over calling this directly.
 func (d *Dispatcher) RegisterCommandHandler(requestType string, handler HandlerFunc) {
 	d.commandHandlers[requestType] = handler
 }
 
+// RegisterQueryHandler is the read-side counterpart to
+// RegisterCommandHandler.
 func (d *Dispatcher) RegisterQueryHandler(requestType string, handler HandlerFunc) {
 	d.queryHandlers[requestType] = handler
 }
 
+// Dispatch resolves the handler for request and invokes it through
+// the pipeline. Commands are looked up first; queries are tried only
+// if no command handler matches. Returns ErrorCodeNotFound wrapped in
+// a DomainError when no handler is registered.
 func (d *Dispatcher) Dispatch(ctx context.Context, request any) (any, error) {
 	requestType := requestKey(request)
 

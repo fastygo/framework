@@ -1,18 +1,13 @@
 {
-  "name": "framework",
+  "name": "fastygo-example-landing",
   "private": true,
   "scripts": {
-    "preflight": "bash ./scripts/preflight.sh",
-    "dev:css": "tailwindcss -i ./internal/site/web/static/css/input.css -o ./internal/site/web/static/css/app.css --watch",
-    "build:css": "tailwindcss -i ./internal/site/web/static/css/input.css -o ./internal/site/web/static/css/app.css --minify",
-    "dev:docs:css": "tailwindcss -i ./internal/site/docs/web/static/css/input.css -o ./internal/site/docs/web/static/css/app.css --watch",
-    "build:docs:css": "tailwindcss -i ./internal/site/docs/web/static/css/input.css -o ./internal/site/docs/web/static/css/app.css --minify",
-    "sync:ui8kit": "bash ./scripts/sync-ui8kit-css.sh",
-    "ui8kit:build": "npm run sync:ui8kit && npm run build:css && npm run build:docs:css",
-    "generate": "templ generate",
-    "build": "npm run ui8kit:build && npm run generate",
-    "preview": "npm run build && go run ./cmd/server",
-    "preview:docs": "npm run build && go run ./cmd/docs"
+    "build:css:landing": "tailwindcss -i ./examples/landing/web/static/css/input.css -o ./examples/landing/web/static/css/app.css --minify",
+    "build:css:web": "tailwindcss -i ./examples/web/web/static/css/input.css -o ./examples/web/web/static/css/app.css --minify",
+    "build:css:blog": "tailwindcss -i ./examples/blog/web/static/css/input.css -o ./examples/blog/web/static/css/app.css --minify",
+    "build:css:dashboard": "tailwindcss -i ./examples/dashboard/web/static/css/input.css -o ./examples/dashboard/web/static/css/app.css --minify",
+    "build:css:docs": "tailwindcss -i ./examples/docs/web/static/css/input.css -o ./examples/docs/web/static/css/app.css --minify",
+    "build:css:all": "npm run build:css:landing && npm run build:css:web && npm run build:css:blog && npm run build:css:dashboard && npm run build:css:docs"
   },
   "dependencies": {
     "@tailwindcss/cli": "^4.2.1",

@@ -1,0 +1,15 @@
+{
+  "name": "fastygo-example-blog",
+  "private": true,
+  "scripts": {
+    "sync:ui8kit": "bash ../../scripts/sync-ui8kit-css.sh web/static",
+    "dev:css": "tailwindcss -i ./web/static/css/input.css -o ./web/static/css/app.css --watch",
+    "build:css": "tailwindcss -i ./web/static/css/input.css -o ./web/static/css/app.css --minify",
+    "build": "npm run sync:ui8kit && npm run build:css && templ generate ./...",
+    "preview": "npm run build && go run ./cmd/server"
+  },
+  "dependencies": {
+    "@tailwindcss/cli": "^4.2.1",
+    "tailwindcss": "^4.2.1"
+  }
+}

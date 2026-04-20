@@ -15,6 +15,10 @@ var blockedPatterns = []string{
 	"wp-login",
 }
 
+// MethodGuardMiddleware rejects HTTP TRACE and CONNECT (405) and
+// returns 404 for paths that look like reconnaissance probes (paths
+// containing "..", a NUL byte, or a well-known scanner pattern such
+// as ".env", ".git", "wp-admin", "wp-login").
 func MethodGuardMiddleware() middleware.Middleware {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

@@ -1,0 +1,36 @@
+package views
+
+import (
+	"strconv"
+
+	ui "github.com/fastygo/ui8kit/ui"
+)
+
+templ OverviewPage(data OverviewData) {
+	<div class="dashboard-page">
+		<header class="dashboard-page-header">
+			@ui.Title(ui.TitleProps{Class: "dashboard-page-title"}, data.Greeting)
+			<p class="dashboard-page-description">{ data.Description }</p>
+		</header>
+
+		<section class="dashboard-stat-grid">
+			<article class="dashboard-stat">
+				<p class="dashboard-stat-label">{ data.ContactsLabel }</p>
+				<p class="dashboard-stat-value">{ strconv.Itoa(data.ContactsCount) }</p>
+				<a class="dashboard-stat-link" href="/contacts">{ data.ManageText }</a>
+			</article>
+			<article class="dashboard-stat">
+				<p class="dashboard-stat-label">{ data.WorkspaceLabel }</p>
+				<p class="dashboard-stat-value">{ data.BrandName }</p>
+				<a class="dashboard-stat-link" href="/contacts">{ data.AddContactText }</a>
+			</article>
+			<article class="dashboard-stat">
+				<p class="dashboard-stat-label">{ data.AccountLabel }</p>
+				<p class="dashboard-stat-value">{ data.Email }</p>
+				<form method="post" action="/auth/logout">
+					<button class="dashboard-stat-link" type="submit">{ data.SignOutText }</button>
+				</form>
+			</article>
+		</section>
+	</div>
+}

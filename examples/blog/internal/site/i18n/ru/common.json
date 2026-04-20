@@ -1,0 +1,31 @@
+{
+  "brand_name": "Acme Blog",
+  "theme": {
+    "label": "Тема",
+    "switch_to_dark_label": "Переключить на тёмный режим",
+    "switch_to_light_label": "Переключить на светлый режим"
+  },
+  "language": {
+    "label": "Язык",
+    "current_label": "RU",
+    "next_label": "EN",
+    "next_locale": "en",
+    "available": ["en", "ru"],
+    "locale_labels": {
+      "en": "EN",
+      "ru": "RU"
+    }
+  },
+  "header_nav_items": [
+    {
+      "label": "Главная",
+      "path": "/"
+    },
+    {
+      "label": "Фреймворк",
+      "path": "https://github.com/fastygo/framework"
+    }
+  ],
+  "index_title": "Последние посты",
+  "index_description": "Подробные заметки о разработке с fastygo + ui8kit."
+}

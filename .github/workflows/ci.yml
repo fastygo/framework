@@ -1,0 +1,74 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  framework:
+    name: framework / lint+test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+
+      - name: Disable workspace
+        run: echo "GOWORK=off" >> $GITHUB_ENV
+
+      - name: Download dependencies
+        run: go mod download
+
+      - name: Run lint + tests
+        run: make ci
+
+      - name: Coverage gate (per-package thresholds)
+        run: make coverage-gate
+
+      - name: Upload coverage profile
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: coverage-profile
+          path: coverage.out
+          retention-days: 7
+
+      - name: go vet (Go 1.25 analyzers waitgroup, hostport)
+        run: go vet ./...
+
+      - name: golangci-lint
+        uses: golangci/golangci-lint-action@v6
+        with:
+          version: v1.64
+          args: --timeout=5m
+
+  examples:
+    name: build examples
+    runs-on: ubuntu-latest
+    needs: framework
+    strategy:
+      fail-fast: false
+      matrix:
+        example: [landing, web, blog, docs, dashboard]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+
+      - name: Install templ
+        run: go install github.com/a-h/templ/cmd/templ@v0.3.1001
+
+      - name: Generate templ for example
+        working-directory: examples/${{ matrix.example }}
+        run: templ generate ./...
+
+      - name: Build example
+        working-directory: examples/${{ matrix.example }}
+        run: |
+          go mod download
+          go build ./...

@@ -1,0 +1,97 @@
+package views
+
+import (
+	t "github.com/a-h/templ"
+	ui8layout "github.com/fastygo/ui8kit/layout"
+	ui "github.com/fastygo/ui8kit/ui"
+)
+
+// Page is the data model rendered by Landing.
+type Page struct {
+	BrandName              string
+	Lang                   string
+	Tagline                string
+	Title                  string
+	Subtitle               string
+	PrimaryCTA             string
+	PrimaryHref            string
+	Features               []FeatureItem
+	FooterText             string
+	ThemeLabel             string
+	ThemeDarkLabel         string
+	ThemeLightLabel        string
+	LanguageCurrentLocale   string
+	LanguageCurrentLabel    string
+	LanguageNextLocale      string
+	LanguageNextLabel       string
+	LanguageDefaultLocale   string
+	LanguageAvailableLocales string
+	LanguageNextHref        string
+}
+
+type FeatureItem struct {
+	Title       string
+	Description string
+	Icon        string
+}
+
+templ Landing(p Page) {
+	@ui8layout.Shell(ui8layout.ShellProps{
+		Title:          p.Title,
+		Lang:           p.Lang,
+		BrandName:      p.BrandName,
+		MarketingShell: true,
+		Active:         "/",
+		HeadExtra:      headExtra(),
+		HeaderExtra:    landingLanguageToggle(p),
+		ThemeToggle: ui8layout.ThemeToggleProps{
+			Label:              p.ThemeLabel,
+			SwitchToDarkLabel:  p.ThemeDarkLabel,
+			SwitchToLightLabel: p.ThemeLightLabel,
+		},
+	}) {
+		<div class="landing-page">
+			<section class="landing-hero">
+				<p class="landing-kicker">{ p.Tagline }</p>
+				@ui.Title(ui.TitleProps{Class: "landing-title"}, p.Title)
+				<p class="landing-subtitle">{ p.Subtitle }</p>
+				<div class="landing-cta-row">
+					<a class="landing-cta" href={ t.URL(p.PrimaryHref) } target="_blank" rel="noopener noreferrer">{ p.PrimaryCTA }</a>
+				</div>
+			</section>
+
+			if len(p.Features) > 0 {
+				<section class="landing-features">
+					for _, feature := range p.Features {
+						<article class="landing-feature">
+							<h3 class="landing-feature-title">{ feature.Title }</h3>
+							<p class="landing-feature-description">{ feature.Description }</p>
+						</article>
+					}
+				</section>
+			}
+
+			<footer class="landing-footer">{ p.FooterText }</footer>
+		</div>
+	}
+}
+
+templ landingLanguageToggle(p Page) {
+	<div class="ui-header-language">
+		<a
+			id="landing-language-toggle"
+			class="ui-header-action-btn"
+			href={ t.URL(p.LanguageNextHref) }
+			data-default-locale={ p.LanguageDefaultLocale }
+			data-current-locale={ p.LanguageCurrentLocale }
+			data-next-locale={ p.LanguageNextLocale }
+			data-next-label={ p.LanguageNextLabel }
+			data-available-locales={ p.LanguageAvailableLocales }
+		>
+			{ p.LanguageCurrentLabel }
+		</a>
+	</div>
+}
+
+templ headExtra() {
+}

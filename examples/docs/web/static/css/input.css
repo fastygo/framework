@@ -1,0 +1,14 @@
+@import "tailwindcss";
+@source "../../../internal/site/views/**/*.templ";
+@source "../../../internal/site/views/**/*.go";
+@source "../../../internal/site/**/*.go";
+@source "../../../cmd/**/*.go";
+@source "../js/**/*.js";
+
+@import "../../../../../pkg/fonts/outfit.css";
+@import "./ui8kit/base.css";
+@import "./ui8kit/shell.css";
+@import "./ui8kit/components.css";
+@import "./ui8kit/latty.css";
+@import "./ui8kit/prose.css";
+@import "./docs-components.css";

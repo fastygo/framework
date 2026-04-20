@@ -1,0 +1,69 @@
+# golangci-lint configuration for github.com/fastygo/framework.
+#
+# Phase 1 minimum viable set: catches concurrency, context, and resource
+# bugs without drowning the team in style noise. Tuned for v1.64.
+
+run:
+  timeout: 5m
+  tests: true
+
+linters:
+  disable-all: true
+  enable:
+    # Defaults worth keeping
+    - errcheck
+    - govet
+    - staticcheck
+    - ineffassign
+    - unused
+
+    # Security and resource hygiene
+    - gosec
+    - bodyclose
+
+    # Context and error handling
+    - contextcheck
+    - noctx
+    - nilerr
+    - errorlint
+
+    # Light style/correctness
+    - gocritic
+
+linters-settings:
+  govet:
+    enable-all: true
+    disable:
+      # fieldalignment is too aggressive for v0.x APIs; revisit later.
+      - fieldalignment
+
+  gosec:
+    excludes:
+      # G404 (math/rand) is fine in tests and worker jitter.
+      - G404
+
+  gocritic:
+    enabled-tags:
+      - diagnostic
+      - performance
+    disabled-checks:
+      - hugeParam
+      - rangeValCopy
+
+issues:
+  exclude-rules:
+    # Tests may use fmt.Sprintf for table-driven names without security risk.
+    - path: _test\.go
+      linters:
+        - gosec
+
+    # Generated templ files are not our code.
+    - path: _templ\.go
+      linters:
+        - errcheck
+        - gosec
+        - gocritic
+        - staticcheck
+
+  max-issues-per-linter: 0
+  max-same-issues: 0

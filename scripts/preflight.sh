@@ -32,6 +32,13 @@ go test ./...
 echo "Running check-no-root-imports..."
 go run ./scripts/check-no-root-imports.go
 
+# Coverage gate: produce a profile for pkg/ and verify per-package
+# thresholds (security-critical >=90%, core >=80%, see
+# scripts/coverage-gate/main.go for the full table).
+echo "Running coverage gate..."
+go test -covermode=atomic -coverprofile=coverage.out ./pkg/...
+go run ./scripts/coverage-gate -profile=coverage.out
+
 if [[ "$RUN_RACE" == "1" ]]; then
 	if [[ "$(go env CGO_ENABLED)" == "1" ]]; then
 		echo "Running race tests..."

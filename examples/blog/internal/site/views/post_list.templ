@@ -1,0 +1,22 @@
+package views
+
+import t "github.com/a-h/templ"
+
+templ PostList(data PostListData) {
+	<div class="blog-page">
+		<header class="blog-page-header">
+			<h1 class="blog-page-title">{ data.Title }</h1>
+			<p class="blog-page-description">{ data.Description }</p>
+		</header>
+		<div class="blog-post-list">
+			for _, post := range data.Posts {
+				<a class="blog-post-card" href={ t.URL("/posts/" + post.Slug) }>
+					<h2 class="blog-post-card-title">{ post.Title }</h2>
+					if post.Summary != "" {
+						<p class="blog-post-card-summary">{ post.Summary }</p>
+					}
+				</a>
+			}
+		</div>
+	</div>
+}

@@ -1,0 +1,45 @@
+{
+  "overview": {
+    "page_title": "Обзор",
+    "description": "Краткий обзор того, что происходит в вашем пространстве %s.",
+    "contacts_label": "Контакты",
+    "workspace_label": "Рабочая среда",
+    "account_label": "Аккаунт",
+    "manage_text": "Управлять →",
+    "add_contact_text": "Добавить контакт",
+    "sign_out_text": "Выйти",
+    "greeting_template": "Добро пожаловать назад, %s"
+  },
+  "contacts": {
+    "page_title": "Контакты",
+    "description": "Базовый CRUD-скелет на in-memory репозитории.",
+    "add_header": "Добавить контакт",
+    "name_label": "Имя",
+    "email_label": "Email",
+    "company_label": "Компания",
+    "add_button_text": "Добавить",
+    "existing_contacts_text": "Текущие контакты",
+    "no_contacts_text": "Контакты еще не добавлены.",
+    "name_header": "Имя",
+    "email_header": "Email",
+    "company_header": "Компания",
+    "created_header": "Создан",
+    "delete_text": "Удалить",
+    "error_text": {
+      "name_required": "Требуется имя контакта.",
+      "email_required": "Требуется email контакта.",
+      "create_contact_failed": "Не удалось добавить контакт."
+    }
+  },
+  "login": {
+    "page_title": "Вход",
+    "subtitle": "Можно вводить любой email и пароль — это демо-режим.",
+    "email_label": "Email",
+    "password_label": "Пароль",
+    "submit_button_text": "Войти",
+    "session_error": "Не удалось войти. Попробуйте еще раз."
+  },
+  "account": {
+    "sign_out_text": "Выйти"
+  }
+}

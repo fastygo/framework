@@ -1,0 +1,14 @@
+package views
+
+import t "github.com/a-h/templ"
+
+templ PostPage(data PostPageData) {
+	<div class="blog-page">
+		<article class="prose max-w-none">
+			@t.Raw(data.HTMLContent)
+		</article>
+		<p class="blog-back">
+			<a href="/">← Back to all posts</a>
+		</p>
+	</div>
+}

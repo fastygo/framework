@@ -12,6 +12,11 @@ import (
 	"github.com/a-h/templ"
 )
 
+// Render executes a templ component into an in-memory buffer, sets the
+// HTML content type, and writes the buffer to w. Buffering ensures the
+// component finishes successfully before any bytes hit the network — a
+// mid-render failure surfaces as a normal Go error instead of a partial
+// 200 response.
 func Render(ctx context.Context, w http.ResponseWriter, component templ.Component) error {
 	buf := &bytes.Buffer{}
 	if err := component.Render(ctx, buf); err != nil {
@@ -22,6 +27,11 @@ func Render(ctx context.Context, w http.ResponseWriter, component templ.Componen
 	return err
 }
 
+// CachedRender renders component once per cache key, reusing the bytes on
+// every subsequent hit. It also negotiates ETag/If-None-Match so an
+// already-cached response can short-circuit to 304 Not Modified.
+//
+// A nil htmlCache or empty key disables caching and falls through to Render.
 func CachedRender(ctx context.Context, w http.ResponseWriter, r *http.Request, htmlCache *cache.Cache[[]byte], key string, component templ.Component) error {
 	if htmlCache == nil || key == "" {
 		return Render(ctx, w, component)
@@ -65,6 +75,9 @@ func htmlETag(value []byte) string {
 	return fmt.Sprintf("\"%x\"", sum)
 }
 
+// WriteJSON sets a JSON content type, writes status, and JSON-encodes
+// payload. It does not buffer: a marshalling failure mid-stream produces
+// a partial body — keep payload simple (no custom MarshalJSON that may panic).
 func WriteJSON(w http.ResponseWriter, status int, payload any) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(status)

@@ -1,0 +1,37 @@
+package views
+
+templ LoginPage(data LoginPageData) {
+	<!DOCTYPE html>
+	<html lang={ data.Lang }>
+	<head>
+		<meta charset="utf-8"/>
+		<meta name="viewport" content="width=device-width,initial-scale=1"/>
+		<title>{ data.Title }</title>
+		<link rel="stylesheet" href="/static/css/app.css"/>
+		<script src="/static/js/ui8kit.js"></script>
+	</head>
+	<body class="login-shell">
+		<main class="login-card">
+			<header class="login-header">
+				<h1 class="login-title">{ data.Title }</h1>
+				<p class="login-subtitle">{ data.Subtitle }</p>
+			</header>
+			if data.ErrorText != "" {
+				<p class="login-error">{ data.ErrorText }</p>
+			}
+			<form method="post" action="/auth/login" class="login-form">
+				<input type="hidden" name="return_to" value={ data.ReturnTo }/>
+				<label class="login-field">
+					<span>{ data.EmailLabel }</span>
+					<input type="email" name="email" autocomplete="email" required/>
+				</label>
+				<label class="login-field">
+					<span>{ data.PasswordLabel }</span>
+					<input type="password" name="password" autocomplete="current-password" required/>
+				</label>
+				<button type="submit" class="login-submit">{ data.SubmitText }</button>
+			</form>
+		</main>
+	</body>
+	</html>
+}

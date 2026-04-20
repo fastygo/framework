@@ -1,0 +1,15 @@
+{
+  "brand_name": "Acme Dashboard",
+  "nav": {
+    "overview": "Overview",
+    "contacts": "Contacts"
+  },
+  "error_text": {
+    "missing_credentials": "Email and password are required."
+  },
+  "theme": {
+    "label": "Theme",
+    "switch_to_dark_label": "Switch to dark mode",
+    "switch_to_light_label": "Switch to light mode"
+  }
+}

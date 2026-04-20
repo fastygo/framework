@@ -1,0 +1,43 @@
+package views
+
+import (
+	t "github.com/a-h/templ"
+	"github.com/fastygo/framework/pkg/app"
+	"github.com/fastygo/framework/examples/dashboard/internal/site/views/partials"
+	ui8layout "github.com/fastygo/ui8kit/layout"
+)
+
+templ DashboardLayout(data LayoutData, body t.Component) {
+	@ui8layout.Shell(ui8layout.ShellProps{
+		Title:       data.Title,
+		Lang:        data.Lang,
+		BrandName:   data.BrandName,
+		Active:      data.Active,
+		NavItems:    asShellNavItems(data.NavItems),
+		HeadExtra:   headExtra(),
+		HeaderExtra: nil,
+		HeaderTrailing: partials.AccountMenu(data.CurrentEmail, data.AccountSignOutText, data.LanguageToggle),
+		ThemeToggle: ui8layout.ThemeToggleProps{
+			Label:              data.ThemeToggle.Label,
+			SwitchToDarkLabel:  data.ThemeToggle.SwitchToDarkLabel,
+			SwitchToLightLabel: data.ThemeToggle.SwitchToLightLabel,
+		},
+	}) {
+		@body
+	}
+}
+
+templ headExtra() {
+}
+
+func asShellNavItems(items []app.NavItem) []ui8layout.NavItem {
+	mapped := make([]ui8layout.NavItem, len(items))
+	for i, item := range items {
+		mapped[i] = ui8layout.NavItem{
+			Label: item.Label,
+			Path:  item.Path,
+			Icon:  item.Icon,
+		}
+	}
+	return mapped
+}

@@ -13,6 +13,21 @@ const (
 	defaultImmutableExtensions = ".css|.js|.png|.jpg|.jpeg|.gif|.webp|.svg|.ico|.map|.woff|.woff2|.ttf|.eot|.otf"
 )
 
+// SecureFileServer returns an http.Handler that serves files from
+// root with three guarantees the stdlib http.FileServer does not
+// provide:
+//
+//   - Path traversal (".." segments) is rejected with 404.
+//   - Hidden / dotfile segments (".env", ".git/config", ...) are
+//     rejected with 403 — important defence-in-depth when the static
+//     directory lives next to source files.
+//   - Long-lived assets (css/js/images/fonts, see
+//     defaultImmutableExtensions) are served with
+//     "public, max-age=<maxAge>, immutable" plus an ETag derived from
+//     mtime+size; everything else gets a short 60-second max-age.
+//
+// Pass maxAge in seconds; non-positive values default to one day for
+// immutable assets.
 func SecureFileServer(root string, maxAge int) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		cleanPath := strings.TrimSpace(path.Clean(r.URL.Path))

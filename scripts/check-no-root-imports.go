@@ -1,3 +1,8 @@
+// check-no-root-imports verifies that the framework module never depends on
+// any package outside `pkg/`. It is intentionally simple: walk every .go
+// file in the repository root (excluding examples/ subprojects, which have
+// their own go.mod), parse the imports, and reject any import that starts
+// with the framework module path but does not point into pkg/.
 package main
 
 import (
@@ -10,29 +15,29 @@ import (
 	"strings"
 )
 
-type forbiddenPath struct {
-	name  string
-	prefix string
+const moduleRoot = "github.com/fastygo/framework"
+
+var allowedFrameworkPrefixes = []string{
+	moduleRoot,
+	moduleRoot + "/pkg",
 }
 
 func main() {
-	moduleRoot := "github.com/fastygo/framework"
-	forbidden := []forbiddenPath{
-		{name: "internal/features", prefix: moduleRoot + "/internal/features"},
-		{name: "internal/site/features", prefix: moduleRoot + "/internal/site/features"},
-		{name: "views", prefix: moduleRoot + "/views"},
-		{name: "fixtures", prefix: moduleRoot + "/fixtures"},
-	}
-
 	fset := token.NewFileSet()
-	found := false
+	violations := 0
 
 	visit := func(path string, d os.DirEntry, err error) error {
 		if err != nil {
 			return err
 		}
 		if d.IsDir() {
-			if d.Name() == ".git" || d.Name() == "node_modules" {
+			name := d.Name()
+			if name == ".git" || name == "node_modules" {
+				return filepath.SkipDir
+			}
+			// Skip examples/* — they are independent Go modules with their
+			// own composition roots and are allowed to import everything.
+			if path != "." && name == "examples" {
 				return filepath.SkipDir
 			}
 			return nil
@@ -51,13 +56,15 @@ func main() {
 			if err != nil {
 				continue
 			}
-			for _, rule := range forbidden {
-				if isForbiddenImport(importPath, rule.prefix) {
-					position := fset.Position(importSpec.Path.Pos())
-					fmt.Printf("%s:%d: %s (%s)\n", position.Filename, position.Line, importPath, rule.name)
-					found = true
-				}
+			if !strings.HasPrefix(importPath, moduleRoot) {
+				continue
 			}
+			if isAllowed(importPath) {
+				continue
+			}
+			position := fset.Position(importSpec.Path.Pos())
+			fmt.Printf("%s:%d: %s (only %s/pkg/... is allowed inside the framework module)\n", position.Filename, position.Line, importPath, moduleRoot)
+			violations++
 		}
 		return nil
 	}
@@ -67,14 +74,21 @@ func main() {
 		os.Exit(1)
 	}
 
-	if found {
-		fmt.Println("Failing due to root-import policy violations.")
+	if violations > 0 {
+		fmt.Printf("Failing due to %d framework boundary violation(s).\n", violations)
 		os.Exit(1)
 	}
-
-	fmt.Println("No-root imports check passed.")
+	fmt.Println("No-root imports check passed: framework module only references pkg/...")
 }
 
-func isForbiddenImport(importPath string, prefix string) bool {
-	return importPath == prefix || strings.HasPrefix(importPath, prefix+"/")
+func isAllowed(importPath string) bool {
+	for _, prefix := range allowedFrameworkPrefixes {
+		if importPath == prefix {
+			return true
+		}
+		if strings.HasPrefix(importPath, prefix+"/") {
+			return true
+		}
+	}
+	return false
 }

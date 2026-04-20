@@ -1,0 +1,43 @@
+{
+  "brand_name": "Acme",
+  "tagline": "Сделано с fastygo + ui8kit",
+  "title": "Запускай быстро, оставайся простым.",
+  "subtitle": "Минимальный стартовый landing-пример, показывающий, что нужно для серверно-рендеримого маркетингового сайта.",
+  "primary_cta": "Перейти к фреймворку",
+  "primary_href": "https://github.com/fastygo/framework",
+  "footer_text": "© Acme — создано на fastygo/framework",
+  "theme": {
+    "label": "Тема",
+    "switch_to_dark_label": "Переключить на тёмный режим",
+    "switch_to_light_label": "Переключить на светлый режим"
+  },
+  "language": {
+    "label": "Язык",
+    "current_label": "RU",
+    "next_label": "EN",
+    "next_locale": "en",
+    "available": ["en", "ru"],
+    "locale_labels": {
+      "en": "EN",
+      "ru": "RU"
+    }
+  },
+  "features": [
+    {
+      "title": "Единый бинарник",
+      "description": "Собрал и выложил на сервер — готово. Без runtime зависимостей.",
+      "icon": "binary"
+    },
+    {
+      "title": "Серверный рендеринг",
+      "description": "Templ + Tailwind 4 дают моментальный первый рендер без лишнего client-side JS.",
+      "icon": "layers"
+    },
+    {
+      "title": "Shell UI8Kit",
+      "description": "Хедер, переключатель темы и согласованные токены дизайна сразу из коробки.",
+      "icon": "palette"
+    }
+  ],
+  "locale": "ru"
+}

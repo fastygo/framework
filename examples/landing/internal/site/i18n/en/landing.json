@@ -1,0 +1,43 @@
+{
+  "brand_name": "Acme",
+  "tagline": "Built with fastygo + ui8kit",
+  "title": "Launch fast, stay simple.",
+  "subtitle": "A one-file landing example showing the absolute minimum needed to ship a server-rendered marketing page.",
+  "primary_cta": "Get the framework",
+  "primary_href": "https://github.com/fastygo/framework",
+  "footer_text": "© Acme — Powered by fastygo/framework",
+  "theme": {
+    "label": "Theme",
+    "switch_to_dark_label": "Switch to dark mode",
+    "switch_to_light_label": "Switch to light mode"
+  },
+  "language": {
+    "label": "Language",
+    "current_label": "EN",
+    "next_label": "RU",
+    "next_locale": "ru",
+    "available": ["en", "ru"],
+    "locale_labels": {
+      "en": "EN",
+      "ru": "RU"
+    }
+  },
+  "features": [
+    {
+      "title": "Single binary",
+      "description": "Compile, drop on a server, done. No runtime dependencies.",
+      "icon": "binary"
+    },
+    {
+      "title": "Server-rendered",
+      "description": "Templ + Tailwind 4 give you instant first paint with no client JS overhead.",
+      "icon": "layers"
+    },
+    {
+      "title": "UI8Kit shell",
+      "description": "Header, theme switch, and consistent design tokens out of the box.",
+      "icon": "palette"
+    }
+  ],
+  "locale": "en"
+}

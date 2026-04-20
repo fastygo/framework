@@ -7,12 +7,17 @@ import (
 	"github.com/fastygo/framework/pkg/core/cqrs"
 )
 
+// Validation is a PipelineBehavior that calls Validate() on the
+// request when the request implements a `Validate() error` method.
+// A non-nil error is wrapped in a DomainError(ErrorCodeValidation).
+// Requests without a Validate method pass through unchanged.
 type Validation struct{}
 
 type validator interface {
 	Validate() error
 }
 
+// Handle implements cqrs.PipelineBehavior.
 func (Validation) Handle(ctx context.Context, request any, next cqrs.HandlerFunc) (any, error) {
 	if request == nil {
 		return next(ctx, request)

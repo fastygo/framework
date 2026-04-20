@@ -9,10 +9,16 @@ import (
 	"github.com/fastygo/framework/pkg/core/cqrs"
 )
 
+// Logging is a PipelineBehavior that emits an info-level slog event
+// before and after each handler invocation, including the handled
+// type, duration, and error (when any). Use slog.New(...) with a
+// JSON handler in production for structured ingestion.
 type Logging struct {
+	// Logger is the destination logger. nil falls back to slog.Default().
 	Logger *slog.Logger
 }
 
+// Handle implements cqrs.PipelineBehavior.
 func (l Logging) Handle(ctx context.Context, request any, next cqrs.HandlerFunc) (any, error) {
 	logger := l.Logger
 	if logger == nil {

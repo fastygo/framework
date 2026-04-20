@@ -41,6 +41,31 @@ func TestCacheTTLExpiry(t *testing.T) {
 	}
 }
 
+// TestCacheCleanupBoundsGrowth verifies that Cleanup actually evicts every
+// expired entry across all shards, so a periodic call keeps memory bounded.
+func TestCacheCleanupBoundsGrowth(t *testing.T) {
+	t.Parallel()
+
+	const total = 10_000
+	c := New[int](20 * time.Millisecond)
+	for i := 0; i < total; i++ {
+		c.Set(strconv.Itoa(i), i)
+	}
+
+	time.Sleep(50 * time.Millisecond)
+	c.Cleanup()
+
+	var remaining int
+	for i := range c.shards {
+		c.shards[i].mu.RLock()
+		remaining += len(c.shards[i].items)
+		c.shards[i].mu.RUnlock()
+	}
+	if remaining != 0 {
+		t.Fatalf("expected 0 entries after Cleanup, got %d", remaining)
+	}
+}
+
 func TestCacheConcurrentAccess(t *testing.T) {
 	t.Parallel()
 

@@ -1,0 +1,45 @@
+{
+  "overview": {
+    "page_title": "Overview",
+    "description": "A quick look at what's happening in your %s workspace.",
+    "contacts_label": "Contacts",
+    "workspace_label": "Workspace",
+    "account_label": "Account",
+    "manage_text": "Manage →",
+    "add_contact_text": "Add a contact",
+    "sign_out_text": "Sign out",
+    "greeting_template": "Welcome back, %s"
+  },
+  "contacts": {
+    "page_title": "Contacts",
+    "description": "A starter CRUD scaffold backed by an in-memory repository.",
+    "add_header": "Add a contact",
+    "name_label": "Name",
+    "email_label": "Email",
+    "company_label": "Company",
+    "add_button_text": "Add",
+    "existing_contacts_text": "Existing contacts",
+    "no_contacts_text": "No contacts yet.",
+    "name_header": "Name",
+    "email_header": "Email",
+    "company_header": "Company",
+    "created_header": "Created",
+    "delete_text": "Delete",
+    "error_text": {
+      "name_required": "Contact name is required.",
+      "email_required": "Contact email is required.",
+      "create_contact_failed": "Unable to create contact."
+    }
+  },
+  "login": {
+    "page_title": "Sign in",
+    "subtitle": "Use any email and password — this is a demo stub.",
+    "email_label": "Email",
+    "password_label": "Password",
+    "submit_button_text": "Sign in",
+    "session_error": "Unable to sign in. Please try again."
+  },
+  "account": {
+    "sign_out_text": "Sign out"
+  }
+}

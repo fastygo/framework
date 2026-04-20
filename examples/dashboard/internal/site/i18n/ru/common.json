@@ -1,0 +1,15 @@
+{
+  "brand_name": "Acme Dashboard",
+  "nav": {
+    "overview": "Обзор",
+    "contacts": "Контакты"
+  },
+  "error_text": {
+    "missing_credentials": "Требуются email и пароль."
+  },
+  "theme": {
+    "label": "Тема",
+    "switch_to_dark_label": "Переключить на тёмный режим",
+    "switch_to_light_label": "Переключить на светлый режим"
+  }
+}

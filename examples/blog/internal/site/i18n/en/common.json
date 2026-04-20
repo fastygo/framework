@@ -1,0 +1,31 @@
+{
+  "brand_name": "Acme Blog",
+  "theme": {
+    "label": "Theme",
+    "switch_to_dark_label": "Switch to dark mode",
+    "switch_to_light_label": "Switch to light mode"
+  },
+  "language": {
+    "label": "Language",
+    "current_label": "EN",
+    "next_label": "RU",
+    "next_locale": "ru",
+    "available": ["en", "ru"],
+    "locale_labels": {
+      "en": "EN",
+      "ru": "RU"
+    }
+  },
+  "header_nav_items": [
+    {
+      "label": "Home",
+      "path": "/"
+    },
+    {
+      "label": "Framework",
+      "path": "https://github.com/fastygo/framework"
+    }
+  ],
+  "index_title": "Latest posts",
+  "index_description": "Long-form notes on building with fastygo + ui8kit."
+}

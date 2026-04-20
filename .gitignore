@@ -7,8 +7,6 @@ node_modules/
 *.exe
 *.log
 *.tmp
-internal/site/web/static/css/app.css
-internal/site/docs/web/static/css/app.css
 .manual/
 .project/
 .roadmap/
@@ -16,6 +14,16 @@ internal/site/docs/web/static/css/app.css
 .paas/
 .env
 docker-compose.override.yml
-C:\\Users\\alexe/
 **/*.exe
 **/*.log
+
+# Generated CSS bundles in example apps
+examples/**/static/css/app.css
+examples/**/web/static/css/app.css
+
+# Local Go workspace state
+go.work.sum
+
+# Coverage profiles produced by `make coverage` / coverage-gate
+coverage.out
+*.cov

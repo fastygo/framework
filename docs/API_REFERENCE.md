@@ -349,7 +349,7 @@ Used for passing view-state into templates.
 - `func ContextWithRequestID(ctx context.Context, requestID string) context.Context`
 - `func RequestIDFromContext(ctx context.Context) string`
 - `func RequestIDMiddleware() Middleware`
-  - If the header is missing, generates `uuid.NewString()` and writes it to both context and response.
+  - Echoes the `X-Request-ID` header when present, otherwise generates a fresh RFC 4122 UUID v4 (via `crypto/rand`, no external dependency) and writes it to both the request context and the response header.
 
 ---
 
