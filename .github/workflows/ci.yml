@@ -40,10 +40,11 @@ jobs:
         run: go vet ./...
 
       - name: golangci-lint
-        uses: golangci/golangci-lint-action@v6
+        # v9 is the first action major that ships golangci-lint v2 by default.
+        # v2.4+ is required for Go 1.25 (older binaries are built with Go 1.24).
+        uses: golangci/golangci-lint-action@v9
         with:
-          version: v1.64
-          args: --timeout=5m
+          version: v2.11
 
   examples:
     name: build examples

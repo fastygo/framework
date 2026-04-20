@@ -19,8 +19,9 @@ lint:
 	go test ./...
 	$(NO_ROOT_IMPORT_CHECK)
 
-# lint-go runs golangci-lint. Requires golangci-lint to be installed:
-#   go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.64.5
+# lint-go runs golangci-lint. Requires golangci-lint v2.4+ (Go 1.25 support):
+#   go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@v2.11.4
+# CI pins v2.11 via golangci/golangci-lint-action@v9 — keep these in sync.
 lint-go:
 	golangci-lint run ./...
 

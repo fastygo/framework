@@ -91,11 +91,13 @@ step "coverage gate"              go run ./scripts/coverage-gate -profile=covera
 # preflight stays usable on fresh checkouts.
 if [[ "$SKIP_LINT" != "1" ]]; then
 	if command -v golangci-lint >/dev/null 2>&1; then
+		# v2 dropped the run.timeout config field; pass it on the CLI instead.
 		step "golangci-lint run"  golangci-lint run --timeout=5m ./...
 	else
 		echo
 		echo "=== preflight: golangci-lint SKIPPED ==="
-		echo "Install with: go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.64.5"
+		echo "Install v2.4+ (required for Go 1.25, CI pins v2.11):"
+		echo "  go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@v2.11.4"
 		echo "Or set PREFLIGHT_SKIP_LINT=1 to silence this notice."
 	fi
 fi
