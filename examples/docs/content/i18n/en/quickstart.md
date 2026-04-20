@@ -1,5 +1,7 @@
 # Quickstart
 
+This guide is for the `examples/docs` app: a dedicated server-side documentation example.
+
 ## Prerequisites
 
 - Go `1.25.5` or newer
@@ -11,19 +13,19 @@
 ```bash
 git clone <your-fork-or-repo-url> fastygo-framework
 cd fastygo-framework
+cd examples/docs
 
 npm install
 go mod download
 ```
 
-## 2) Prepare UI8Kit CSS
+## 2) Sync UI8Kit CSS
 
 ```bash
-go mod download github.com/fastygo/ui8kit@v0.2.5
 npm run sync:ui8kit
 ```
 
-## 3) Run the app in development mode
+## 3) Run in development mode
 
 ```bash
 npm run build:css
@@ -31,76 +33,79 @@ go run github.com/a-h/templ/cmd/templ@v0.3.1001 generate
 go run ./cmd/server
 ```
 
-Alternatively, if `make` is available:
+If `make` is available:
 
 ```bash
 make dev
 ```
 
-Run docs application:
+`make dev` generates templates, builds CSS, and starts the local server.
 
-```bash
-make dev-docs
-```
-
-Build docs statically:
-
-```bash
-make build-docs
-```
-
-## 4) Open in your browser
-
-Go to:
-
-- `http://127.0.0.1:8080`
-
-You should see the dashboard shell with:
-
-- Sidebar navigation from features
-- Mobile `Sheet` panel behavior on narrow viewports
-- Theme toggle in the header
-- Language switcher in the header
-- Welcome page with title, description and button
-- Documentation index and article pages at `/` and `/quickstart`, `/developer-guide`, `/api-reference`
-
-## Optional production build
+## 4) Production build
 
 ```bash
 make build
-./bin/framework
-```
-
-To run both app and docs in production build:
-
-```bash
-make build-docs
 ./bin/docs
 ```
 
-## Environment
+Without `make`:
 
-The app reads these defaults in `pkg/app/config.go`:
+```bash
+npm run build:css
+go run github.com/a-h/templ/cmd/templ@v0.3.1001 generate
+go build -o bin/docs ./cmd/server
+./bin/docs
+```
 
-- `APP_BIND` (default: `127.0.0.1:8080`)
-- `APP_STATIC_DIR` (default: `static`)
-- `APP_DEFAULT_LOCALE` (default: `en`)
-- `APP_AVAILABLE_LOCALES` (default: `en,ru`)
-- `APP_DATA_SOURCE` (default: `fixture`)
+## 5) Open in browser
 
-## CI and lint checks
+Visit:
 
-The repository runs the no-root-import policy in CI via `.github/workflows/no-root-imports.yml`.
-It executes `make ci` on pushes to `main` and pull requests.
+- `http://127.0.0.1:8081/quickstart`
 
-`make ci` -> `make lint-ci` -> `make lint`:
+You should see:
 
+- Sidebar via `Shell`
+- Theme toggle
+- Language switcher
+- Links to `/quickstart`, `/developer-guide`, `/api-reference`
+
+## 6) Why Reader mode is inconsistent across pages
+
+Browser reader mode uses heuristics that prefer long narrative text.
+
+- All markdown pages are rendered through the same pipeline in this example:
+  - `pkg/content-markdown` renders markdown to HTML,
+  - `templ` places it into `<article class="prose max-w-none">`.
+- Pages with a lot of command snippets and short explanatory text (for example `quickstart`) may not be ideal for Reader mode.
+- Adding short explanatory paragraphs between code blocks usually improves how reader mode detects the page.
+
+This behavior is browser heuristics, not an issue in this docs app.
+
+## 7) CI and lint checks
+
+CI runs `make ci` from `.github/workflows/ci.yml`.
+
+`make ci` executes:
+
+- `make lint-ci`
+- `make lint`
 - `go test ./...`
 - `go run ./scripts/check-no-root-imports.go`
 
-Without `make`, run the same checks manually:
+Without `make`, run manually:
 
 ```bash
 go test ./...
 go run ./scripts/check-no-root-imports.go
 ```
+
+## Environment
+
+Defaults are configured in `pkg/app/config.go`:
+
+- `APP_BIND` (default: `127.0.0.1:8081`)
+- `APP_STATIC_DIR` (default: `web/static`)
+- `APP_DEFAULT_LOCALE` (default: `en`)
+- `APP_AVAILABLE_LOCALES` (default: `en,ru`)
+- `APP_DATA_SOURCE` (default: `fixture`)

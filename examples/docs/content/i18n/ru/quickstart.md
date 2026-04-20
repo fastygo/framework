@@ -1,5 +1,7 @@
 # Быстрый старт
 
+Это руководство для примера `examples/docs` — отдельного серверного приложения документации.
+
 ## Что нужно установить
 
 - Go `1.25.5` или новее
@@ -11,6 +13,7 @@
 ```bash
 git clone <URL-вашего-fork-or-repo> fastygo-framework
 cd fastygo-framework
+cd examples/docs
 
 npm install
 go mod download
@@ -19,7 +22,6 @@ go mod download
 ## 2) Подготовка CSS UI8Kit
 
 ```bash
-go mod download github.com/fastygo/ui8kit@v0.2.5
 npm run sync:ui8kit
 ```
 
@@ -37,54 +39,55 @@ go run ./cmd/server
 make dev
 ```
 
-Запуск docs-сайта:
+Команда `make dev` собирает шаблоны Templ и CSS, затем запускает локальный сервер.
 
-```bash
-make dev-docs
-```
-
-Сборка production-версии docs:
-
-```bash
-make build-docs
-```
-
-## 4) Откройте страницу в браузере
-
-Перейдите на:
-
-- `http://127.0.0.1:8080` (основное приложение)
-- `http://127.0.0.1:8081/docs` (документация)
-
-Вы должны увидеть:
-
-- Боковое меню для фичей
-- Адаптивное мобильное поведение `Sheet` на узких экранах
-- Кнопку переключения темы в хедере
-- Кнопку смены языка в хедере
-- Welcome-страницу с заголовком, описанием и кнопкой
-- Индекс документов и страницы `/`, `/quickstart`, `/developer-guide`, `/api-reference` в docs
-
-## Альтернативная production-сборка
+## 4) Production-сборка
 
 ```bash
 make build
-./bin/framework
-```
-
-Сборка и запуск docs production-версии:
-
-```bash
-make build-docs
 ./bin/docs
 ```
 
-## CI и проверки линтера
+Без `make`:
 
-CI в GitHub задается через `.github/workflows/no-root-imports.yml`.
-Workflow запускает `make ci` для `push` в `main` и для `pull_request`.
+```bash
+npm run build:css
+go run github.com/a-h/templ/cmd/templ@v0.3.1001 generate
+go build -o bin/docs ./cmd/server
+./bin/docs
+```
 
-`make ci` выполняет цепочку:
+## 5) Откройте страницу в браузере
+
+Перейдите на:
+
+- `http://127.0.0.1:8081/quickstart`
+
+Убедитесь, что отображаются:
+
+- Sidebar через `Shell`
+- Кнопка смены темы
+- Переключатель языка
+- Ссылки на `/quickstart`, `/developer-guide`, `/api-reference`
+
+## 6) Про режим чтения в браузере
+
+У разных браузеров своя логика активации Reader mode:
+
+- Режим чтения анализирует текстовый контент страницы и строит свой «чистый» вид.
+- Все markdown-страницы проходят через одинаковый шаблон:
+  - `pkg/content-markdown` рендерит HTML,
+  - `templ` вставляет результат в `<article class="prose max-w-none">`.
+- Если страница состоит в основном из блоков кода (например, шаги в `quickstart`), алгоритм Reader может предложить более короткий вариант или «не предлагать» его.
+- Для лучшего попадания в Reader mode лучше держать между примерами кода короткие описательные абзацы.
+
+На текущий момент это поведение обусловлено не сервером, а heuristics браузера.
+
+## 7) CI и проверки линтера
+
+В репозитории CI запускает `make ci` в `.github/workflows/ci.yml`.
+
+`make ci` по умолчанию выполняет:
 
 - `make lint-ci`
 - `make lint`
@@ -100,10 +103,10 @@ go run ./scripts/check-no-root-imports.go
 
 ## Переменные окружения
 
-Приложение читает значения по умолчанию из `pkg/app/config.go`:
+По умолчанию значение берутся из `pkg/app/config.go`:
 
-- `APP_BIND` (по умолчанию: `127.0.0.1:8080`)
-- `APP_STATIC_DIR` (по умолчанию: `internal/site/web/static`)
+- `APP_BIND` (по умолчанию: `127.0.0.1:8081`)
+- `APP_STATIC_DIR` (по умолчанию: `web/static`)
 - `APP_DEFAULT_LOCALE` (по умолчанию: `en`)
 - `APP_AVAILABLE_LOCALES` (по умолчанию: `en,ru`)
 - `APP_DATA_SOURCE` (по умолчанию: `fixture`)
