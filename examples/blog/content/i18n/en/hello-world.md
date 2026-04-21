@@ -1,21 +1,35 @@
 # Hello, world
 
-Welcome to the demo blog built on top of **fastygo/framework** and **UI8Kit**.
+This post is a practical look at how the demo blog in `examples/blog` is rendered.
 
-This post is rendered server-side from a markdown file embedded directly
-into the binary. There is no database, no CMS, and no client-side JavaScript
-involved in producing the article body — the markdown is converted to HTML
-once at startup and cached in memory.
+There is no CMS, no database dependency for content, and no heavy client-side rendering for article conversion. Articles live in markdown files inside the repository and are transformed on the server side before the first request.
 
-## Why pre-render?
+In short, you write markdown, register a slug, and get a real SSR page from the same Go application.
 
-- **Simple operations.** A single Go binary serves both the templ shell
-  and the rendered article.
-- **Predictable performance.** Rendering happens at boot; requests just
-  return cached HTML.
-- **Easy versioning.** Posts are tracked in git alongside code.
+## How the blog render pipeline works
 
-## What's next?
+1. Markdown files are discovered from embedded locale directories.
+2. `pkg/content-markdown` parses and renders them into HTML during startup.
+3. On every request, the cached HTML is reused and inserted into templates.
 
-Drop a new file under `content/i18n/<locale>/<slug>.md`, add a matching entry to the
-post registry in `internal/site/blog/feature.go`, and rebuild.
+This makes the runtime path simpler and more deterministic.
+
+### Startup rendering
+
+Rendering at startup removes repeated conversion work from request handling. That keeps response times more predictable as traffic increases.
+
+### In-memory cache
+
+A warm cache means opening the same post repeatedly does not repeat expensive conversion, which is useful for frequently visited pages and stable UX.
+
+## Why this helps teams
+
+- Content and code are versioned together in git.
+- The pipeline is easy to inspect and reason about.
+- The setup is lightweight to scaffold for internal tools and examples.
+
+You can think in three steps: source markdown → rendered cache → templ view.
+
+## Next steps
+
+Drop a new file under `content/i18n/<locale>/<slug>.md`, register it in `internal/site/blog/feature.go`, regenerate templates if needed, and restart the server.

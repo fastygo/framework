@@ -1,13 +1,33 @@
 # Why UI8Kit
 
-UI8Kit ships with a complete shell pattern (`Shell`, `Nav`, `ThemeToggle`),
-matching Tailwind utilities, and ready-made primitives such as `Title`,
-`Text`, and `Button`.
+UI8Kit in this example is used as the shared UI layer across the blog, docs, and marketing surfaces.
 
-For a blog example that means:
+The goal is to avoid repeating the same shell implementation for each page type while keeping visual consistency in header, sidebar behavior, and theme switching.
 
-- The header, sidebar, and theme toggle render with the same look as the
-  marketing site (`examples/web`) and the docs site (`examples/docs`).
-- We focus on writing markdown and feature glue instead of layout CSS.
-- The shell is responsive out of the box: the sidebar collapses into a
-  mobile sheet on small viewports.
+## Benefits of a shared shell
+
+- One repeatable structure for multiple apps.
+- Less boilerplate in every feature.
+- Consistent behavior for navigation and responsive layout.
+
+## How this speeds up development
+
+### Lower cognitive overhead
+
+Developers spend more time on feature logic and content instead of rebuilding the base shell.
+
+### Easier scaling
+
+When design updates happen in one shared layer, every connected page benefits immediately.
+
+### Consistent primitives
+
+Reusable units like `Title`, `Text`, and `Button` help keep templates predictable and easier to review.
+
+## When to deviate
+
+If a product needs a highly custom interface, keep shared primitives and replace only the parts that must remain bespoke.
+
+## Conclusion
+
+In this repo, UI8Kit is a practical baseline: it reduces duplication, speeds implementation, and keeps UI behavior consistent.
