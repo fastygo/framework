@@ -1,0 +1,20 @@
+---
+description: Framework — respect UI8Kit / Elements / Blocks layering
+alwaysApply: true
+---
+
+# Framework (workspace)
+
+**Role:** Core framework and **examples** live here. UI examples should **consume** the stack, not redefine lower layers.
+
+**Dependency direction (never reverse)**  
+`App / examples` → `Blocks` → `Elements` → `UI8Kit`  
+(`go.work` may list `@Framework`, `@UI8Kit`, `Elements`, `Blocks` as siblings.)
+
+**When changing UI**
+- **Tokens / atoms / layout grammar** → `UI8Kit`.
+- **Reusable widget behavior** → `Elements`.
+- **Page sections and composition** → `Blocks`; accumulate shared pieces in block `internal/` or `pkg/` before promoting to Elements.
+- **Brand, gradients, campaign layout** → app or example CSS — not in kit or Elements.
+
+**Examples:** keep `.templ` free of utility-class noise; compose primitives and blocks; align with sibling repos’ `.cursor/rules`.
