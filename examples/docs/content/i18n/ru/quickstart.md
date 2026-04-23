@@ -5,8 +5,7 @@
 ## Что нужно установить
 
 - Go `1.25.5` или новее
-- Node.js `20+`
-- Bash (для скрипта синхронизации CSS UI8Kit)
+- Bun `1.3+`
 
 ## 1) Клонирование и установка зависимостей
 
@@ -15,20 +14,20 @@ git clone <URL-вашего-fork-or-repo> fastygo-framework
 cd fastygo-framework
 cd examples/docs
 
-npm install
+bun install
 go mod download
 ```
 
-## 2) Подготовка CSS UI8Kit
+## 2) Подготовка ассетов UI8Kit
 
 ```bash
-npm run sync:ui8kit
+bun run vendor:assets
 ```
 
 ## 3) Запуск приложения в режиме разработки
 
 ```bash
-npm run build:css
+bun run build:css
 go run github.com/a-h/templ/cmd/templ@v0.3.1001 generate
 go run ./cmd/server
 ```
@@ -51,7 +50,7 @@ make build
 Без `make`:
 
 ```bash
-npm run build:css
+bun run build:css
 go run github.com/a-h/templ/cmd/templ@v0.3.1001 generate
 go build -o bin/docs ./cmd/server
 ./bin/docs

@@ -1,16 +1,21 @@
 {
-  "name": "fastygo-example-landing",
+  "name": "fastygo-framework-workspace",
   "private": true,
+  "packageManager": "bun@1.3.3",
+  "workspaces": [
+    "examples/*"
+  ],
   "scripts": {
     "build:css:landing": "tailwindcss -i ./examples/landing/web/static/css/input.css -o ./examples/landing/web/static/css/app.css --minify",
     "build:css:web": "tailwindcss -i ./examples/web/web/static/css/input.css -o ./examples/web/web/static/css/app.css --minify",
     "build:css:blog": "tailwindcss -i ./examples/blog/web/static/css/input.css -o ./examples/blog/web/static/css/app.css --minify",
     "build:css:dashboard": "tailwindcss -i ./examples/dashboard/web/static/css/input.css -o ./examples/dashboard/web/static/css/app.css --minify",
     "build:css:docs": "tailwindcss -i ./examples/docs/web/static/css/input.css -o ./examples/docs/web/static/css/app.css --minify",
-    "build:css:all": "npm run build:css:landing && npm run build:css:web && npm run build:css:blog && npm run build:css:dashboard && npm run build:css:docs"
+    "build:css:all": "bun run build:css:landing && bun run build:css:web && bun run build:css:blog && bun run build:css:dashboard && bun run build:css:docs"
   },
-  "dependencies": {
+  "devDependencies": {
     "@tailwindcss/cli": "^4.2.1",
+    "@ui8kit/aria": "0.1.0",
     "tailwindcss": "^4.2.1"
   }
 }

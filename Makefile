@@ -48,10 +48,11 @@ ci:
 
 # Build every example. Useful as a smoke test for the framework API surface.
 examples:
+	bun install
 	@for example in examples/*/; do \
 		if [ -f "$${example}go.mod" ]; then \
 			echo "==> building $${example}"; \
-			(cd "$${example}" && go build ./...) || exit 1; \
+			(cd "$${example}" && bun run vendor:assets && bun run build:css && templ generate ./... && go build ./...) || exit 1; \
 		fi; \
 	done
 

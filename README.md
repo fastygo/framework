@@ -113,8 +113,9 @@ sibling module. There is nothing to install — Go picks up `go.work`
 automatically.
 
 ```bash
+bun install
 go test ./...                        # framework tests
-make examples                        # build every example (Go-only)
+make examples                        # build every example (assets + CSS + Go)
 (cd examples/web && make dev)        # full dev loop for one example
 ```
 
@@ -124,7 +125,7 @@ framework module and `go build ./...` on every example.
 ## Pre-requisites
 
 - Go `1.25.0` or newer
-- Node.js `20+` (only when building CSS for an example)
+- Bun `1.3+` (for example CSS + JS asset builds)
 - [`templ`](https://templ.guide/installation): `go install github.com/a-h/templ/cmd/templ@v0.3.1001`
 
 ## Releasing the framework

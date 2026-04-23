@@ -5,8 +5,7 @@ This guide is for the `examples/docs` app: a dedicated server-side documentation
 ## Prerequisites
 
 - Go `1.25.5` or newer
-- Node.js `20+`
-- Bash (for the UI8Kit CSS sync script)
+- Bun `1.3+`
 
 ## 1) Clone and install dependencies
 
@@ -15,20 +14,20 @@ git clone <your-fork-or-repo-url> fastygo-framework
 cd fastygo-framework
 cd examples/docs
 
-npm install
+bun install
 go mod download
 ```
 
-## 2) Sync UI8Kit CSS
+## 2) Vendor UI8Kit assets
 
 ```bash
-npm run sync:ui8kit
+bun run vendor:assets
 ```
 
 ## 3) Run in development mode
 
 ```bash
-npm run build:css
+bun run build:css
 go run github.com/a-h/templ/cmd/templ@v0.3.1001 generate
 go run ./cmd/server
 ```
@@ -51,7 +50,7 @@ make build
 Without `make`:
 
 ```bash
-npm run build:css
+bun run build:css
 go run github.com/a-h/templ/cmd/templ@v0.3.1001 generate
 go build -o bin/docs ./cmd/server
 ./bin/docs

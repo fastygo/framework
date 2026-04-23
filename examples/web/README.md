@@ -25,7 +25,7 @@ examples/web/
 │       └── cab/                 # OIDC cabinet feature
 ├── web/static/                  # CSS / JS / images (synced with UI8Kit)
 ├── go.mod                       # depends on github.com/fastygo/framework
-├── package.json                 # npm scripts for tailwind + ui8kit sync
+├── package.json                 # Bun scripts for tailwind + asset vendoring
 └── Dockerfile
 ```
 
@@ -38,10 +38,10 @@ just copy the directory and remove `go.work`.
 
 ```bash
 cd examples/web
-npm install
+bun install
 go mod download
-npm run sync:ui8kit                 # writes web/static/css/ui8kit/*.css
-npm run build:css                   # tailwind build
+bun run vendor:assets               # writes web/static/{css,fonts,js}
+bun run build:css                   # tailwind build
 templ generate ./...                # render templ files
 go run ./cmd/server
 ```

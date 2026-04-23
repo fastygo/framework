@@ -22,3 +22,4 @@
 .prose th { @apply font-semibold text-left; }
 .prose strong { @apply font-semibold; }
 .prose em { @apply italic; }
+

@@ -18,11 +18,12 @@ the team behind them is ready.
 
 ## How they share assets
 
-- `web/static/css/*.css` and `web/static/js/ui8kit.js` are **synced from
-  UI8Kit** via `../../scripts/sync-ui8kit-css.sh`. Each example's
-  `package.json` exposes that as `npm run sync:ui8kit`.
-- The Outfit font files live in `pkg/fonts/` and are copied into each
-  example's `web/static/fonts/` by the same script.
+- `web/static/css/*.css`, `web/static/js/theme.js`, and
+  `web/static/js/ui8kit.js` are vendored by the UI8Kit CLI:
+  `go run github.com/fastygo/ui8kit/scripts/cmd/sync-assets web/static`.
+- Each example's `package.json` exposes that as `bun run vendor:assets`.
+- The Outfit font files still come from `pkg/fonts/`, but the copy logic now
+  lives in the same UI8Kit CLI rather than a Framework-local bash script.
 - Tailwind 4 builds CSS from `web/static/css/input.css` to
   `web/static/css/app.css` (gitignored).
 
@@ -56,8 +57,8 @@ tagged framework release.
    - `internal/site/...` for templates and features
    - `web/static/css/input.css` for Tailwind
    - `go.mod` with the `replace` directive above
-   - `package.json` exposing `sync:ui8kit`, `dev:css`, `build:css`, and `build`
-   - `Makefile` exposing `dev`, `build`, `sync-ui8kit`, `css`, `generate`
+   - `package.json` exposing `vendor:assets`, `dev:css`, `build:css`, and `build`
+   - `Makefile` exposing `dev`, `build`, `vendor-assets`, `css`, `generate`
    - `README.md` describing the goal and quick start
 2. Add `./examples/<name>` to the top-level `go.work`.
 3. Add the example to `.github/workflows/ci.yml` under the `build-examples` matrix.

@@ -5,9 +5,10 @@
 // Run locally:
 //
 //	cd examples/web
+//	bun install
 //	go mod download
-//	../../scripts/sync-ui8kit-css.sh web/static
-//	npx @tailwindcss/cli -i web/static/css/input.css -o web/static/css/app.css
+//	bun run vendor:assets
+//	bun run build:css
 //	templ generate ./...
 //	go run ./cmd/server
 package main
@@ -51,8 +52,8 @@ func main() {
 		WithSecurity(security.LoadConfig()).
 		WithLocales(app.LocalesConfig{
 			Strategy: &locale.PathPrefixStrategy{
-				Available: cfg.AvailableLocales,
-				Default:   cfg.DefaultLocale,
+				Available:       cfg.AvailableLocales,
+				Default:         cfg.DefaultLocale,
 				RedirectMissing: true,
 			},
 			Cookie: locale.CookieOptions{

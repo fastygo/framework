@@ -2,23 +2,25 @@ SHELL := /bin/bash
 
 APP := bin/web
 
-.PHONY: dev build sync-ui8kit css generate test lint
+.PHONY: dev build vendor-assets css generate test lint
 
 dev:
 	templ generate ./...
-	npm run build:css
+	bun run vendor:assets
+	bun run build:css
 	go run ./cmd/server
 
 build:
 	templ generate ./...
-	npm run build:css
+	bun run vendor:assets
+	bun run build:css
 	go build -o $(APP) ./cmd/server
 
-sync-ui8kit:
-	bash ../../scripts/sync-ui8kit-css.sh web/static
+vendor-assets:
+	bun run vendor:assets
 
 css:
-	npm run build:css
+	bun run build:css
 
 generate:
 	templ generate ./...

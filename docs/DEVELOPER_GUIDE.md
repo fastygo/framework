@@ -196,7 +196,7 @@ Current business-level capabilities:
 - `internal/site/web/i18n` – embedded JSON i18n content
 - `internal/site/web/static/css` – Tailwind + UI8Kit CSS pipeline
 - `internal/site/web/static/js/app-shell.js` – theme/locale behavior
-- `scripts/sync-ui8kit-css.sh` – copies UI8Kit CSS from module cache
+- `go run github.com/fastygo/ui8kit/scripts/cmd/sync-assets web/static` – vendors UI8Kit CSS, fonts, theme.js, and ui8kit.js into an example app
 - `docs/QUICKSTART.md` – quick run instructions
 
 ---
@@ -240,12 +240,12 @@ Because `AppBuilder` composes `NavItems` automatically, each feature contributes
 ## Commands
 
 - Install dependencies:
-  - `npm install`
+  - `bun install`
   - `go mod download`
-- Sync UI8Kit styles:
-  - `npm run sync:ui8kit`
+- Vendor UI8Kit assets:
+  - `bun run vendor:assets`
 - Dev run:
-  - `npm run build:css`
+  - `bun run build:css`
   - `go run github.com/a-h/templ/cmd/templ@v0.3.1001 generate`
   - `go run ./cmd/server`
   - or `make dev` (if available)
@@ -261,7 +261,7 @@ Because `AppBuilder` composes `NavItems` automatically, each feature contributes
     - `go test ./...`
     - `go run ./scripts/check-no-root-imports.go`
 - CSS watch:
-  - `npm run dev:css`
+  - `bun run dev:css`
 - Docs CSS watch:
   - `npm run dev:docs:css`
 

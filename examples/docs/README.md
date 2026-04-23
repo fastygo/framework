@@ -29,10 +29,10 @@ To add a new docs page:
 
 ```bash
 cd examples/docs
-npm install
+bun install
 go mod download
-npm run sync:ui8kit
-npm run build:css
+bun run vendor:assets
+bun run build:css
 templ generate ./...
 go run ./cmd/server
 ```

@@ -30,10 +30,10 @@ examples/dashboard/
 
 ```bash
 cd examples/dashboard
-npm install
+bun install
 go mod download
-npm run sync:ui8kit
-npm run build:css
+bun run vendor:assets
+bun run build:css
 templ generate ./...
 SESSION_KEY="$(openssl rand -base64 32)" go run ./cmd/server
 ```

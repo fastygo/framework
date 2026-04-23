@@ -3,8 +3,7 @@
 ## Prerequisites
 
 - Go `1.25.5` or newer
-- Node.js `20+`
-- Bash (for the UI8Kit CSS sync script)
+- Bun `1.3+`
 
 ## 1) Clone and install dependencies
 
@@ -12,21 +11,21 @@
 git clone <your-fork-or-repo-url> fastygo-framework
 cd fastygo-framework
 
-npm install
+bun install
 go mod download
 ```
 
-## 2) Prepare UI8Kit CSS
+## 2) Prepare UI8Kit assets
 
 ```bash
 go mod download github.com/fastygo/ui8kit@v0.2.5
-npm run sync:ui8kit
+(cd examples/web && bun run vendor:assets)
 ```
 
 ## 3) Run the app in development mode
 
 ```bash
-npm run build:css
+(cd examples/web && bun run build:css)
 go run github.com/a-h/templ/cmd/templ@v0.3.1001 generate
 go run ./cmd/server
 ```

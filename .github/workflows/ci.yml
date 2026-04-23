@@ -56,20 +56,35 @@ jobs:
         example: [landing, web, blog, docs, dashboard]
     steps:
       - uses: actions/checkout@v4
+        with:
+          path: framework
+
+      - uses: actions/checkout@v4
+        with:
+          repository: fastygo/ui8kit
+          path: '@UI8Kit'
 
       - uses: actions/setup-go@v5
         with:
-          go-version-file: go.mod
+          go-version-file: framework/go.mod
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.3.3
+
+      - name: Install workspace JS dependencies
+        working-directory: framework
+        run: bun install
 
       - name: Install templ
         run: go install github.com/a-h/templ/cmd/templ@v0.3.1001
 
-      - name: Generate templ for example
-        working-directory: examples/${{ matrix.example }}
-        run: templ generate ./...
+      - name: Build example assets
+        working-directory: framework/examples/${{ matrix.example }}
+        run: bun run build
 
       - name: Build example
-        working-directory: examples/${{ matrix.example }}
+        working-directory: framework/examples/${{ matrix.example }}
         run: |
           go mod download
           go build ./...

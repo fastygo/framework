@@ -20,6 +20,20 @@ docker-compose.override.yml
 # Generated CSS bundles in example apps
 examples/**/static/css/app.css
 examples/**/web/static/css/app.css
+examples/**/static/css/fonts.css
+examples/**/web/static/css/fonts.css
+examples/**/static/js/theme.js
+examples/**/static/js/theme.*.js
+examples/**/static/js/ui8kit.js
+examples/**/static/js/ui8kit.*.js
+examples/**/static/js/manifest.json
+examples/**/static/fonts/
+examples/**/web/static/js/theme.js
+examples/**/web/static/js/theme.*.js
+examples/**/web/static/js/ui8kit.js
+examples/**/web/static/js/ui8kit.*.js
+examples/**/web/static/js/manifest.json
+examples/**/web/static/fonts/
 
 # Local Go workspace state
 go.work.sum

@@ -44,15 +44,16 @@ step() {
 	if "$@"; then
 		echo "--- preflight: $name OK ---"
 		return 0
+	else
+		local rc=$?
+		echo "!!! preflight: $name FAILED (exit $rc) !!!" >&2
+		FAILURES+=("$name")
+		if [[ "$FAIL_FAST" == "1" ]]; then
+			summary
+			exit 1
+		fi
+		return 0
 	fi
-	local rc=$?
-	echo "!!! preflight: $name FAILED (exit $rc) !!!" >&2
-	FAILURES+=("$name")
-	if [[ "$FAIL_FAST" == "1" ]]; then
-		summary
-		exit 1
-	fi
-	return 0
 }
 
 summary() {
@@ -105,19 +106,25 @@ fi
 # ----- Optional: mirror of the `examples` matrix job -----
 #
 # Catches API breaks that only show up when an example consumes the
-# framework via its own go.mod (the matrix runs `templ generate` then
-# `go build ./...` for each example).
+# framework via its own go.mod. This now mirrors the example CI more
+# closely: Bun install at the workspace root, then `bun run build`
+# (vendor assets + build css + templ generate) followed by `go build`.
 if [[ "$BUILD_EXAMPLES" == "1" ]]; then
 	if ! command -v templ >/dev/null 2>&1; then
 		echo
 		echo "=== preflight: examples SKIPPED ==="
 		echo "templ not found. Install with:"
 		echo "  go install github.com/a-h/templ/cmd/templ@v0.3.1001"
+	elif ! command -v bun >/dev/null 2>&1; then
+		echo
+		echo "=== preflight: examples SKIPPED ==="
+		echo "bun not found. Install Bun 1.3+ to mirror the example asset pipeline."
 	else
+		step "bun install" bun install
 		for example in examples/*/; do
 			[[ -f "${example}go.mod" ]] || continue
-			step "example: ${example} (templ generate)" \
-				bash -c "cd '${example}' && templ generate ./..."
+			step "example: ${example} (bun run build)" \
+				bash -c "cd '${example}' && bun run build"
 			step "example: ${example} (go build ./...)" \
 				bash -c "cd '${example}' && go mod download && go build ./..."
 		done
