@@ -214,7 +214,7 @@ Current business-level capabilities:
 
 ### Docs site run/build commands
 
-- `npm run build:docs:css`
+- From the framework repo root: `bun run build:css:docs` (Tailwind for `examples/docs`)
 - `make dev-docs` – run docs site in development mode on `8081`
 - `make build-docs` – build `./bin/docs`
 - `go run ./cmd/docs` – run docs site in place
@@ -262,8 +262,7 @@ Because `AppBuilder` composes `NavItems` automatically, each feature contributes
     - `go run ./scripts/check-no-root-imports.go`
 - CSS watch:
   - `bun run dev:css`
-- Docs CSS watch:
-  - `npm run dev:docs:css`
+- Docs CSS watch (from `examples/docs`): `bun run dev:css`
 
 ---
 

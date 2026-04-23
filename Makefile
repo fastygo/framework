@@ -1,7 +1,7 @@
 SHELL := /bin/bash
 
 # This Makefile operates on the framework module only.
-# Each example under examples/* ships its own Makefile / npm scripts.
+# Each example under examples/* ships its own Makefile / Bun scripts.
 
 NO_ROOT_IMPORT_CHECK := go run ./scripts/check-no-root-imports.go
 COVERAGE_PROFILE := coverage.out
