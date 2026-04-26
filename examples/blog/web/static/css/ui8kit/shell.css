@@ -65,10 +65,6 @@
     @apply mt-4;
   }
 
-  .ui-shell-mobile-sheet-divider {
-    @apply border-t border-border;
-  }
-
   .ui-shell-nav-mobile {
     @apply space-y-1 p-2;
   }
@@ -137,7 +133,7 @@
   }
 
   .ui-header-nav-wrap {
-    @apply hidden justify-center md:flex;
+    @apply flex justify-center;
   }
 
   .ui-header-nav {
