@@ -1,5 +1,7 @@
 package views
 
+import dashboardblocks "github.com/fastygo/blocks/dashboard"
+
 templ LoginPage(data LoginPageData) {
 	<!DOCTYPE html>
 	<html lang={ data.Lang }>
@@ -12,27 +14,25 @@ templ LoginPage(data LoginPageData) {
 		<script src="/static/js/ui8kit.js" defer></script>
 	</head>
 	<body class="login-shell">
-		<main class="login-card">
-			<header class="login-header">
-				<h1 class="login-title">{ data.Title }</h1>
-				<p class="login-subtitle">{ data.Subtitle }</p>
-			</header>
-			if data.ErrorText != "" {
-				<p class="login-error">{ data.ErrorText }</p>
-			}
-			<form method="post" action="/auth/login" class="login-form">
-				<input type="hidden" name="return_to" value={ data.ReturnTo }/>
-				<label class="login-field">
-					<span>{ data.EmailLabel }</span>
-					<input type="email" name="email" autocomplete="email" required/>
-				</label>
-				<label class="login-field">
-					<span>{ data.PasswordLabel }</span>
-					<input type="password" name="password" autocomplete="current-password" required/>
-				</label>
-				<button type="submit" class="login-submit">{ data.SubmitText }</button>
-			</form>
-		</main>
+		@dashboardblocks.LoginPanel(dashboardblocks.LoginProps{
+			Title:         data.Title,
+			Subtitle:      data.Subtitle,
+			ErrorText:     data.ErrorText,
+			ReturnTo:      data.ReturnTo,
+			EmailLabel:    data.EmailLabel,
+			PasswordLabel: data.PasswordLabel,
+			SubmitText:    data.SubmitText,
+			Classes: dashboardblocks.LoginClasses{
+				Card:     "login-card",
+				Header:   "login-header",
+				Title:    "login-title",
+				Subtitle: "login-subtitle",
+				Error:    "login-error",
+				Form:     "login-form",
+				Field:    "login-field",
+				Submit:   "login-submit",
+			},
+		})
 	</body>
 	</html>
 }

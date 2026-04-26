@@ -1,28 +1,33 @@
 package partials
 
 import (
+	"github.com/fastygo/elements/account"
 	"github.com/fastygo/elements/toggles"
 	"github.com/fastygo/framework/pkg/web/view"
 )
 
 templ AccountMenu(email string, signOutLabel string, language view.LanguageToggleData) {
-	<div class="dashboard-account-wrap">
-	<form method="post" action="/auth/logout" class="dashboard-account">
-		if email != "" {
-			<span class="dashboard-account-email">{ email }</span>
-		}
-		<button type="submit" class="dashboard-account-signout">{ signOutLabel }</button>
-	</form>
-	@toggles.LanguageToggle(toggles.LanguageToggleProps{
-		Class:            "ui-header-action-btn",
-		Href:             language.NextHref,
-		DefaultLocale:    language.DefaultLocale,
-		CurrentLocale:    language.CurrentLocale,
-		CurrentLabel:     language.CurrentLabel,
-		NextLocale:       language.NextLocale,
-		AvailableLocales: language.AvailableLocales,
-		EnhanceWithJS:    language.EnhanceWithJS,
-		SPATarget:        language.SPATarget,
+	@account.Menu(account.MenuProps{
+		Email:         email,
+		SignOutLabel:  signOutLabel,
+		SignOutAction: "/auth/logout",
+		Classes: account.MenuClasses{
+			Wrap:    "dashboard-account-wrap",
+			Form:    "dashboard-account",
+			Email:   "dashboard-account-email",
+			SignOut: "dashboard-account-signout",
+		},
+		LanguageToggle: toggles.LanguageToggleProps{
+			Class:            "ui-header-action-btn",
+			Href:             language.NextHref,
+			DefaultLocale:    language.DefaultLocale,
+			CurrentLocale:    language.CurrentLocale,
+			CurrentLabel:     language.CurrentLabel,
+			NextLocale:       language.NextLocale,
+			NextLabel:        language.NextLabel,
+			AvailableLocales: language.AvailableLocales,
+			EnhanceWithJS:    language.EnhanceWithJS,
+			SPATarget:        language.SPATarget,
+		},
 	})
-	</div>
 }
