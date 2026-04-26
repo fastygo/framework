@@ -8,6 +8,8 @@ package views
 import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
+import "github.com/fastygo/blocks/marketing"
+
 func CabPage(email string) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
@@ -29,20 +31,30 @@ func CabPage(email string) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"web-page\"><section class=\"web-hero\"><div class=\"web-hero-content\"><h1 class=\"web-hero-title\">Welcome, ")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"web-page\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		var templ_7745c5c3_Var2 string
-		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(email)
-		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/site/views/cab.templ`, Line: 7, Col: 47}
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
+		templ_7745c5c3_Err = marketing.Hero(marketing.HeroProps{
+			Title:    "Welcome, " + email,
+			Subtitle: "You are authenticated via SSO.",
+			PrimaryAction: marketing.Action{
+				Label: "Sign out",
+				Href:  "/auth/logout",
+				Class: "web-hero-cta web-hero-cta-secondary",
+			},
+			Classes: marketing.HeroClasses{
+				Section:  "web-hero",
+				Content:  "web-hero-content",
+				Title:    "web-hero-title",
+				Subtitle: "web-hero-description",
+				Actions:  "web-hero-actions",
+			},
+		}).Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "</h1><p class=\"web-hero-description\">You are authenticated via SSO.</p><div class=\"web-hero-actions\"><a class=\"web-hero-cta web-hero-cta-secondary\" href=\"/auth/logout\">Sign out</a></div></div></section></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "</div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

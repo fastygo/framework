@@ -57,6 +57,10 @@
     @apply mb-2 text-base font-semibold;
   }
 
+  .web-hero-feature-card-description {
+    @apply text-sm text-muted-foreground;
+  }
+
   .web-hero-feature-card {
     @apply rounded-xl border bg-card p-4;
   }

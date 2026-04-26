@@ -8,7 +8,7 @@ package views
 import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
-import t "github.com/a-h/templ"
+import "github.com/fastygo/blocks/editorial"
 
 func PostPage(data PostPageData) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
@@ -31,15 +31,16 @@ func PostPage(data PostPageData) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"blog-page\"><article class=\"prose max-w-none\">")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		templ_7745c5c3_Err = t.Raw(data.HTMLContent).Render(ctx, templ_7745c5c3_Buffer)
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "</article><p class=\"blog-back\"><a href=\"/\">← Back to all posts</a></p></div>")
+		templ_7745c5c3_Err = editorial.PostArticle(editorial.PostArticleProps{
+			HTMLContent: data.HTMLContent,
+			BackHref:    "/",
+			BackLabel:   "← Back to all posts",
+			Classes: editorial.PostArticleClasses{
+				Page:    "blog-page",
+				Article: "prose max-w-none",
+				Back:    "blog-back",
+			},
+		}).Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

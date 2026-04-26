@@ -10,6 +10,7 @@ import templruntime "github.com/a-h/templ/runtime"
 
 import (
 	t "github.com/a-h/templ"
+	"github.com/fastygo/elements/toggles"
 	"github.com/fastygo/framework/examples/docs/internal/site/views/partials"
 	"github.com/fastygo/framework/pkg/app"
 	ui8layout "github.com/fastygo/ui8kit/layout"
@@ -66,6 +67,11 @@ func DocsLayout(data DocsLayoutData, headExtra t.Component, body t.Component) te
 				SwitchToDarkLabel:  data.ThemeToggle.SwitchToDarkLabel,
 				SwitchToLightLabel: data.ThemeToggle.SwitchToLightLabel,
 			},
+			ThemeToggleComponent: toggles.DarkModeToggle(toggles.DarkModeToggleProps{
+				Label:              data.ThemeToggle.Label,
+				SwitchToDarkLabel:  data.ThemeToggle.SwitchToDarkLabel,
+				SwitchToLightLabel: data.ThemeToggle.SwitchToLightLabel,
+			}),
 			HeaderTrailing: nil,
 		}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var2), templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {

@@ -1,9 +1,11 @@
 package views
 
 import (
-	t "github.com/a-h/templ"
+	"strings"
+
+	"github.com/fastygo/blocks/marketing"
+	"github.com/fastygo/elements/toggles"
 	ui8layout "github.com/fastygo/ui8kit/layout"
-	ui "github.com/fastygo/ui8kit/ui"
 )
 
 // Page is the data model rendered by Landing.
@@ -49,49 +51,87 @@ templ Landing(p Page) {
 			SwitchToDarkLabel:  p.ThemeDarkLabel,
 			SwitchToLightLabel: p.ThemeLightLabel,
 		},
+		ThemeToggleComponent: toggles.DarkModeToggle(toggles.DarkModeToggleProps{
+			Label:              p.ThemeLabel,
+			SwitchToDarkLabel:  p.ThemeDarkLabel,
+			SwitchToLightLabel: p.ThemeLightLabel,
+		}),
 	}) {
-		<div class="landing-page">
-			<section class="landing-hero">
-				<p class="landing-kicker">{ p.Tagline }</p>
-				@ui.Title(ui.TitleProps{Class: "landing-title"}, p.Title)
-				<p class="landing-subtitle">{ p.Subtitle }</p>
-				<div class="landing-cta-row">
-					<a class="landing-cta" href={ t.URL(p.PrimaryHref) } target="_blank" rel="noopener noreferrer">{ p.PrimaryCTA }</a>
-				</div>
-			</section>
-
-			if len(p.Features) > 0 {
-				<section class="landing-features">
-					for _, feature := range p.Features {
-						<article class="landing-feature">
-							<h3 class="landing-feature-title">{ feature.Title }</h3>
-							<p class="landing-feature-description">{ feature.Description }</p>
-						</article>
-					}
-				</section>
-			}
-
-			<footer class="landing-footer">{ p.FooterText }</footer>
-		</div>
+		@marketing.LandingPage(marketing.LandingPageProps{
+			Classes: marketing.LandingPageClasses{
+				Page: "landing-page",
+			},
+			Hero: marketing.HeroProps{
+				Kicker:   p.Tagline,
+				Title:    p.Title,
+				Subtitle: p.Subtitle,
+				PrimaryAction: marketing.Action{
+					Label:  p.PrimaryCTA,
+					Href:   p.PrimaryHref,
+					NewTab: true,
+				},
+				Classes: marketing.HeroClasses{
+					Section:  "landing-hero",
+					Kicker:   "landing-kicker",
+					Title:    "landing-title",
+					Subtitle: "landing-subtitle",
+					Actions:  "landing-cta-row",
+					Action:   "landing-cta",
+				},
+			},
+			Features: marketing.FeatureGridProps{
+				Items: landingFeatures(p.Features),
+				Classes: marketing.FeatureGridClasses{
+					Section:     "landing-features",
+					Card:        "landing-feature",
+					Title:       "landing-feature-title",
+					Description: "landing-feature-description",
+				},
+			},
+			Footer: marketing.FooterProps{
+				Text: p.FooterText,
+				Classes: marketing.FooterClasses{
+					Footer: "landing-footer",
+				},
+			},
+		})
 	}
 }
 
+func landingFeatures(features []FeatureItem) []marketing.FeatureItem {
+	items := make([]marketing.FeatureItem, 0, len(features))
+	for _, feature := range features {
+		items = append(items, marketing.FeatureItem{
+			Title:       feature.Title,
+			Description: feature.Description,
+			Icon:        feature.Icon,
+		})
+	}
+	return items
+}
+
 templ landingLanguageToggle(p Page) {
-	<div class="ui-header-language">
-		<a
-			id="landing-language-toggle"
-			class="ui-header-action-btn"
-			href={ t.URL(p.LanguageNextHref) }
-			data-default-locale={ p.LanguageDefaultLocale }
-			data-current-locale={ p.LanguageCurrentLocale }
-			data-next-locale={ p.LanguageNextLocale }
-			data-next-label={ p.LanguageNextLabel }
-			data-available-locales={ p.LanguageAvailableLocales }
-		>
-			{ p.LanguageCurrentLabel }
-		</a>
-	</div>
+	@toggles.HeaderLanguageToggle(toggles.HeaderLanguageToggleProps{
+		Toggle: toggles.LanguageToggleProps{
+			ID:               "landing-language-toggle",
+			Class:            "ui-header-action-btn",
+			Href:             p.LanguageNextHref,
+			DefaultLocale:    p.LanguageDefaultLocale,
+			CurrentLocale:    p.LanguageCurrentLocale,
+			CurrentLabel:     p.LanguageCurrentLabel,
+			NextLocale:       p.LanguageNextLocale,
+			NextLabel:        p.LanguageNextLabel,
+			AvailableLocales: splitLocales(p.LanguageAvailableLocales),
+		},
+	})
 }
 
 templ headExtra() {
+}
+
+func splitLocales(value string) []string {
+	if value == "" {
+		return nil
+	}
+	return strings.Split(value, ",")
 }

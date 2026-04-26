@@ -1,24 +1,21 @@
 package partials
 
 import (
-	"strings"
-
-	t "github.com/a-h/templ"
+	"github.com/fastygo/elements/toggles"
 	"github.com/fastygo/framework/pkg/web/view"
 )
 
 templ LanguageToggle(data view.LanguageToggleData) {
-	<a
-		id="docs-language-toggle"
-		class="docs-language-toggle ui-header-action-btn"
-		href={ t.URL(data.NextHref) }
-		data-default-locale={ data.DefaultLocale }
-		data-current-locale={ data.CurrentLocale }
-		data-next-locale={ data.NextLocale }
-		data-available-locales={ strings.Join(data.AvailableLocales, ",") }
-		if data.EnhanceWithJS {
-			data-ui8kit-spa-lang="1"
-			data-spa-target={ data.SPATarget }
-		}
-	>{ data.CurrentLabel }</a>
+	@toggles.LanguageToggle(toggles.LanguageToggleProps{
+		ID:               "docs-language-toggle",
+		Class:            "docs-language-toggle ui-header-action-btn",
+		Href:             data.NextHref,
+		DefaultLocale:    data.DefaultLocale,
+		CurrentLocale:    data.CurrentLocale,
+		CurrentLabel:     data.CurrentLabel,
+		NextLocale:       data.NextLocale,
+		AvailableLocales: data.AvailableLocales,
+		EnhanceWithJS:    data.EnhanceWithJS,
+		SPATarget:        data.SPATarget,
+	})
 }

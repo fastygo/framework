@@ -2,7 +2,7 @@ SHELL := /bin/bash
 
 APP := bin/blog
 
-.PHONY: dev build vendor-assets css generate test
+.PHONY: dev build vendor-assets css generate test layout-audit
 
 dev:
 	templ generate ./...
@@ -27,3 +27,6 @@ generate:
 
 test:
 	go test ./...
+
+layout-audit:
+	(cd ../.. && go run ./scripts/layout-audit ./examples/blog/internal/site/views)

@@ -1,0 +1,16 @@
+{
+  "utilities": {
+    "bg-red-500": {
+      "reason": "Use semantic UI8Kit color tokens or app-owned component classes instead of raw palette colors.",
+      "suggest": ["bg-destructive"]
+    },
+    "text-red-500": {
+      "reason": "Use semantic UI8Kit color tokens or app-owned component classes instead of raw palette colors.",
+      "suggest": ["text-destructive"]
+    },
+    "bg-blue-500": {
+      "reason": "Use semantic UI8Kit color tokens or app-owned component classes instead of raw palette colors.",
+      "suggest": ["bg-primary"]
+    }
+  }
+}

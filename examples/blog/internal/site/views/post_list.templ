@@ -1,22 +1,33 @@
 package views
 
-import t "github.com/a-h/templ"
+import "github.com/fastygo/blocks/editorial"
 
 templ PostList(data PostListData) {
-	<div class="blog-page">
-		<header class="blog-page-header">
-			<h1 class="blog-page-title">{ data.Title }</h1>
-			<p class="blog-page-description">{ data.Description }</p>
-		</header>
-		<div class="blog-post-list">
-			for _, post := range data.Posts {
-				<a class="blog-post-card" href={ t.URL("/posts/" + post.Slug) }>
-					<h2 class="blog-post-card-title">{ post.Title }</h2>
-					if post.Summary != "" {
-						<p class="blog-post-card-summary">{ post.Summary }</p>
-					}
-				</a>
-			}
-		</div>
-	</div>
+	@editorial.PostList(editorial.PostListProps{
+		Title:       data.Title,
+		Description: data.Description,
+		Posts:       editorialPostListItems(data.Posts),
+		Classes: editorial.PostListClasses{
+			Page:        "blog-page",
+			Header:      "blog-page-header",
+			Title:       "blog-page-title",
+			Description: "blog-page-description",
+			List:        "blog-post-list",
+			Card:        "blog-post-card",
+			CardTitle:   "blog-post-card-title",
+			CardSummary: "blog-post-card-summary",
+		},
+	})
+}
+
+func editorialPostListItems(posts []PostListItem) []editorial.PostListItem {
+	items := make([]editorial.PostListItem, 0, len(posts))
+	for _, post := range posts {
+		items = append(items, editorial.PostListItem{
+			Title:   post.Title,
+			Summary: post.Summary,
+			Href:    "/posts/" + post.Slug,
+		})
+	}
+	return items
 }

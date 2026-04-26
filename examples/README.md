@@ -6,6 +6,48 @@ Each subdirectory is an **independent Go module** that depends on
 designed to be cloned out into their own GitHub repositories the moment
 the team behind them is ready.
 
+## Local workspace
+
+Use the top-level workspace for cross-stack development:
+
+```bash
+cd e:/_@Go/.WorkSpace-Framework
+go work sync
+```
+
+Each example keeps local replaces for Framework and UI8Kit during development:
+
+```text
+replace github.com/fastygo/framework => ../..
+replace github.com/fastygo/ui8kit => ../../../@UI8Kit
+```
+
+Add local `elements` or `blocks` requirements and replaces only when an example imports those modules directly:
+
+```text
+require github.com/fastygo/blocks v0.0.0-00010101000000-000000000000
+
+replace github.com/fastygo/blocks => ../../../Blocks
+replace github.com/fastygo/elements => ../../../Elements
+```
+
+Before publishing or cutting a distributable example, replace pseudo-zero requirements with tagged module versions.
+
+## ui8px policy
+
+The examples keep their own `.ui8px/` policy tree because apps can contain brand-owned classes while shared UI8Kit assets still need grid and ARIA checks.
+
+`ui8px` is intentionally not installed as a dependency; call it through `npx`:
+
+```bash
+npx ui8px@latest lint ./...
+npx ui8px@latest lint ./... --learn
+npx ui8px@latest validate aria ./...
+npx ui8px@latest validate patterns ./...
+```
+
+The root `package.json` exposes the same commands as scripts, but still uses `npx` rather than a local dependency.
+
 ## Available starters
 
 | Directory | One-liner | Best fit |
@@ -43,12 +85,14 @@ require (
 )
 
 replace github.com/fastygo/framework => ../..
+
+replace github.com/fastygo/ui8kit => ../../../@UI8Kit
 ```
 
-The `replace` directive resolves the local framework module during
+The `replace` directives resolve the local Framework and UI8Kit modules during
 monorepo development. When you copy an example out into its own
-repository, **delete the `replace` line** and bump the `require` to a
-tagged framework release.
+repository, delete the local replaces and bump the requirements to tagged
+releases.
 
 ## Adding a new example
 

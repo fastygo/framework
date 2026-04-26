@@ -20,7 +20,8 @@
   }
 
   .docs-index-grid {
-    @apply grid gap-3 [grid-template-columns:repeat(auto-fit,minmax(16rem,1fr))];
+    @apply grid gap-3;
+    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
   }
 
   .docs-index-item {
