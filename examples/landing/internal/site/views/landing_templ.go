@@ -79,9 +79,6 @@ func Landing(p Page) templ.Component {
 			}
 			ctx = templ.InitializeContext(ctx)
 			templ_7745c5c3_Err = marketing.LandingPage(marketing.LandingPageProps{
-				Classes: marketing.LandingPageClasses{
-					Page: "landing-page",
-				},
 				Hero: marketing.HeroProps{
 					Kicker:   p.Tagline,
 					Title:    p.Title,
@@ -91,29 +88,12 @@ func Landing(p Page) templ.Component {
 						Href:   p.PrimaryHref,
 						NewTab: true,
 					},
-					Classes: marketing.HeroClasses{
-						Section:  "landing-hero",
-						Kicker:   "landing-kicker",
-						Title:    "landing-title",
-						Subtitle: "landing-subtitle",
-						Actions:  "landing-cta-row",
-						Action:   "landing-cta",
-					},
 				},
 				Features: marketing.FeatureGridProps{
 					Items: landingFeatures(p.Features),
-					Classes: marketing.FeatureGridClasses{
-						Section:     "landing-features",
-						Card:        "landing-feature",
-						Title:       "landing-feature-title",
-						Description: "landing-feature-description",
-					},
 				},
 				Footer: marketing.FooterProps{
 					Text: p.FooterText,
-					Classes: marketing.FooterClasses{
-						Footer: "landing-footer",
-					},
 				},
 			}).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
