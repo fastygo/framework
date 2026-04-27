@@ -108,7 +108,6 @@ func (f *Feature) renderIndex(w http.ResponseWriter, r *http.Request, loc string
 			Title:       bundle.Common.IndexTitle,
 			Description: bundle.Common.IndexDescription,
 			Pages:       pages,
-			Classes:     docsIndexClasses(),
 		})),
 	); err != nil {
 		web.HandleError(w, err)
@@ -144,7 +143,6 @@ func (f *Feature) renderPage(w http.ResponseWriter, r *http.Request, loc, slug s
 		"docs:"+loc+":"+slug,
 		views.DocsLayout(layout, templ.NopComponent, docsblocks.DocsArticle(docsblocks.DocsArticleProps{
 			HTMLContent: rendered.HTML,
-			Classes:     docsArticleClasses(),
 		})),
 	); err != nil {
 		web.HandleError(w, err)
@@ -204,25 +202,4 @@ func cloneNav(items []app.NavItem) []app.NavItem {
 	out := make([]app.NavItem, len(items))
 	copy(out, items)
 	return out
-}
-
-func docsIndexClasses() docsblocks.DocsIndexClasses {
-	return docsblocks.DocsIndexClasses{
-		Page:        "docs-page",
-		Header:      "docs-page-header",
-		Title:       "docs-page-title",
-		Description: "docs-subtle",
-		ContentCard: "docs-content-card",
-		Grid:        "docs-index-grid",
-		Item:        "docs-index-item",
-		ItemTitle:   "docs-index-title",
-	}
-}
-
-func docsArticleClasses() docsblocks.DocsArticleClasses {
-	return docsblocks.DocsArticleClasses{
-		Page:        "docs-page",
-		ContentCard: "docs-content-card",
-		Article:     "prose max-w-none",
-	}
 }

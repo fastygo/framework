@@ -7,16 +7,6 @@ templ PostList(data PostListData) {
 		Title:       data.Title,
 		Description: data.Description,
 		Posts:       editorialPostListItems(data.Posts),
-		Classes: editorial.PostListClasses{
-			Page:        "blog-page",
-			Header:      "blog-page-header",
-			Title:       "blog-page-title",
-			Description: "blog-page-description",
-			List:        "blog-post-list",
-			Card:        "blog-post-card",
-			CardTitle:   "blog-post-card-title",
-			CardSummary: "blog-post-card-summary",
-		},
 	})
 }
 

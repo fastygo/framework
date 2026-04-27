@@ -37,7 +37,7 @@ func LanguageToggle(data view.LanguageToggleData) templ.Component {
 		templ_7745c5c3_Err = toggles.HeaderLanguageToggle(toggles.HeaderLanguageToggleProps{
 			Toggle: toggles.LanguageToggleProps{
 				ID:               "web-language-toggle",
-				Class:            "web-language-toggle ui-header-action-btn",
+				Class:            "ui-header-action-btn",
 				Href:             data.NextHref,
 				DefaultLocale:    data.DefaultLocale,
 				CurrentLocale:    data.CurrentLocale,

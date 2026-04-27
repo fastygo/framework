@@ -35,11 +35,6 @@ func PostPage(data PostPageData) templ.Component {
 			HTMLContent: data.HTMLContent,
 			BackHref:    "/",
 			BackLabel:   "← Back to all posts",
-			Classes: editorial.PostArticleClasses{
-				Page:    "blog-page",
-				Article: "prose max-w-none",
-				Back:    "blog-back",
-			},
 		}).Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err

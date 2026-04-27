@@ -3,22 +3,12 @@ package views
 import "github.com/fastygo/blocks/marketing"
 
 templ CabPage(email string) {
-	<div class="web-page">
-		@marketing.Hero(marketing.HeroProps{
-			Title:    "Welcome, " + email,
-			Subtitle: "You are authenticated via SSO.",
-			PrimaryAction: marketing.Action{
-				Label: "Sign out",
-				Href:  "/auth/logout",
-				Class: "web-hero-cta web-hero-cta-secondary",
-			},
-			Classes: marketing.HeroClasses{
-				Section:  "web-hero",
-				Content:  "web-hero-content",
-				Title:    "web-hero-title",
-				Subtitle: "web-hero-description",
-				Actions:  "web-hero-actions",
-			},
-		})
-	</div>
+	@marketing.Hero(marketing.HeroProps{
+		Title:    "Welcome, " + email,
+		Subtitle: "You are authenticated via SSO.",
+		PrimaryAction: marketing.Action{
+			Label: "Sign out",
+			Href:  "/auth/logout",
+		},
+	})
 }

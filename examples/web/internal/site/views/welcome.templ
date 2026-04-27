@@ -5,46 +5,26 @@ import (
 )
 
 templ WelcomePage(data WelcomePageData) {
-	<div class="web-page">
-		@marketing.Hero(marketing.HeroProps{
-			Kicker:   data.Kicker,
-			Title:    data.Title,
-			Subtitle: data.Description,
-			PrimaryAction: marketing.Action{
-				Label:  data.GithubLabel,
-				Href:   "https://github.com/fastygo/framework",
+	@marketing.Hero(marketing.HeroProps{
+		Kicker:   data.Kicker,
+		Title:    data.Title,
+		Subtitle: data.Description,
+		PrimaryAction: marketing.Action{
+			Label:  data.GithubLabel,
+			Href:   "https://github.com/fastygo/framework",
+			NewTab: true,
+		},
+		Actions: []marketing.Action{
+			{
+				Label:  data.DocsLabel,
+				Href:   "https://docs.fastygo.ru",
 				NewTab: true,
-				Class:  "web-hero-cta web-hero-cta-primary",
 			},
-			Actions: []marketing.Action{
-				{
-					Label:  data.DocsLabel,
-					Href:   "https://docs.fastygo.ru",
-					NewTab: true,
-					Class:  "web-hero-cta web-hero-cta-secondary",
-				},
-			},
-			Classes: marketing.HeroClasses{
-				Section:  "web-hero",
-				Content:  "web-hero-content",
-				Kicker:   "web-hero-kicker",
-				Title:    "web-hero-title",
-				Subtitle: "web-hero-description",
-				Actions:  "web-hero-actions",
-			},
-		})
-		<div class="web-content-card">
-			@marketing.FeatureGrid(marketing.FeatureGridProps{
-				Items: webFeatureItems(data),
-				Classes: marketing.FeatureGridClasses{
-					Section:     "web-hero-feature-grid",
-					Card:        "web-hero-feature-card",
-					Title:       "web-hero-feature-card-title",
-					Description: "web-hero-feature-card-description",
-				},
-			})
-		</div>
-	</div>
+		},
+	})
+	@marketing.FeatureGrid(marketing.FeatureGridProps{
+		Items: webFeatureItems(data),
+	})
 }
 
 func webFeatureItems(data WelcomePageData) []marketing.FeatureItem {

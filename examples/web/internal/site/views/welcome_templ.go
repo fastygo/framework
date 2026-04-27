@@ -33,10 +33,6 @@ func WelcomePage(data WelcomePageData) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"web-page\">")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
 		templ_7745c5c3_Err = marketing.Hero(marketing.HeroProps{
 			Kicker:   data.Kicker,
 			Title:    data.Title,
@@ -45,45 +41,21 @@ func WelcomePage(data WelcomePageData) templ.Component {
 				Label:  data.GithubLabel,
 				Href:   "https://github.com/fastygo/framework",
 				NewTab: true,
-				Class:  "web-hero-cta web-hero-cta-primary",
 			},
 			Actions: []marketing.Action{
 				{
 					Label:  data.DocsLabel,
 					Href:   "https://docs.fastygo.ru",
 					NewTab: true,
-					Class:  "web-hero-cta web-hero-cta-secondary",
 				},
 			},
-			Classes: marketing.HeroClasses{
-				Section:  "web-hero",
-				Content:  "web-hero-content",
-				Kicker:   "web-hero-kicker",
-				Title:    "web-hero-title",
-				Subtitle: "web-hero-description",
-				Actions:  "web-hero-actions",
-			},
 		}).Render(ctx, templ_7745c5c3_Buffer)
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "<div class=\"web-content-card\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		templ_7745c5c3_Err = marketing.FeatureGrid(marketing.FeatureGridProps{
 			Items: webFeatureItems(data),
-			Classes: marketing.FeatureGridClasses{
-				Section:     "web-hero-feature-grid",
-				Card:        "web-hero-feature-card",
-				Title:       "web-hero-feature-card-title",
-				Description: "web-hero-feature-card-description",
-			},
 		}).Render(ctx, templ_7745c5c3_Buffer)
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "</div></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

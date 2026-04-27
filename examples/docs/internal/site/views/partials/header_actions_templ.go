@@ -47,7 +47,7 @@ func HeaderActions(language view.LanguageToggleData, navItems []app.NavItem) tem
 			ContainerClass: "ui-header-language",
 			Toggle: toggles.LanguageToggleProps{
 				ID:               "docs-language-toggle",
-				Class:            "docs-language-toggle ui-header-action-btn",
+				Class:            "ui-header-action-btn",
 				Href:             language.NextHref,
 				DefaultLocale:    language.DefaultLocale,
 				CurrentLocale:    language.CurrentLocale,

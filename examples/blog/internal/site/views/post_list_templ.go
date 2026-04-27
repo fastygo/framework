@@ -35,16 +35,6 @@ func PostList(data PostListData) templ.Component {
 			Title:       data.Title,
 			Description: data.Description,
 			Posts:       editorialPostListItems(data.Posts),
-			Classes: editorial.PostListClasses{
-				Page:        "blog-page",
-				Header:      "blog-page-header",
-				Title:       "blog-page-title",
-				Description: "blog-page-description",
-				List:        "blog-post-list",
-				Card:        "blog-post-card",
-				CardTitle:   "blog-post-card-title",
-				CardSummary: "blog-post-card-summary",
-			},
 		}).Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err

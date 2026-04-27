@@ -31,30 +31,14 @@ func CabPage(email string) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"web-page\">")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
 		templ_7745c5c3_Err = marketing.Hero(marketing.HeroProps{
 			Title:    "Welcome, " + email,
 			Subtitle: "You are authenticated via SSO.",
 			PrimaryAction: marketing.Action{
 				Label: "Sign out",
 				Href:  "/auth/logout",
-				Class: "web-hero-cta web-hero-cta-secondary",
-			},
-			Classes: marketing.HeroClasses{
-				Section:  "web-hero",
-				Content:  "web-hero-content",
-				Title:    "web-hero-title",
-				Subtitle: "web-hero-description",
-				Actions:  "web-hero-actions",
 			},
 		}).Render(ctx, templ_7745c5c3_Buffer)
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "</div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
