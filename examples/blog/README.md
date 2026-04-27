@@ -4,6 +4,11 @@ Markdown-driven blog example. Posts live under `content/posts/<slug>.md`,
 get embedded into the binary, and are rendered through the framework's
 content library.
 
+This example intentionally uses a custom site shell instead of
+`ui8kit/layout.Shell`. The shell still keeps the UI8Kit ARIA/theme hooks for
+the mobile navigation sheet, burger trigger, and dark mode toggle, and is
+checked by `scripts/layout-audit`.
+
 ## Layout
 
 ```
@@ -25,6 +30,15 @@ examples/blog/
 2. Append `{Slug, Title, Summary}` to the `Posts` slice in
    `internal/site/blog/feature.go`.
 3. Run `templ generate ./... && go build ./...`.
+
+## Validate the custom shell
+
+```bash
+bun run layout:audit
+```
+
+The audit runs from the Framework root and checks the custom sheet, burger
+trigger, close controls, theme toggle, and `<main>` landmark wiring.
 
 ## Quick start
 

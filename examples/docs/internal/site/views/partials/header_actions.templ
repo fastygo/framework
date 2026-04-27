@@ -1,33 +1,42 @@
 package partials
 
 import (
-	"strings"
-
+	"github.com/fastygo/elements/navigation"
+	"github.com/fastygo/elements/toggles"
 	"github.com/fastygo/framework/pkg/app"
 	"github.com/fastygo/framework/pkg/web/view"
 )
 
 templ HeaderActions(language view.LanguageToggleData, navItems []app.NavItem) {
-	<div class="ui-header-nav-wrap">
-		<nav class="ui-header-nav" aria-label="Main navigation">
-			for _, item := range navItems {
-				if isExternalNavLink(item.Path) {
-					<a href={ item.Path } class="ui-header-nav-link" target="_blank" rel="noopener noreferrer">
-						{ item.Label }
-					</a>
-				} else {
-					<a href={ item.Path } class="ui-header-nav-link">
-						{ item.Label }
-					</a>
-				}
-			}
-		</nav>
-	</div>
-	<div class="ui-header-language">
-		@LanguageToggle(language)
-	</div>
+	@navigation.HeaderNav(navigation.HeaderNavProps{
+		Items: headerNavigationItems(navItems),
+		Label: "Main navigation",
+	})
+	@toggles.HeaderLanguageToggle(toggles.HeaderLanguageToggleProps{
+		ContainerClass: "ui-header-language",
+		Toggle: toggles.LanguageToggleProps{
+			ID:               "docs-language-toggle",
+			Class:            "docs-language-toggle ui-header-action-btn",
+			Href:             language.NextHref,
+			DefaultLocale:    language.DefaultLocale,
+			CurrentLocale:    language.CurrentLocale,
+			CurrentLabel:     language.CurrentLabel,
+			NextLocale:       language.NextLocale,
+			NextLabel:        language.NextLabel,
+			AvailableLocales: language.AvailableLocales,
+			EnhanceWithJS:    language.EnhanceWithJS,
+			SPATarget:        language.SPATarget,
+		},
+	})
 }
 
-func isExternalNavLink(path string) bool {
-	return strings.HasPrefix(path, "http://") || strings.HasPrefix(path, "https://")
+func headerNavigationItems(items []app.NavItem) []navigation.NavItem {
+	out := make([]navigation.NavItem, 0, len(items))
+	for _, item := range items {
+		out = append(out, navigation.NavItem{
+			Label: item.Label,
+			Href:  item.Path,
+		})
+	}
+	return out
 }

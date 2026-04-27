@@ -1,37 +1,65 @@
 package views
 
 import (
-	ui "github.com/fastygo/ui8kit/ui"
+	"github.com/fastygo/blocks/marketing"
 )
 
 templ WelcomePage(data WelcomePageData) {
 	<div class="web-page">
-		<section class="web-hero">
-			<div class="web-hero-content">
-				<p class="web-hero-kicker">{ data.Kicker }</p>
-				@ui.Title(ui.TitleProps{Class: "web-hero-title"}, data.Title)
-				<p class="web-hero-description">{ data.Description }</p>
-				<div class="web-hero-actions">
-					<a class="web-hero-cta web-hero-cta-primary" href="https://github.com/fastygo/framework" target="_blank" rel="noopener noreferrer">{ data.GithubLabel }</a>
-					<a class="web-hero-cta web-hero-cta-secondary" href="https://docs.fastygo.ru" target="_blank" rel="noopener noreferrer">{ data.DocsLabel }</a>
-				</div>
-			</div>
-		</section>
+		@marketing.Hero(marketing.HeroProps{
+			Kicker:   data.Kicker,
+			Title:    data.Title,
+			Subtitle: data.Description,
+			PrimaryAction: marketing.Action{
+				Label:  data.GithubLabel,
+				Href:   "https://github.com/fastygo/framework",
+				NewTab: true,
+				Class:  "web-hero-cta web-hero-cta-primary",
+			},
+			Actions: []marketing.Action{
+				{
+					Label:  data.DocsLabel,
+					Href:   "https://docs.fastygo.ru",
+					NewTab: true,
+					Class:  "web-hero-cta web-hero-cta-secondary",
+				},
+			},
+			Classes: marketing.HeroClasses{
+				Section:  "web-hero",
+				Content:  "web-hero-content",
+				Kicker:   "web-hero-kicker",
+				Title:    "web-hero-title",
+				Subtitle: "web-hero-description",
+				Actions:  "web-hero-actions",
+			},
+		})
 		<div class="web-content-card">
-			<div class="web-hero-feature-grid">
-				<article class="web-hero-feature-card">
-					<h3 class="web-hero-feature-card-title">{ data.ModularTitle }</h3>
-					<p>{ data.ModularDescription }</p>
-				</article>
-				<article class="web-hero-feature-card">
-					<h3 class="web-hero-feature-card-title">{ data.BootstrapTitle }</h3>
-					<p>{ data.BootstrapDescription }</p>
-				</article>
-				<article class="web-hero-feature-card">
-					<h3 class="web-hero-feature-card-title">{ data.ProductionTitle }</h3>
-					<p>{ data.ProductionDescription }</p>
-				</article>
-			</div>
+			@marketing.FeatureGrid(marketing.FeatureGridProps{
+				Items: webFeatureItems(data),
+				Classes: marketing.FeatureGridClasses{
+					Section:     "web-hero-feature-grid",
+					Card:        "web-hero-feature-card",
+					Title:       "web-hero-feature-card-title",
+					Description: "web-hero-feature-card-description",
+				},
+			})
 		</div>
 	</div>
+}
+
+func webFeatureItems(data WelcomePageData) []marketing.FeatureItem {
+	return []marketing.FeatureItem{
+		{
+			Title:       data.ModularTitle,
+			Description: data.ModularDescription,
+		},
+		{
+			Title:       data.BootstrapTitle,
+			Description: data.BootstrapDescription,
+		},
+		{
+			Title:       data.ProductionTitle,
+			Description: data.ProductionDescription,
+		},
+	}
 }

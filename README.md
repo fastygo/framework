@@ -103,7 +103,8 @@ during monorepo development.
 | `examples/docs` | `/`, `/{slug}` | Localized documentation site |
 | `examples/dashboard` | `/`, `/contacts`, `/auth/...` | Sidebar shell + auth middleware + CRUD scaffold |
 
-See each example's `README.md` for the local quick start.
+See each example's `README.md` for the local quick start and
+[`docs/EXAMPLES.md`](./docs/EXAMPLES.md) for the shared UI layering guide.
 
 ## Local development with `go.work`
 

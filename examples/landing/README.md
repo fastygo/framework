@@ -1,14 +1,16 @@
 # examples/landing
 
-Single-page landing site with no i18n, no CQRS, and a hand-typed feature
-struct directly inside `cmd/server/main.go`. This is the "hello world" of
-the framework.
+Single-page landing site with no CQRS and a hand-typed feature struct directly
+inside `cmd/server/main.go`. The page body is composed from
+`github.com/fastygo/blocks/marketing`, so this example stays focused on app
+wiring, data loading, and brand-specific class hooks.
 
 Use it to learn:
 
 - The shape of a `Feature` (`ID`, `Routes`, `NavItems`).
 - How to render a templ component through `web.CachedRender`.
 - The minimum viable Tailwind + UI8Kit pipeline (`web/static/css/input.css`).
+- How examples consume reusable Blocks while keeping brand CSS local.
 
 ## Quick start
 

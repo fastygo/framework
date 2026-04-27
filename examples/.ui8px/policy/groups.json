@@ -1,0 +1,12 @@
+{
+  "groups": {
+    "display": ["block", "flex", "grid", "hidden", "inline-block", "inline-flex"],
+    "flex.direction": ["flex-col", "flex-row", "flex-wrap"],
+    "align.items": ["items-start", "items-center", "items-end", "items-stretch"],
+    "align.justify": ["justify-start", "justify-center", "justify-end", "justify-between"],
+    "grid.cols": ["grid-cols-1", "grid-cols-2", "grid-cols-3", "grid-cols-4"],
+    "radius": ["rounded", "rounded-md", "rounded-lg", "rounded-xl", "rounded-full"],
+    "shadow": ["shadow", "shadow-none", "shadow-sm", "shadow-lg"],
+    "text.align": ["text-left", "text-center", "text-right"]
+  }
+}

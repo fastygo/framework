@@ -3,34 +3,45 @@ package views
 import (
 	"strconv"
 
-	ui "github.com/fastygo/ui8kit/ui"
+	dashboardblocks "github.com/fastygo/blocks/dashboard"
 )
 
 templ OverviewPage(data OverviewData) {
-	<div class="dashboard-page">
-		<header class="dashboard-page-header">
-			@ui.Title(ui.TitleProps{Class: "dashboard-page-title"}, data.Greeting)
-			<p class="dashboard-page-description">{ data.Description }</p>
-		</header>
+	@dashboardblocks.Overview(dashboardblocks.OverviewProps{
+		Title:       data.Greeting,
+		Description: data.Description,
+		Stats:       overviewStats(data),
+		Classes:     dashboardOverviewClasses(),
+	})
+}
 
-		<section class="dashboard-stat-grid">
-			<article class="dashboard-stat">
-				<p class="dashboard-stat-label">{ data.ContactsLabel }</p>
-				<p class="dashboard-stat-value">{ strconv.Itoa(data.ContactsCount) }</p>
-				<a class="dashboard-stat-link" href="/contacts">{ data.ManageText }</a>
-			</article>
-			<article class="dashboard-stat">
-				<p class="dashboard-stat-label">{ data.WorkspaceLabel }</p>
-				<p class="dashboard-stat-value">{ data.BrandName }</p>
-				<a class="dashboard-stat-link" href="/contacts">{ data.AddContactText }</a>
-			</article>
-			<article class="dashboard-stat">
-				<p class="dashboard-stat-label">{ data.AccountLabel }</p>
-				<p class="dashboard-stat-value">{ data.Email }</p>
-				<form method="post" action="/auth/logout">
-					<button class="dashboard-stat-link" type="submit">{ data.SignOutText }</button>
-				</form>
-			</article>
-		</section>
-	</div>
+func overviewStats(data OverviewData) []dashboardblocks.StatItem {
+	return []dashboardblocks.StatItem{
+		{
+			Label: data.ContactsLabel,
+			Value: strconv.Itoa(data.ContactsCount),
+			Action: dashboardblocks.Action{Label: data.ManageText, Href: "/contacts"},
+		},
+		{
+			Label: data.WorkspaceLabel,
+			Value: data.BrandName,
+			Action: dashboardblocks.Action{Label: data.AddContactText, Href: "/contacts"},
+		},
+		{
+			Label: data.AccountLabel,
+			Value: data.Email,
+			Action: dashboardblocks.Action{Label: data.SignOutText, Href: "/auth/logout", Method: "post"},
+		},
+	}
+}
+
+func dashboardOverviewClasses() dashboardblocks.OverviewClasses {
+	return dashboardblocks.OverviewClasses{
+		Page: dashboardPageClasses(),
+		Grid: "dashboard-stat-grid",
+		Card: "dashboard-stat",
+		Label: "dashboard-stat-label",
+		Value: "dashboard-stat-value",
+		Link: "dashboard-stat-link",
+	}
 }

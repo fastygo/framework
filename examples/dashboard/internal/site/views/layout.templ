@@ -2,8 +2,9 @@ package views
 
 import (
 	t "github.com/a-h/templ"
-	"github.com/fastygo/framework/pkg/app"
 	"github.com/fastygo/framework/examples/dashboard/internal/site/views/partials"
+	"github.com/fastygo/elements/toggles"
+	"github.com/fastygo/framework/pkg/app"
 	ui8layout "github.com/fastygo/ui8kit/layout"
 )
 
@@ -22,6 +23,11 @@ templ DashboardLayout(data LayoutData, body t.Component) {
 			SwitchToDarkLabel:  data.ThemeToggle.SwitchToDarkLabel,
 			SwitchToLightLabel: data.ThemeToggle.SwitchToLightLabel,
 		},
+		ThemeToggleComponent: toggles.DarkModeToggle(toggles.DarkModeToggleProps{
+			Label:              data.ThemeToggle.Label,
+			SwitchToDarkLabel:  data.ThemeToggle.SwitchToDarkLabel,
+			SwitchToLightLabel: data.ThemeToggle.SwitchToLightLabel,
+		}),
 	}) {
 		@body
 	}

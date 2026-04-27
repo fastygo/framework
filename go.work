@@ -3,6 +3,8 @@ go 1.25.0
 use (
 	.
 	../@UI8Kit
+	../Blocks
+	../Elements
 	./examples/web
 	./examples/docs
 	./examples/landing

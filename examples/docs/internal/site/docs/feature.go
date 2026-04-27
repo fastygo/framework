@@ -7,6 +7,7 @@ import (
 
 	"github.com/a-h/templ"
 
+	docsblocks "github.com/fastygo/blocks/docs"
 	"github.com/fastygo/framework/pkg/app"
 	"github.com/fastygo/framework/pkg/cache"
 	content "github.com/fastygo/framework/pkg/content-markdown"
@@ -85,13 +86,13 @@ func (f *Feature) renderIndex(w http.ResponseWriter, r *http.Request, loc string
 		return
 	}
 
-	pages := make([]views.DocsListItem, 0, len(Pages))
+	pages := make([]docsblocks.DocListItem, 0, len(Pages))
 	for _, page := range Pages {
 		title := page.Title
 		if t, ok := bundle.Common.Pages[page.Slug]; ok && t != "" {
 			title = t
 		}
-		pages = append(pages, views.DocsListItem{Slug: page.Slug, Title: title})
+		pages = append(pages, docsblocks.DocListItem{Slug: page.Slug, Title: title})
 	}
 
 	layout := f.layoutFor(r, bundle, loc, "/")
@@ -103,10 +104,11 @@ func (f *Feature) renderIndex(w http.ResponseWriter, r *http.Request, loc string
 		r,
 		f.htmlCache,
 		"docs:index:"+loc,
-		views.DocsLayout(layout, templ.NopComponent, views.DocsIndex(views.DocsIndexData{
+		views.DocsLayout(layout, templ.NopComponent, docsblocks.DocsIndex(docsblocks.DocsIndexProps{
 			Title:       bundle.Common.IndexTitle,
 			Description: bundle.Common.IndexDescription,
 			Pages:       pages,
+			Classes:     docsIndexClasses(),
 		})),
 	); err != nil {
 		web.HandleError(w, err)
@@ -140,9 +142,9 @@ func (f *Feature) renderPage(w http.ResponseWriter, r *http.Request, loc, slug s
 		r,
 		f.htmlCache,
 		"docs:"+loc+":"+slug,
-		views.DocsLayout(layout, templ.NopComponent, views.DocsPage(views.DocsPageData{
-			Title:       pageTitle,
+		views.DocsLayout(layout, templ.NopComponent, docsblocks.DocsArticle(docsblocks.DocsArticleProps{
 			HTMLContent: rendered.HTML,
+			Classes:     docsArticleClasses(),
 		})),
 	); err != nil {
 		web.HandleError(w, err)
@@ -202,4 +204,25 @@ func cloneNav(items []app.NavItem) []app.NavItem {
 	out := make([]app.NavItem, len(items))
 	copy(out, items)
 	return out
+}
+
+func docsIndexClasses() docsblocks.DocsIndexClasses {
+	return docsblocks.DocsIndexClasses{
+		Page:        "docs-page",
+		Header:      "docs-page-header",
+		Title:       "docs-page-title",
+		Description: "docs-subtle",
+		ContentCard: "docs-content-card",
+		Grid:        "docs-index-grid",
+		Item:        "docs-index-item",
+		ItemTitle:   "docs-index-title",
+	}
+}
+
+func docsArticleClasses() docsblocks.DocsArticleClasses {
+	return docsblocks.DocsArticleClasses{
+		Page:        "docs-page",
+		ContentCard: "docs-content-card",
+		Article:     "prose max-w-none",
+	}
 }

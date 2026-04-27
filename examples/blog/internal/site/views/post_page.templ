@@ -1,14 +1,16 @@
 package views
 
-import t "github.com/a-h/templ"
+import "github.com/fastygo/blocks/editorial"
 
 templ PostPage(data PostPageData) {
-	<div class="blog-page">
-		<article class="prose max-w-none">
-			@t.Raw(data.HTMLContent)
-		</article>
-		<p class="blog-back">
-			<a href="/">← Back to all posts</a>
-		</p>
-	</div>
+	@editorial.PostArticle(editorial.PostArticleProps{
+		HTMLContent: data.HTMLContent,
+		BackHref:    "/",
+		BackLabel:   "← Back to all posts",
+		Classes: editorial.PostArticleClasses{
+			Page:    "blog-page",
+			Article: "prose max-w-none",
+			Back:    "blog-back",
+		},
+	})
 }

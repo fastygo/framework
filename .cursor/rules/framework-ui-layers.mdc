@@ -17,4 +17,15 @@ alwaysApply: true
 - **Page sections and composition** → `Blocks`; accumulate shared pieces in block `internal/` or `pkg/` before promoting to Elements.
 - **Brand, gradients, campaign layout** → app or example CSS — not in kit or Elements.
 
-**Examples:** keep `.templ` free of utility-class noise; compose primitives and blocks; align with sibling repos’ `.cursor/rules`.
+**Styling after UI8Kit explicit-class refactor**
+- Explicit Tailwind utility classes are allowed across examples and apps, but they must stay visible in source and pass `ui8px` policy.
+- Use repo-root `.ui8px/` policy where a repo owns templates/CSS. Keep examples and page-like views in **layout** scope; keep reusable controls/widgets in **control** scope.
+- Layout scope follows the 8px rhythm (`px-2`, `px-4`, `px-6`, `gap-4`, etc.). Control scope may use finer 4px tuning (`px-3`, `py-1`, `h-7`) for compact primitives.
+- Prefer semantic token classes (`bg-card`, `text-muted-foreground`, `border-border`) over raw palette utilities.
+- Do not reintroduce UI8Kit `UtilityProps` or safelist-generation patterns; Tailwind should see explicit classes or CSS `@apply`.
+
+**API shape**
+- Higher layers should not export lower-layer props as their public contract. Blocks expose scene props; Elements expose widget props; UI8Kit props are used internally.
+- `Class string` and small part-class override structs are acceptable extension points.
+
+**Examples:** compose primitives, Elements, and Blocks directly; keep app/brand styling in examples or app CSS; align with sibling repos’ `.cursor/rules` and `ui8px` policies.

@@ -10,9 +10,11 @@ import templruntime "github.com/a-h/templ/runtime"
 
 import (
 	t "github.com/a-h/templ"
+	"github.com/fastygo/elements/dialogs"
+	"github.com/fastygo/elements/navigation"
+	"github.com/fastygo/elements/toggles"
 	"github.com/fastygo/framework/examples/blog/internal/site/views/partials"
 	"github.com/fastygo/framework/pkg/app"
-	ui8layout "github.com/fastygo/ui8kit/layout"
 )
 
 func BlogLayout(data LayoutData, body t.Component) templ.Component {
@@ -36,39 +38,165 @@ func BlogLayout(data LayoutData, body t.Component) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Var2 := templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
-			templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
-			templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
-			if !templ_7745c5c3_IsBuffer {
-				defer func() {
-					templ_7745c5c3_BufErr := templruntime.ReleaseBuffer(templ_7745c5c3_Buffer)
-					if templ_7745c5c3_Err == nil {
-						templ_7745c5c3_Err = templ_7745c5c3_BufErr
-					}
-				}()
-			}
-			ctx = templ.InitializeContext(ctx)
-			templ_7745c5c3_Err = body.Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<!doctype html><html lang=\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var2 string
+		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(blogShellLang(data.Lang))
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `blog/internal/site/views/layout.templ`, Line: 14, Col: 38}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><link rel=\"icon\" href=\"/static/img/favicon-32x32.png\" type=\"image/png\" sizes=\"32x32\"><link rel=\"icon\" href=\"/static/img/favicon-192x192.png\" type=\"image/png\" sizes=\"192x192\"><link rel=\"apple-touch-icon\" href=\"/static/img/favicon-192x192.png\"><title>")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var3 string
+		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(data.Title)
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `blog/internal/site/views/layout.templ`, Line: 21, Col: 22}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "</title><link rel=\"stylesheet\" href=\"/static/css/app.css\"><script src=\"/static/js/theme.js\"></script><script src=\"/static/js/ui8kit.js\" defer></script></head><body class=\"ui-shell-body\"><div id=\"blog-mobile-sheet\" class=\"ui-shell-mobile-sheet-panel\" data-ui8kit=\"sheet\" data-ui8kit-dialog role=\"dialog\" aria-modal=\"true\" aria-label=\"Navigation menu\" aria-labelledby=\"blog-mobile-sheet-title\" data-state=\"closed\" hidden><div class=\"ui-shell-mobile-sheet-overlay\" data-ui8kit-dialog-overlay data-ui8kit-dialog-close data-ui8kit-dialog-target=\"blog-mobile-sheet\" aria-label=\"Close overlay\"></div><div class=\"ui-shell-mobile-sheet-content-wrap\"><div class=\"ui-shell-mobile-sheet-header\"><span id=\"blog-mobile-sheet-title\" class=\"ui-shell-mobile-sheet-title\">")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var4 string
+		templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(blogBrand(data.BrandName))
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `blog/internal/site/views/layout.templ`, Line: 42, Col: 104}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "</span>")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = dialogs.CloseButton(dialogs.CloseButtonProps{
+			TargetID: "blog-mobile-sheet",
+			Label:    "Close navigation menu",
+			Text:     "✕",
+		}).Render(ctx, templ_7745c5c3_Buffer)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "</div><div class=\"ui-shell-mobile-sheet-content\"><nav class=\"ui-shell-nav-mobile\" aria-label=\"Mobile navigation\">")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = navigation.NavList(navigation.NavListProps{
+			Items:  navigationItems(data.NavItems),
+			Active: data.Active,
+		}).Render(ctx, templ_7745c5c3_Buffer)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "</nav>")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		if len(data.HeaderNavItems) > 0 {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "<div class=\"ui-shell-mobile-sheet-divider\" role=\"separator\" aria-hidden=\"true\"></div><nav class=\"ui-shell-nav-mobile\" aria-label=\"Main navigation\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			return nil
-		})
-		templ_7745c5c3_Err = ui8layout.Shell(ui8layout.ShellProps{
-			Title:          data.Title,
-			Lang:           data.Lang,
-			BrandName:      data.BrandName,
-			Active:         data.Active,
-			MarketingShell: true,
-			NavItems:       toShellNavItems(data.NavItems),
-			HeadExtra:      headExtra(),
-			HeaderExtra:    partials.HeaderActions(data.LanguageToggle, data.HeaderNavItems),
-			ThemeToggle: ui8layout.ThemeToggleProps{
-				Label:              data.ThemeToggle.Label,
-				SwitchToDarkLabel:  data.ThemeToggle.SwitchToDarkLabel,
-				SwitchToLightLabel: data.ThemeToggle.SwitchToLightLabel,
+			templ_7745c5c3_Err = navigation.NavList(navigation.NavListProps{
+				Items: navigationItems(data.HeaderNavItems),
+			}).Render(ctx, templ_7745c5c3_Buffer)
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "</nav>")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "</div></div></div><div class=\"ui-shell-layout-row\"><aside class=\"ui-shell-desktop-aside\"><div class=\"ui-shell-desktop-brand-row\"><p class=\"ui-shell-brand-title\">")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var5 string
+		templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(blogBrand(data.BrandName))
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `blog/internal/site/views/layout.templ`, Line: 70, Col: 65}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 10, "</p></div><nav class=\"ui-shell-nav-desktop\" aria-label=\"Primary navigation\">")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = navigation.NavList(navigation.NavListProps{
+			Items:  navigationItems(data.NavItems),
+			Active: data.Active,
+		}).Render(ctx, templ_7745c5c3_Buffer)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 11, "</nav></aside><div class=\"ui-shell-main-column\"><header class=\"ui-header\">")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = navigation.MobileMenuButton(navigation.MobileMenuButtonProps{
+			ID:       "blog-mobile-sheet-trigger",
+			TargetID: "blog-mobile-sheet",
+			Label:    "Open navigation menu",
+			Classes: navigation.MobileMenuButtonClasses{
+				Icon: "latty latty-menu ui-theme-icon",
 			},
-		}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var2), templ_7745c5c3_Buffer)
+		}).Render(ctx, templ_7745c5c3_Buffer)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 12, "<h1 class=\"ui-header-title\">")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var6 string
+		templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(data.Title)
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `blog/internal/site/views/layout.templ`, Line: 89, Col: 46}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 13, "</h1><div class=\"ui-header-actions\">")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = partials.HeaderActions(data.LanguageToggle, data.HeaderNavItems).Render(ctx, templ_7745c5c3_Buffer)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = toggles.DarkModeToggle(toggles.DarkModeToggleProps{
+			Label:              data.ThemeToggle.Label,
+			SwitchToDarkLabel:  data.ThemeToggle.SwitchToDarkLabel,
+			SwitchToLightLabel: data.ThemeToggle.SwitchToLightLabel,
+		}).Render(ctx, templ_7745c5c3_Buffer)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 14, "</div></header><main class=\"ui-shell-main\">")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = body.Render(ctx, templ_7745c5c3_Buffer)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 15, "</main></div></div></body></html>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -76,41 +204,37 @@ func BlogLayout(data LayoutData, body t.Component) templ.Component {
 	})
 }
 
-func headExtra() templ.Component {
-	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
-		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
-		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
-			return templ_7745c5c3_CtxErr
-		}
-		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
-		if !templ_7745c5c3_IsBuffer {
-			defer func() {
-				templ_7745c5c3_BufErr := templruntime.ReleaseBuffer(templ_7745c5c3_Buffer)
-				if templ_7745c5c3_Err == nil {
-					templ_7745c5c3_Err = templ_7745c5c3_BufErr
-				}
-			}()
-		}
-		ctx = templ.InitializeContext(ctx)
-		templ_7745c5c3_Var3 := templ.GetChildren(ctx)
-		if templ_7745c5c3_Var3 == nil {
-			templ_7745c5c3_Var3 = templ.NopComponent
-		}
-		ctx = templ.ClearChildren(ctx)
-		return nil
-	})
-}
-
-func toShellNavItems(items []app.NavItem) []ui8layout.NavItem {
-	out := make([]ui8layout.NavItem, len(items))
-	for i, item := range items {
-		out[i] = ui8layout.NavItem{
-			Label: item.Label,
-			Path:  item.Path,
-			Icon:  item.Icon,
-		}
+func navigationItems(items []app.NavItem) []navigation.NavItem {
+	out := make([]navigation.NavItem, 0, len(items))
+	for _, item := range items {
+		out = append(out, navigation.NavItem{
+			Label:     item.Label,
+			Href:      item.Path,
+			IconClass: navigationIconClass(item.Icon),
+		})
 	}
 	return out
+}
+
+func navigationIconClass(icon string) string {
+	if icon == "" {
+		return ""
+	}
+	return "latty latty-" + icon + " ui-sidebar-item-icon"
+}
+
+func blogShellLang(value string) string {
+	if value == "" {
+		return "en"
+	}
+	return value
+}
+
+func blogBrand(value string) string {
+	if value == "" {
+		return "Blog"
+	}
+	return value
 }
 
 var _ = templruntime.GeneratedTemplate

@@ -1,69 +1,59 @@
 package views
 
-import t "github.com/a-h/templ"
+import dashboardblocks "github.com/fastygo/blocks/dashboard"
 
 templ ContactsPage(data ContactsPageData) {
-	<div class="dashboard-page">
-		<header class="dashboard-page-header">
-			<h1 class="dashboard-page-title">{ data.PageTitle }</h1>
-			<p class="dashboard-page-description">{ data.Description }</p>
-		</header>
-
-		<section class="dashboard-card">
-			<h2 class="dashboard-card-title">{ data.AddHeader }</h2>
-			<form method="post" action="/contacts" class="dashboard-form">
-				<label class="dashboard-field">
-					<span>{ data.NameLabel }</span>
-					<input type="text" name="name" required/>
-				</label>
-				<label class="dashboard-field">
-					<span>{ data.EmailLabel }</span>
-					<input type="email" name="email" required/>
-				</label>
-				<label class="dashboard-field">
-					<span>{ data.CompanyLabel }</span>
-					<input type="text" name="company"/>
-				</label>
-				<button type="submit" class="dashboard-button">{ data.AddButtonText }</button>
-			</form>
-		</section>
-
-		<section class="dashboard-card">
-			<h2 class="dashboard-card-title">{ data.ExistingContactsText }</h2>
-			if len(data.Contacts) == 0 {
-				<p class="dashboard-empty">{ data.NoContactsText }</p>
-			} else {
-				<table class="dashboard-table">
-					<thead>
-						<tr>
-							<th>{ data.NameHeader }</th>
-							<th>{ data.EmailHeader }</th>
-							<th>{ data.CompanyHeader }</th>
-							<th>{ data.CreatedHeader }</th>
-							<th></th>
-						</tr>
-					</thead>
-					<tbody>
-						for _, contact := range data.Contacts {
-							<tr>
-								<td>{ contact.Name }</td>
-								<td>{ contact.Email }</td>
-								<td>{ contact.Company }</td>
-								<td>{ contact.CreatedAt }</td>
-								<td>
-									<form method="post" action={ contactDeleteAction(contact.ID) }>
-										<button type="submit" class="dashboard-button-secondary">{ data.DeleteText }</button>
-									</form>
-								</td>
-							</tr>
-						}
-					</tbody>
-				</table>
-			}
-		</section>
-	</div>
+	@dashboardblocks.Contacts(dashboardblocks.ContactsProps{
+		Title:            data.PageTitle,
+		Description:      data.Description,
+		AddTitle:         data.AddHeader,
+		Fields:           contactFields(data),
+		SubmitLabel:      data.AddButtonText,
+		ListTitle:        data.ExistingContactsText,
+		EmptyText:        data.NoContactsText,
+		NameHeader:       data.NameHeader,
+		EmailHeader:      data.EmailHeader,
+		CompanyHeader:    data.CompanyHeader,
+		CreatedHeader:    data.CreatedHeader,
+		DeleteLabel:      data.DeleteText,
+		DeleteActionBase: "/contacts",
+		Rows:             contactRows(data.Contacts),
+		Classes:          dashboardContactsClasses(),
+	})
 }
 
-func contactDeleteAction(id string) t.SafeURL {
-	return t.URL("/contacts/" + id + "/delete")
+func contactFields(data ContactsPageData) []dashboardblocks.ContactField {
+	return []dashboardblocks.ContactField{
+		{Label: data.NameLabel, Name: "name", Type: "text", Required: true},
+		{Label: data.EmailLabel, Name: "email", Type: "email", Required: true},
+		{Label: data.CompanyLabel, Name: "company", Type: "text"},
+	}
+}
+
+func contactRows(rows []ContactRow) []dashboardblocks.ContactRow {
+	out := make([]dashboardblocks.ContactRow, 0, len(rows))
+	for _, row := range rows {
+		out = append(out, dashboardblocks.ContactRow{
+			ID:        row.ID,
+			Name:      row.Name,
+			Email:     row.Email,
+			Company:   row.Company,
+			CreatedAt: row.CreatedAt,
+		})
+	}
+	return out
+}
+
+func dashboardContactsClasses() dashboardblocks.ContactsClasses {
+	return dashboardblocks.ContactsClasses{
+		Page:            dashboardPageClasses(),
+		Card:            "dashboard-card",
+		CardTitle:       "dashboard-card-title",
+		Form:            "dashboard-form",
+		Field:           "dashboard-field",
+		PrimaryButton:   "dashboard-button",
+		SecondaryButton: "dashboard-button-secondary",
+		Table:           "dashboard-table",
+		Empty:           "dashboard-empty",
+	}
 }

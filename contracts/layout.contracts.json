@@ -1,0 +1,27 @@
+{
+  "contracts": {
+    "dialog.trigger": {
+      "providers": [
+        {
+          "component": "github.com/fastygo/elements/navigation.MobileMenuButton",
+          "targetField": "TargetID"
+        }
+      ]
+    },
+    "dialog.close": {
+      "providers": [
+        {
+          "component": "github.com/fastygo/elements/dialogs.CloseButton",
+          "targetField": "TargetID"
+        }
+      ]
+    },
+    "theme.toggle": {
+      "providers": [
+        {
+          "component": "github.com/fastygo/elements/toggles.DarkModeToggle"
+        }
+      ]
+    }
+  }
+}
