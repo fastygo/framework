@@ -46,7 +46,6 @@ func ContactsPage(data ContactsPageData) templ.Component {
 			DeleteLabel:      data.DeleteText,
 			DeleteActionBase: "/contacts",
 			Rows:             contactRows(data.Contacts),
-			Classes:          dashboardContactsClasses(),
 		}).Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
@@ -75,20 +74,6 @@ func contactRows(rows []ContactRow) []dashboardblocks.ContactRow {
 		})
 	}
 	return out
-}
-
-func dashboardContactsClasses() dashboardblocks.ContactsClasses {
-	return dashboardblocks.ContactsClasses{
-		Page:            dashboardPageClasses(),
-		Card:            "dashboard-card",
-		CardTitle:       "dashboard-card-title",
-		Form:            "dashboard-form",
-		Field:           "dashboard-field",
-		PrimaryButton:   "dashboard-button",
-		SecondaryButton: "dashboard-button-secondary",
-		Table:           "dashboard-table",
-		Empty:           "dashboard-empty",
-	}
 }
 
 var _ = templruntime.GeneratedTemplate

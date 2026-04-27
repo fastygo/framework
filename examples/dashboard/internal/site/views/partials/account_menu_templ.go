@@ -39,12 +39,6 @@ func AccountMenu(email string, signOutLabel string, language view.LanguageToggle
 			Email:         email,
 			SignOutLabel:  signOutLabel,
 			SignOutAction: "/auth/logout",
-			Classes: account.MenuClasses{
-				Wrap:    "dashboard-account-wrap",
-				Form:    "dashboard-account",
-				Email:   "dashboard-account-email",
-				SignOut: "dashboard-account-signout",
-			},
 			LanguageToggle: toggles.LanguageToggleProps{
 				Class:            "ui-header-action-btn",
 				Href:             language.NextHref,

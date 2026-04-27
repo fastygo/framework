@@ -13,7 +13,7 @@ templ LoginPage(data LoginPageData) {
 		<script src="/static/js/theme.js"></script>
 		<script src="/static/js/ui8kit.js" defer></script>
 	</head>
-	<body class="login-shell">
+	<body class="ui-shell-body">
 		@dashboardblocks.LoginPanel(dashboardblocks.LoginProps{
 			Title:         data.Title,
 			Subtitle:      data.Subtitle,
@@ -22,16 +22,6 @@ templ LoginPage(data LoginPageData) {
 			EmailLabel:    data.EmailLabel,
 			PasswordLabel: data.PasswordLabel,
 			SubmitText:    data.SubmitText,
-			Classes: dashboardblocks.LoginClasses{
-				Card:     "login-card",
-				Header:   "login-header",
-				Title:    "login-title",
-				Subtitle: "login-subtitle",
-				Error:    "login-error",
-				Form:     "login-form",
-				Field:    "login-field",
-				Submit:   "login-submit",
-			},
 		})
 	</body>
 	</html>

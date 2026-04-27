@@ -39,7 +39,6 @@ func OverviewPage(data OverviewData) templ.Component {
 			Title:       data.Greeting,
 			Description: data.Description,
 			Stats:       overviewStats(data),
-			Classes:     dashboardOverviewClasses(),
 		}).Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
@@ -65,17 +64,6 @@ func overviewStats(data OverviewData) []dashboardblocks.StatItem {
 			Value:  data.Email,
 			Action: dashboardblocks.Action{Label: data.SignOutText, Href: "/auth/logout", Method: "post"},
 		},
-	}
-}
-
-func dashboardOverviewClasses() dashboardblocks.OverviewClasses {
-	return dashboardblocks.OverviewClasses{
-		Page:  dashboardPageClasses(),
-		Grid:  "dashboard-stat-grid",
-		Card:  "dashboard-stat",
-		Label: "dashboard-stat-label",
-		Value: "dashboard-stat-value",
-		Link:  "dashboard-stat-link",
 	}
 }
 

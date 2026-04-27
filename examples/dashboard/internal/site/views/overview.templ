@@ -11,7 +11,6 @@ templ OverviewPage(data OverviewData) {
 		Title:       data.Greeting,
 		Description: data.Description,
 		Stats:       overviewStats(data),
-		Classes:     dashboardOverviewClasses(),
 	})
 }
 
@@ -35,13 +34,3 @@ func overviewStats(data OverviewData) []dashboardblocks.StatItem {
 	}
 }
 
-func dashboardOverviewClasses() dashboardblocks.OverviewClasses {
-	return dashboardblocks.OverviewClasses{
-		Page: dashboardPageClasses(),
-		Grid: "dashboard-stat-grid",
-		Card: "dashboard-stat",
-		Label: "dashboard-stat-label",
-		Value: "dashboard-stat-value",
-		Link: "dashboard-stat-link",
-	}
-}
