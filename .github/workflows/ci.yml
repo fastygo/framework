@@ -22,8 +22,8 @@ jobs:
       - name: Download dependencies
         run: go mod download
 
-      - name: Run lint + tests
-        run: make ci
+      - name: Run tests and vet
+        run: make lint-ci
 
       - name: Coverage gate (per-package thresholds)
         run: make coverage-gate
@@ -44,7 +44,7 @@ jobs:
         # v2.4+ is required for Go 1.25 (older binaries are built with Go 1.24).
         uses: golangci/golangci-lint-action@v9
         with:
-          version: v2.11
+          version: v2.11.4
 
   examples:
     name: build examples

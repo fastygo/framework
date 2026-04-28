@@ -187,10 +187,6 @@ func (c *OIDCClient) Discovery() (*ProviderConfig, error) {
 // DiscoveryContext loads (and caches for 10 minutes) the issuer metadata,
 // binding the outbound discovery request to ctx.
 func (c *OIDCClient) DiscoveryContext(ctx context.Context) (*ProviderConfig, error) {
-	if ctx == nil {
-		ctx = context.Background()
-	}
-
 	c.mu.RLock()
 	if c.provider != nil && time.Since(c.fetched) < 10*time.Minute {
 		provider := c.provider
@@ -234,10 +230,6 @@ func (c *OIDCClient) ExchangeCode(code string) (*TokenResponse, error) {
 // ExchangeCodeContext swaps an authorization code for tokens, binding
 // discovery and token endpoint requests to ctx.
 func (c *OIDCClient) ExchangeCodeContext(ctx context.Context, code string) (*TokenResponse, error) {
-	if ctx == nil {
-		ctx = context.Background()
-	}
-
 	provider, err := c.DiscoveryContext(ctx)
 	if err != nil {
 		return nil, err
@@ -281,10 +273,6 @@ func (c *OIDCClient) VerifyIDToken(idToken string) (*IDTokenClaims, error) {
 // VerifyIDTokenContext validates the RS256 signature and standard claims,
 // binding discovery and JWKS requests to ctx.
 func (c *OIDCClient) VerifyIDTokenContext(ctx context.Context, idToken string) (*IDTokenClaims, error) {
-	if ctx == nil {
-		ctx = context.Background()
-	}
-
 	provider, err := c.DiscoveryContext(ctx)
 	if err != nil {
 		return nil, err
@@ -351,10 +339,6 @@ func (c *OIDCClient) fetchPublicKey(jwksURI, kid string) (*rsa.PublicKey, error)
 }
 
 func (c *OIDCClient) fetchPublicKeyContext(ctx context.Context, jwksURI, kid string) (*rsa.PublicKey, error) {
-	if ctx == nil {
-		ctx = context.Background()
-	}
-
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, jwksURI, nil)
 	if err != nil {
 		return nil, fmt.Errorf("auth: build JWKS request: %w", err)

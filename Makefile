@@ -23,11 +23,9 @@ lint:
 #   go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@v2.11.4
 # CI pins v2.11 via golangci/golangci-lint-action@v9 — keep these in sync.
 lint-go:
-	golangci-lint run ./...
+	golangci-lint run --timeout=5m ./...
 
-lint-ci:
-	$(MAKE) lint
-	$(MAKE) vet
+lint-ci: lint vet
 
 # coverage runs the test suite for pkg/ with a coverage profile. The
 # profile is consumed by coverage-gate (see below) and can also be
@@ -42,9 +40,7 @@ coverage:
 coverage-gate: coverage
 	$(COVERAGE_GATE) -profile=$(COVERAGE_PROFILE)
 
-ci:
-	$(MAKE) lint-ci
-	$(MAKE) coverage-gate
+ci: lint-ci coverage-gate
 
 # Build every example. Useful as a smoke test for the framework API surface.
 examples:

@@ -8,12 +8,13 @@ set -euo pipefail
 # the `examples` matrix job and a few extras (race, go.work parity).
 #
 # Usage:
-#   ./scripts/preflight.sh                         # full local CI parity
+#   ./scripts/preflight.sh                         # full local CI parity without make/cgo
 #   PREFLIGHT_CI_PARITY=1 ./scripts/preflight.sh   # also unset go.work like CI
 #   PREFLIGHT_RUN_RACE=1  ./scripts/preflight.sh   # add `go test -race`
 #   PREFLIGHT_BUILD_EXAMPLES=1 ./scripts/preflight.sh
 #                                                  # build every example/* (needs templ)
 #   PREFLIGHT_SKIP_LINT=1 ./scripts/preflight.sh   # skip golangci-lint (e.g. when not installed)
+#   PREFLIGHT_SKIP_DIRTY=1 ./scripts/preflight.sh  # skip git dirty-tree check
 #   PREFLIGHT_FAIL_FAST=0 ./scripts/preflight.sh   # collect every failure instead of stopping at first
 #
 # Exit codes:
@@ -23,6 +24,7 @@ set -euo pipefail
 RUN_RACE="${PREFLIGHT_RUN_RACE:-0}"
 BUILD_EXAMPLES="${PREFLIGHT_BUILD_EXAMPLES:-0}"
 SKIP_LINT="${PREFLIGHT_SKIP_LINT:-0}"
+SKIP_DIRTY="${PREFLIGHT_SKIP_DIRTY:-0}"
 FAIL_FAST="${PREFLIGHT_FAIL_FAST:-1}"
 
 # CI uses GOWORK=off so the framework module resolves dependencies the
@@ -144,7 +146,7 @@ if [[ "$RUN_RACE" == "1" ]]; then
 fi
 
 # Catches the classic "I forgot to commit generated files" footgun.
-if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+if [[ "$SKIP_DIRTY" != "1" ]] && git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
 	step "no uncommitted changes" bash -c "git diff --exit-code && git diff --cached --exit-code"
 fi
 

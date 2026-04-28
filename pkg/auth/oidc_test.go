@@ -403,6 +403,20 @@ func TestOIDCClient_VerifyIDTokenContext_UsesCancellationForJWKS(t *testing.T) {
 	}
 }
 
+func TestOIDCClient_FetchPublicKeyWrapper(t *testing.T) {
+	key, _ := rsa.GenerateKey(rand.Reader, 2048)
+	m := newOIDCMock(t, key, "kid-1")
+	c := newClient(t, m)
+
+	pub, err := c.fetchPublicKey(m.server.URL+"/jwks", "kid-1")
+	if err != nil {
+		t.Fatalf("fetchPublicKey: %v", err)
+	}
+	if pub.N.Cmp(key.N) != 0 || pub.E != key.E {
+		t.Fatal("fetchPublicKey returned the wrong public key")
+	}
+}
+
 func TestOIDCClient_VerifyIDToken_RejectsInvalidFormat(t *testing.T) {
 	key, _ := rsa.GenerateKey(rand.Reader, 2048)
 	m := newOIDCMock(t, key, "k1")

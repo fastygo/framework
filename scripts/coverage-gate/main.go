@@ -48,9 +48,9 @@ var thresholds = map[string]float64{
 	"github.com/fastygo/framework/pkg/web/security": 90.0,
 
 	// Core domain primitives and the CQRS dispatcher.
-	"github.com/fastygo/framework/pkg/core":                  80.0,
-	"github.com/fastygo/framework/pkg/core/cqrs":             80.0,
-	"github.com/fastygo/framework/pkg/core/cqrs/behaviors":   80.0,
+	"github.com/fastygo/framework/pkg/core":                80.0,
+	"github.com/fastygo/framework/pkg/core/cqrs":           80.0,
+	"github.com/fastygo/framework/pkg/core/cqrs/behaviors": 80.0,
 
 	// Composition root: Builder, App lifecycle, workers.
 	"github.com/fastygo/framework/pkg/app": 85.0,
@@ -59,6 +59,7 @@ var thresholds = map[string]float64{
 	"github.com/fastygo/framework/pkg/cache":          90.0,
 	"github.com/fastygo/framework/pkg/observability":  80.0,
 	"github.com/fastygo/framework/pkg/web/health":     90.0,
+	"github.com/fastygo/framework/pkg/web/instant":    90.0,
 	"github.com/fastygo/framework/pkg/web/metrics":    80.0,
 	"github.com/fastygo/framework/pkg/web/middleware": 80.0,
 	"github.com/fastygo/framework/pkg/web/view":       80.0,

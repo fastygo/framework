@@ -5,7 +5,7 @@
 #
 # Requires golangci-lint >= v2.4.0 (Go 1.25 support — official binaries
 # below v2.4 are built with Go 1.24 and refuse to lint a go1.25 module).
-# CI pins v2.11; bump the version in .github/workflows/ci.yml when raising
+# CI pins v2.11.4; bump the version in .github/workflows/ci.yml when raising
 # this floor.
 
 version: "2"
