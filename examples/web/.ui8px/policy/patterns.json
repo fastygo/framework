@@ -43,6 +43,18 @@
       "bg-accent",
       "text-accent-foreground"
     ],
+    "ui-auth-card": [
+      "w-full",
+      "max-w-sm"
+    ],
+    "ui-auth-shell": [
+      "flex",
+      "min-h-screen",
+      "items-center",
+      "justify-center",
+      "bg-background",
+      "p-4"
+    ],
     "ui-breadcrumb": [
       "text-sm"
     ],

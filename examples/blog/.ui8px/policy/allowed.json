@@ -155,6 +155,7 @@
     "max-h-dvh",
     "max-w-7xl",
     "max-w-full",
+    "max-w-sm",
     "md:grid-cols-2",
     "min-h-screen",
     "min-w-0",

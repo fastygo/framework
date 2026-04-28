@@ -53,7 +53,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        example: [landing, web, blog, docs, dashboard]
+        example: [landing, web, blog, docs, dashboard, instant]
     steps:
       - uses: actions/checkout@v4
         with:

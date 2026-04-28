@@ -1,0 +1,9 @@
+{
+  "name": "fastygo-example-instant",
+  "private": true,
+  "scripts": {
+    "build": "go test ./...",
+    "preview": "go run ./cmd/server",
+    "bench": "go test ./internal/site -bench=. -benchmem"
+  }
+}

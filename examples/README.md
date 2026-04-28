@@ -15,7 +15,7 @@ cd e:/_@Go/.WorkSpace-Framework
 go work sync
 ```
 
-Each example keeps local replaces for Framework and UI8Kit during development:
+Most UI examples keep local replaces for Framework and UI8Kit during development:
 
 ```text
 replace github.com/fastygo/framework => ../..
@@ -31,7 +31,7 @@ replace github.com/fastygo/blocks => ../../../Blocks
 replace github.com/fastygo/elements => ../../../Elements
 ```
 
-Before publishing or cutting a distributable example, replace pseudo-zero requirements with tagged module versions.
+Before publishing or cutting a distributable example, replace pseudo-zero requirements with tagged module versions. `instant/` is the exception: it is intentionally authored without local `replace` directives so it can be copied into a standalone repository with minimal cleanup.
 
 ## ui8px policy
 
@@ -57,6 +57,7 @@ The root `package.json` exposes the same commands as scripts, but still uses `np
 | [`blog/`](./blog/) | Markdown posts pre-rendered at startup | Personal/team blogs, changelog feeds |
 | [`docs/`](./docs/) | Localized markdown documentation site | Product docs, internal handbooks |
 | [`dashboard/`](./dashboard/) | Sidebar shell, auth middleware, contacts CRUD | Internal tools, CRMs, admin panels |
+| [`instant/`](./instant/) | One prebuilt HTML page, inline CSS, no assets | Messenger WebViews, instant articles, ultra-fast entry pages |
 
 ## How they share assets
 
@@ -71,7 +72,7 @@ The root `package.json` exposes the same commands as scripts, but still uses `np
 
 ## How they consume the framework
 
-Every example's `go.mod` looks like:
+Most UI example `go.mod` files look like:
 
 ```go
 module github.com/fastygo/framework/examples/<name>
@@ -94,14 +95,18 @@ monorepo development. When you copy an example out into its own
 repository, delete the local replaces and bump the requirements to tagged
 releases.
 
+The `instant/` example has no asset pipeline and no local replaces. It uses
+`go.work` inside this repository and expects a tagged `github.com/fastygo/framework`
+version when published as a separate repository.
+
 ## Adding a new example
 
 1. Create `examples/<name>/` with at least:
    - `cmd/server/main.go` (composition root)
    - `internal/site/...` for templates and features
-   - `web/static/css/input.css` for Tailwind
-   - `go.mod` with the `replace` directive above
-   - `package.json` exposing `vendor:assets`, `dev:css`, `build:css`, and `build`
+   - `web/static/css/input.css` for Tailwind when the example has assets
+   - `go.mod` with local replaces unless the example is intentionally standalone
+   - `package.json` exposing the build steps the CI matrix should run
    - `Makefile` exposing `dev`, `build`, `vendor-assets`, `css`, `generate`
    - `README.md` describing the goal and quick start
 2. Add `./examples/<name>` to the top-level `go.work`.

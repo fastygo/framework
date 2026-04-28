@@ -152,9 +152,8 @@ func TestNewOIDCClient_Defaults(t *testing.T) {
 	})
 	if c == nil {
 		t.Fatal("NewOIDCClient returned nil")
-	}
-	// Trailing slash on Issuer must be trimmed.
-	if c.issuer != "https://issuer.example" {
+	} else if c.issuer != "https://issuer.example" {
+		// Trailing slash on Issuer must be trimmed.
 		t.Errorf("issuer: got %q, want trimmed", c.issuer)
 	}
 	if len(c.scopes) != 2 || c.scopes[0] != "openid" {

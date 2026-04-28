@@ -20,8 +20,7 @@ func TestPathPrefixStrategyResolveStripsLocalePrefix(t *testing.T) {
 	}
 	if rewritten == nil {
 		t.Fatal("expected rewritten request")
-	}
-	if rewritten.URL.Path != "/docs/quickstart" {
+	} else if rewritten.URL.Path != "/docs/quickstart" {
 		t.Fatalf("expected rewritten path /docs/quickstart, got %q", rewritten.URL.Path)
 	}
 }

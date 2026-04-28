@@ -18,6 +18,7 @@
     "build:css:dashboard": "tailwindcss -i ./examples/dashboard/web/static/css/input.css -o ./examples/dashboard/web/static/css/app.css --minify",
     "build:css:docs": "tailwindcss -i ./examples/docs/web/static/css/input.css -o ./examples/docs/web/static/css/app.css --minify",
     "build:css:all": "bun run build:css:landing && bun run build:css:web && bun run build:css:blog && bun run build:css:dashboard && bun run build:css:docs",
+    "build:instant": "cd examples/instant && bun run build",
     "build:all": "bun run vendor:assets:all && bun run build:css:all"
   },
   "devDependencies": {

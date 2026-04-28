@@ -98,7 +98,7 @@
   }
 
   .ui-shell-main {
-    @apply w-full min-w-0 max-w-full p-4 md:p-6;
+    @apply flex w-full min-w-0 max-w-full flex-col gap-6 p-4 md:p-6;
   }
 
   .ui-header {

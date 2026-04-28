@@ -34,6 +34,9 @@
         "tailwindcss": "^4.2.1",
       },
     },
+    "examples/instant": {
+      "name": "fastygo-example-instant",
+    },
     "examples/landing": {
       "name": "fastygo-example-landing",
       "devDependencies": {
@@ -131,6 +134,8 @@
     "fastygo-example-dashboard": ["fastygo-example-dashboard@workspace:examples/dashboard"],
 
     "fastygo-example-docs": ["fastygo-example-docs@workspace:examples/docs"],
+
+    "fastygo-example-instant": ["fastygo-example-instant@workspace:examples/instant"],
 
     "fastygo-example-landing": ["fastygo-example-landing@workspace:examples/landing"],
 

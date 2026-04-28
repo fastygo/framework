@@ -43,6 +43,18 @@
       "bg-accent",
       "text-accent-foreground"
     ],
+    "ui-auth-card": [
+      "w-full",
+      "max-w-sm"
+    ],
+    "ui-auth-shell": [
+      "flex",
+      "min-h-screen",
+      "items-center",
+      "justify-center",
+      "bg-background",
+      "p-4"
+    ],
     "ui-breadcrumb": [
       "text-sm"
     ],
@@ -343,9 +355,12 @@
       "w-full"
     ],
     "ui-shell-main": [
+      "flex",
       "w-full",
       "min-w-0",
       "max-w-full",
+      "flex-col",
+      "gap-6",
       "p-4",
       "md:p-6"
     ],
