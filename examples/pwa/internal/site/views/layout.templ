@@ -1,0 +1,170 @@
+package views
+
+import (
+	"strings"
+
+	t "github.com/a-h/templ"
+	"github.com/fastygo/elements/toggles"
+	"github.com/fastygo/framework/pkg/app"
+	"github.com/fastygo/framework/pkg/web/view"
+)
+
+templ Layout(data LayoutData, body t.Component) {
+	<!DOCTYPE html>
+	<html lang={ pwaLang(data.Lang) }>
+		<head>
+			<meta charset="UTF-8"/>
+			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+			<meta name="theme-color" content="#111827"/>
+			<meta name="apple-mobile-web-app-capable" content="yes"/>
+			<meta name="apple-mobile-web-app-title" content={ pwaBrand(data.AppName) }/>
+			<link rel="manifest" href="/manifest.webmanifest"/>
+			<link rel="apple-touch-icon" href="/static/img/icons/icon-192.svg"/>
+			<title>{ data.Title }</title>
+			<link rel="stylesheet" href="/static/css/app.css"/>
+			<script src="/static/js/theme.js"></script>
+			<script src="/static/js/ui8kit.js" defer></script>
+			<script src="/static/js/pwa-register.js" defer></script>
+			<script src="/static/js/pwa-data.js" defer></script>
+			<script src="/static/js/pwa-pomodoro.js" defer></script>
+		</head>
+		<body class="ui-shell-body pwa-body">
+			<div class="pwa-stage">
+				<aside class="pwa-side">
+					<a class="pwa-brand" href="/" aria-label={ pwaBrand(data.BrandName) }>
+						<span class="pwa-brand-mark" aria-hidden="true">✓</span>
+						<span>
+							<strong>{ pwaBrand(data.BrandName) }</strong>
+							<small>{ data.InstallHint }</small>
+						</span>
+					</a>
+					<nav class="pwa-nav" aria-label="Primary navigation">
+						for _, item := range data.NavItems {
+							<a class={ pwaNavClass(item.Path, data.Active) } href={ item.Path }>
+								@PWAIcon(item.Icon)
+								<span>{ item.Label }</span>
+							</a>
+						}
+					</nav>
+				</aside>
+				<div class="pwa-phone-wrap">
+					<div class="pwa-phone" role="application" aria-label={ pwaBrand(data.AppName) }>
+						<header class="pwa-topbar">
+							<div class="pwa-topbar-brand">
+								<span class="pwa-brand-mark" aria-hidden="true">✓</span>
+								<strong>{ topbarBrand(data.AppName) }</strong>
+							</div>
+							<div class="pwa-actions">
+								@languageLink(data.LanguageToggle)
+								@toggles.DarkModeToggle(toggles.DarkModeToggleProps{
+									Label:              data.ThemeToggle.Label,
+									SwitchToDarkLabel:  data.ThemeToggle.SwitchToDarkLabel,
+									SwitchToLightLabel: data.ThemeToggle.SwitchToLightLabel,
+								})
+							</div>
+						</header>
+						<main class="pwa-screen">
+							@body
+						</main>
+						<nav class="pwa-tabbar" aria-label="App navigation">
+							for _, item := range data.HeaderNavItems {
+								<a class={ pwaTabClass(item.Path, data.Active) } href={ item.Path }>
+									@PWAIcon(item.Icon)
+									<span>{ item.Label }</span>
+								</a>
+							}
+						</nav>
+					</div>
+				</div>
+			</div>
+		</body>
+	</html>
+}
+
+templ languageLink(data view.LanguageToggleData) {
+	if data.NextLocale != "" {
+		<a class="pwa-language" href={ data.NextHref } aria-label={ data.Label }>
+			{ localeShortLabel(data.NextLocale) }
+		</a>
+	}
+}
+
+templ PWAIcon(name string) {
+	if name == "home" {
+		<svg class="pwa-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none">
+			<path d="M3 10.5 12 3l9 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+			<path d="M5 10v10h5v-5h4v5h5V10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+		</svg>
+	} else if name == "sparkles" {
+		<svg class="pwa-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none">
+			<path d="M12 3l1.8 4.2L18 9l-4.2 1.8L12 15l-1.8-4.2L6 9l4.2-1.8L12 3Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"></path>
+			<path d="M19 14l.9 2.1L22 17l-2.1.9L19 20l-.9-2.1L16 17l2.1-.9L19 14Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"></path>
+		</svg>
+	} else if name == "crown" {
+		<svg class="pwa-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none">
+			<path d="m4 8 4 4 4-7 4 7 4-4-2 11H6L4 8Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+			<path d="M6 19h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+		</svg>
+	} else if name == "settings" {
+		<svg class="pwa-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none">
+			<path d="M12 15.5A3.5 3.5 0 1 0 12 8a3.5 3.5 0 0 0 0 7.5Z" stroke="currentColor" stroke-width="2"></path>
+			<path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 0 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-1.8-.3 1.6 1.6 0 0 0-1 1.5V21a2 2 0 0 1-4 0v-.2a1.6 1.6 0 0 0-1-1.5 1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1A1.6 1.6 0 0 0 4.6 15a1.6 1.6 0 0 0-1.5-1H3a2 2 0 0 1 0-4h.1a1.6 1.6 0 0 0 1.5-1 1.6 1.6 0 0 0-.3-1.8l-.1-.1a2 2 0 0 1 2.8-2.8l.1.1a1.6 1.6 0 0 0 1.8.3h.1a1.6 1.6 0 0 0 1-1.5V3a2 2 0 0 1 4 0v.2a1.6 1.6 0 0 0 1 1.5h.1a1.6 1.6 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8v.1a1.6 1.6 0 0 0 1.5 1h.1a2 2 0 0 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1Z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path>
+		</svg>
+	} else {
+		<svg class="pwa-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none">
+			<circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="2"></circle>
+		</svg>
+	}
+}
+
+func pwaLang(value string) string {
+	if value == "" {
+		return "en"
+	}
+	return value
+}
+
+func pwaBrand(value string) string {
+	if value == "" {
+		return "Tasks"
+	}
+	return value
+}
+
+func topbarBrand(value string) string {
+	return strings.ToUpper(pwaBrand(value))
+}
+
+func localeShortLabel(locale string) string {
+	switch strings.ToLower(strings.TrimSpace(locale)) {
+	case "ru":
+		return "Ru"
+	case "en":
+		return "En"
+	default:
+		if locale == "" {
+			return ""
+		}
+		return strings.ToUpper(locale[:1]) + strings.ToLower(locale[1:])
+	}
+}
+
+func pwaNavClass(path string, active string) string {
+	if path == active {
+		return "pwa-nav-link pwa-nav-link-active"
+	}
+	return "pwa-nav-link"
+}
+
+func pwaTabClass(path string, active string) string {
+	if path == active {
+		return "pwa-tab pwa-tab-active"
+	}
+	return "pwa-tab"
+}
+
+func cloneAppNavItems(items []app.NavItem) []app.NavItem {
+	out := make([]app.NavItem, len(items))
+	copy(out, items)
+	return out
+}

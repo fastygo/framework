@@ -1,0 +1,10 @@
+package views
+
+templ CancelPage(data CancelPageData) {
+	@PageHeader(data.Header)
+	@BenefitList(data.Reasons)
+	<div class="pwa-actions-row">
+		<a class="pwa-button pwa-button-danger" href="/" data-pwa-cancel-subscription>{ data.PrimaryCTA }</a>
+		@SecondaryLink("/subscription", data.SecondaryCTA)
+	</div>
+}

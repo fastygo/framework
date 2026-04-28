@@ -1,0 +1,10 @@
+package views
+
+templ OfflinePage(data OfflinePageData) {
+	<section class="pwa-card pwa-center-card">
+		@Placeholder("☁")
+		@PageHeader(data.Header)
+		<p class="pwa-secure-note">{ data.CachedHint }</p>
+		@PrimaryLink("/", data.PrimaryCTA)
+	</section>
+}

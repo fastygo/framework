@@ -1,0 +1,81 @@
+package views
+
+templ PomodoroPage(data PomodoroPageData) {
+	<section class="pwa-pomodoro" data-pwa-pomodoro>
+		<section class="pwa-pomodoro-desktop">
+			@PageHeader(data.Header)
+			<section
+				class="pwa-card pwa-pomodoro-card"
+				data-mode-work={ data.ModeWork }
+				data-mode-short-break={ data.ModeShortBreak }
+				data-mode-long-break={ data.ModeLongBreak }
+				data-start-label={ data.StartCTA }
+				data-pause-label={ data.PauseCTA }
+				data-goal-template={ data.GoalTemplate }
+			>
+				<div class="pwa-section-title">
+					<h2 data-pomodoro-mode>{ data.ModeWork }</h2>
+					<span class="pwa-badge" data-pomodoro-progress-label>{ data.ProgressLabel }</span>
+				</div>
+				<div class="pwa-pomodoro-time" aria-live="polite" data-pomodoro-time>25:00</div>
+				<div class="pwa-pomodoro-progress" aria-hidden="true">
+					<span data-pomodoro-progress></span>
+				</div>
+				<p class="pwa-secure-note" data-pomodoro-goal>{ data.GoalTemplate }</p>
+				<div class="pwa-actions-row">
+					<button class="pwa-button pwa-button-primary" type="button" data-pomodoro-start>{ data.StartCTA }</button>
+					<button class="pwa-button pwa-button-secondary" type="button" data-pomodoro-skip>{ data.SkipCTA }</button>
+					<button class="pwa-button pwa-button-secondary" type="button" data-pomodoro-reset>{ data.ResetCTA }</button>
+				</div>
+			</section>
+			<section class="pwa-card pwa-pomodoro-settings">
+				<div>
+					<h2>{ data.SettingsTitle }</h2>
+					<p>{ data.SessionHint }</p>
+				</div>
+				<form class="pwa-form-grid" data-pomodoro-settings>
+					<label>
+						<span>{ data.WorkLabel }</span>
+						<input type="number" min="5" max="55" name="work" value="25"/>
+					</label>
+					<label>
+						<span>{ data.ShortBreakLabel }</span>
+						<input type="number" min="3" max="10" name="shortBreak" value="5"/>
+					</label>
+					<label>
+						<span>{ data.LongBreakLabel }</span>
+						<input type="number" min="5" max="45" name="longBreak" value="20"/>
+					</label>
+					<label>
+						<span>{ data.RoundLabel }</span>
+						<input type="number" min="1" max="12" name="round" value="4"/>
+					</label>
+					<label class="pwa-form-full">
+						<span>{ data.GoalLabel }</span>
+						<input type="number" min="1" max="24" name="goal" value="12"/>
+					</label>
+					<label class="pwa-pomodoro-toggle">
+						<input type="checkbox" name="sound" checked/>
+						<span>{ data.SoundLabel }</span>
+					</label>
+					<label class="pwa-pomodoro-toggle">
+						<input type="checkbox" name="tick"/>
+						<span>{ data.TickLabel }</span>
+					</label>
+					<label class="pwa-pomodoro-toggle pwa-form-full">
+						<input type="checkbox" name="notifications"/>
+						<span>{ data.NotificationsLabel }</span>
+					</label>
+				</form>
+			</section>
+		</section>
+		<section class="pwa-card pwa-center-card pwa-pomodoro-mobile">
+			<div class="pwa-placeholder" aria-hidden="true">
+				<img src="/static/img/tasks-2.png" alt="" loading="lazy" decoding="async"/>
+			</div>
+			<h1>{ data.MobileTitle }</h1>
+			<p>{ data.MobileSubtitle }</p>
+			@SecondaryLink("/", data.BackCTA)
+		</section>
+	</section>
+}

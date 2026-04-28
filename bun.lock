@@ -45,6 +45,14 @@
         "tailwindcss": "^4.2.1",
       },
     },
+    "examples/pwa": {
+      "name": "fastygo-example-pwa",
+      "devDependencies": {
+        "@tailwindcss/cli": "^4.2.1",
+        "@ui8kit/aria": "0.1.0",
+        "tailwindcss": "^4.2.1",
+      },
+    },
     "examples/web": {
       "name": "fastygo-example-web",
       "devDependencies": {
@@ -138,6 +146,8 @@
     "fastygo-example-instant": ["fastygo-example-instant@workspace:examples/instant"],
 
     "fastygo-example-landing": ["fastygo-example-landing@workspace:examples/landing"],
+
+    "fastygo-example-pwa": ["fastygo-example-pwa@workspace:examples/pwa"],
 
     "fastygo-example-web": ["fastygo-example-web@workspace:examples/web"],
 

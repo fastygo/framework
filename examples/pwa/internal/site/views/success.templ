@@ -1,0 +1,22 @@
+package views
+
+templ ProcessingPage(data ProcessingPageData) {
+	<section class="pwa-card pwa-center-card">
+		<div class="pwa-spinner" aria-hidden="true"></div>
+		@PageHeader(data.Header)
+		<p class="pwa-secure-note">{ data.SecureHint }</p>
+		@SecondaryLink("/payment/success", "Show success state")
+	</section>
+}
+
+templ SuccessPage(data SuccessPageData) {
+	<section class="pwa-card pwa-center-card" data-pwa-subscription-success>
+		@Placeholder("✓")
+		@PageHeader(data.Header)
+		<p class="pwa-secure-note">{ data.ConfirmationNo }</p>
+		<div class="pwa-actions-row">
+			@PrimaryLink("/", data.PrimaryCTA)
+			@SecondaryLink("/subscription", data.ManageCTA)
+		</div>
+	</section>
+}

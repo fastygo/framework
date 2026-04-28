@@ -1,0 +1,198 @@
+{
+  "common": {
+    "brand_name": "FastyGo Tasks",
+    "app_name": "Tasks",
+    "install_hint": "Installable PWA shell",
+    "open_menu_label": "Open navigation menu",
+    "close_menu_label": "Close navigation menu",
+    "theme": {
+      "label": "Theme",
+      "switch_to_dark_label": "Switch to dark mode",
+      "switch_to_light_label": "Switch to light mode"
+    },
+    "language": {
+      "label": "Language",
+      "current_label": "English",
+      "next_label": "Русский",
+      "next_locale": "ru",
+      "available": ["en", "ru"],
+      "locale_labels": {
+        "en": "English",
+        "ru": "Русский"
+      }
+    },
+    "header_nav": [
+      { "label": "Dashboard", "path": "/", "icon": "home" },
+      { "label": "Onboarding", "path": "/onboarding", "icon": "sparkles" },
+      { "label": "Premium", "path": "/paywall", "icon": "crown" },
+      { "label": "Subscription", "path": "/subscription", "icon": "settings" }
+    ]
+  },
+  "home": {
+    "kicker": "Today",
+    "title": "Plan the day without losing the flow.",
+    "subtitle": "A compact task dashboard for the PWA shell: fast to open, useful offline, and ready for mobile install.",
+    "primary_cta": "Start onboarding",
+    "secondary_cta": "View premium",
+    "tasks": [
+      { "title": "Review launch checklist", "time": "09:30", "status": "In progress", "priority": "High" },
+      { "title": "Send weekly update", "time": "11:00", "status": "Planned", "priority": "Medium" },
+      { "title": "Prepare payment mock", "time": "15:30", "status": "Premium", "priority": "Low" }
+    ],
+    "stats": [
+      { "label": "Tasks done", "value": "7", "hint": "3 ahead of plan" },
+      { "label": "Focus time", "value": "4h", "hint": "Saved this week" },
+      { "label": "Offline ready", "value": "Yes", "hint": "Shell cached" }
+    ],
+    "benefits": [
+      { "title": "Offline app shell", "description": "Navigation falls back to a cached page when the network is gone." },
+      { "title": "Install prompt ready", "description": "Manifest and icons make the browser treat it like an app." },
+      { "title": "Static cache", "description": "CSS, JS, and shell routes are prepared by the service worker." }
+    ],
+    "task_tools": {
+      "title": "Local task editor",
+      "description": "Create, edit, and delete tasks after Premium is activated. Everything stays on this device.",
+      "locked_hint": "Activate Premium to unlock local task editing.",
+      "title_label": "Task",
+      "time_label": "Time",
+      "status_label": "Status",
+      "priority_label": "Priority",
+      "save_cta": "Save task",
+      "reset_cta": "Cancel edit",
+      "edit_cta": "Edit",
+      "delete_cta": "Delete",
+      "active_status": "Premium active",
+      "inactive_status": "Premium inactive",
+      "subscription_hint": "Tasks remain after cancellation until you clear the PWA cache.",
+      "subscription_edit_cta": "Manage subscription"
+    }
+  },
+  "onboarding": {
+    "title": "Three screens before value is clear.",
+    "subtitle": "A neutral prototype of the mobile onboarding path shown in the reference flow.",
+    "continue_cta": "Continue",
+    "skip_cta": "Skip for now",
+    "steps": [
+      { "label": "1", "title": "Welcome to Tasks", "description": "Collect tasks, goals, and reminders in one installable workspace.", "symbol": "✓" },
+      { "label": "2", "title": "Plan your time", "description": "Create a clear day plan and keep priorities visible.", "symbol": "◷" },
+      { "label": "3", "title": "Never miss it", "description": "Reminder surfaces and cached shell make the app useful even on weak links.", "symbol": "!" }
+    ]
+  },
+  "paywall": {
+    "title": "Unlock the full task system.",
+    "subtitle": "Premium adds reminders, calendar sync, analytics, and offline-first confidence.",
+    "badge": "Popular",
+    "primary_cta": "Choose plan",
+    "restore_cta": "Restore purchase",
+    "benefits": [
+      { "title": "Unlimited monthly tasks", "description": "Create as many plans and recurring items as you need." },
+      { "title": "Reminder notifications", "description": "Keep the next action visible at the right moment." },
+      { "title": "Calendar and planning", "description": "Prototype the screens that a real app would connect to native calendars." },
+      { "title": "Priority support", "description": "Show the subscription value without wiring real billing." }
+    ]
+  },
+  "pricing": {
+    "title": "Choose a tariff.",
+    "subtitle": "Mock plans copied from a typical subscription flow. The selected card moves to payment.",
+    "primary_cta": "Continue to payment",
+    "compare_cta": "Compare plans",
+    "plans": [
+      { "name": "Premium", "price": "$2.99", "period": "month", "description": "Monthly access to core premium tools.", "badge": "Selected", "selected": true },
+      { "name": "Pro", "price": "$6.99", "period": "month", "description": "More automation and planning controls.", "badge": "", "selected": false },
+      { "name": "Business", "price": "$9.99", "period": "month", "description": "Team-ready mock subscription tier.", "badge": "", "selected": false }
+    ]
+  },
+  "payment": {
+    "title": "Choose a payment method.",
+    "subtitle": "This is a UI prototype only. No payment data is stored or sent.",
+    "method_title": "Available methods",
+    "card_title": "Add card",
+    "primary_cta": "Pay $2.99",
+    "secure_hint": "Secure connection mock. Your data is protected in the prototype.",
+    "payment_methods": [
+      { "label": "Bank card", "description": "Visa, Mastercard, MIR", "symbol": "CARD" },
+      { "label": "App Store / Google Play", "description": "Native store billing mock", "symbol": "APP" },
+      { "label": "Fast payments", "description": "Instant transfer mock", "symbol": "PAY" },
+      { "label": "Other wallets", "description": "QMoney, Qiwi, YooMoney mock", "symbol": "WAL" }
+    ]
+  },
+  "processing": {
+    "title": "Processing payment.",
+    "subtitle": "Please wait. This may take a few seconds in a real integration.",
+    "secure_hint": "Secure connection"
+  },
+  "success": {
+    "title": "Subscription activated.",
+    "subtitle": "Thank you for trusting Tasks. Premium tools are now available in the prototype.",
+    "primary_cta": "Start using",
+    "manage_cta": "Manage subscription",
+    "confirmation_no": "Mock receipt #PWA-2042"
+  },
+  "subscription": {
+    "title": "Manage subscription.",
+    "subtitle": "A realistic management screen for plan, payment method, history, restore, and cancellation.",
+    "plan_name": "Premium",
+    "plan_meta": "$2.99 / month · next renewal on May 25",
+    "status": "Active",
+    "inactive_status": "Inactive",
+    "cancel_cta": "Cancel subscription",
+    "actions": [
+      { "label": "Change tariff", "description": "Switch between Premium, Pro, and Business." },
+      { "label": "Payment method", "description": "Visa ending in 4242." },
+      { "label": "Payment history", "description": "Review receipts and mock invoices." },
+      { "label": "Restore purchase", "description": "Recover access on another device." }
+    ],
+    "local_data": {
+      "title": "Local task database",
+      "description": "Export tasks with statuses, import another JSON database, or clear offline cache and local PWA data.",
+      "export_cta": "Export JSON",
+      "import_cta": "Import JSON",
+      "clear_cta": "Clear cache",
+      "hint": "Export before clearing if you want to restore this local task database later."
+    }
+  },
+  "cancel": {
+    "title": "Are you sure you want to cancel?",
+    "subtitle": "The screen mirrors a typical retention flow without touching any real subscription.",
+    "primary_cta": "Cancel subscription",
+    "secondary_cta": "Stay with Premium",
+    "reasons": [
+      { "title": "Your data stays safe", "description": "Tasks are not deleted in this prototype." },
+      { "title": "You can return later", "description": "Subscription state can be restored in a real app." },
+      { "title": "We will miss you", "description": "The UI keeps the tone clear without dark patterns." }
+    ]
+  },
+  "offline": {
+    "title": "You are offline.",
+    "subtitle": "The PWA shell is still available. Return to the dashboard or reconnect to refresh live content.",
+    "primary_cta": "Back to dashboard",
+    "cached_hint": "This page is served from the service worker navigation fallback."
+  },
+  "pomodoro": {
+    "kicker": "Secret lab",
+    "title": "Pomodoro for deep work.",
+    "subtitle": "A quiet desktop and tablet timer for Edge sessions. It runs while this tab stays open and stores settings only for the current session.",
+    "mode_work": "Work",
+    "mode_short_break": "Short break",
+    "mode_long_break": "Long break",
+    "start_cta": "Start",
+    "pause_cta": "Pause",
+    "reset_cta": "Reset",
+    "skip_cta": "Skip",
+    "settings_title": "Session settings",
+    "work_label": "Work minutes",
+    "short_break_label": "Short break",
+    "long_break_label": "Long break",
+    "round_label": "Long break every",
+    "goal_label": "Daily goal",
+    "sound_label": "Sound",
+    "tick_label": "Soft tick",
+    "notifications_label": "Browser notifications",
+    "progress_label": "Session",
+    "goal_template": "0 of 12 pomodoros",
+    "session_hint": "Settings use session storage and disappear after the tab is closed.",
+    "mobile_title": "Pomodoro lab is for larger screens.",
+    "mobile_subtitle": "Open this secret URL on a desktop or tablet. Mobile keeps the TASKS shell light and shows this placeholder instead.",
+    "back_cta": "Back to tasks"
+  }
+}

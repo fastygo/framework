@@ -10,5 +10,6 @@ use (
 	./examples/landing
 	./examples/blog
 	./examples/instant
+	./examples/pwa
 	./examples/dashboard
 )

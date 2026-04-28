@@ -1,0 +1,86 @@
+package views
+
+templ HomePage(data HomePageData) {
+	<div data-pwa-home-extra>
+		@PageHeader(data.Header)
+	</div>
+	<div class="pwa-actions-row" data-pwa-home-extra>
+		@PrimaryLink("/onboarding", data.PrimaryCTA)
+		@SecondaryLink("/paywall", data.SecondaryCTA)
+	</div>
+	<section class="pwa-stats-grid" aria-label="Task summary" data-pwa-home-extra>
+		for _, stat := range data.Stats {
+			<article class="pwa-card pwa-stat-card">
+				<span>{ stat.Label }</span>
+				<strong>{ stat.Value }</strong>
+				<small>{ stat.Hint }</small>
+			</article>
+		}
+	</section>
+	<section class="pwa-card">
+		<div class="pwa-section-title">
+			<h2>Today</h2>
+			<span
+				class="pwa-badge"
+				data-pwa-subscription-status
+				data-pwa-active-label={ data.TaskTools.ActiveStatus }
+				data-pwa-inactive-label={ data.TaskTools.InactiveStatus }
+			>{ data.TaskTools.InactiveStatus }</span>
+		</div>
+		<div class="pwa-list" data-pwa-task-list>
+			for _, task := range data.Tasks {
+				<article
+					class="pwa-task"
+					data-pwa-task="true"
+					data-pwa-task-title={ task.Title }
+					data-pwa-task-time={ task.Time }
+					data-pwa-task-status={ task.Status }
+					data-pwa-task-priority={ task.Priority }
+				>
+					<div>
+						<strong>{ task.Title }</strong>
+						<small>{ task.Time } · { task.Priority }</small>
+					</div>
+					<span data-pwa-task-status-label={ task.Title }>{ task.Status }</span>
+				</article>
+			}
+		</div>
+	</section>
+	<section class="pwa-card pwa-task-tools" data-pwa-task-tools>
+		<div class="pwa-section-title">
+			<h2>{ data.TaskTools.Title }</h2>
+			<a class="pwa-subtle-link" href="/subscription">{ data.TaskTools.SubscriptionEditCTA }</a>
+		</div>
+		<p>{ data.TaskTools.Description }</p>
+		<p class="pwa-secure-note" data-pwa-task-lock>{ data.TaskTools.LockedHint }</p>
+		<form class="pwa-form-grid" data-pwa-task-form>
+			<input type="hidden" name="id" data-pwa-task-id/>
+			<label class="pwa-form-full">
+				<span>{ data.TaskTools.TitleLabel }</span>
+				<input type="text" name="title" required data-pwa-task-title-input/>
+			</label>
+			<label>
+				<span>{ data.TaskTools.TimeLabel }</span>
+				<input type="time" name="time" data-pwa-task-time-input/>
+			</label>
+			<label>
+				<span>{ data.TaskTools.PriorityLabel }</span>
+				<input type="text" name="priority" data-pwa-task-priority-input/>
+			</label>
+			<label class="pwa-form-full">
+				<span>{ data.TaskTools.StatusLabel }</span>
+				<input type="text" name="status" data-pwa-task-status-input/>
+			</label>
+			<div class="pwa-actions-row pwa-form-full">
+				<button class="pwa-button pwa-button-primary" type="submit" data-pwa-save-task>{ data.TaskTools.SaveCTA }</button>
+				<button class="pwa-button pwa-button-secondary" type="reset" data-pwa-reset-task>{ data.TaskTools.ResetCTA }</button>
+			</div>
+		</form>
+		<p class="pwa-secure-note" data-pwa-task-status-message>{ data.TaskTools.SubscriptionHint }</p>
+		<span hidden data-pwa-edit-label>{ data.TaskTools.EditCTA }</span>
+		<span hidden data-pwa-delete-label>{ data.TaskTools.DeleteCTA }</span>
+	</section>
+	<div data-pwa-home-extra>
+		@BenefitList(data.Benefits)
+	</div>
+}

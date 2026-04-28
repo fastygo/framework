@@ -1,0 +1,42 @@
+package views
+
+templ PaymentPage(data PaymentPageData) {
+	@PageHeader(data.Header)
+	<section class="pwa-card">
+		<h2>{ data.MethodTitle }</h2>
+		<div class="pwa-list">
+			for _, method := range data.PaymentMethods {
+				<article class="pwa-payment-method">
+					<span>{ method.Symbol }</span>
+					<div>
+						<strong>{ method.Label }</strong>
+						<small>{ method.Description }</small>
+					</div>
+				</article>
+			}
+		</div>
+	</section>
+	<section class="pwa-card">
+		<h2>{ data.CardTitle }</h2>
+		<div class="pwa-form-grid" aria-label="Mock card form">
+			<label>
+				<span>Card number</span>
+				<input value="0000 0000 0000 0000" readonly/>
+			</label>
+			<label>
+				<span>Expiry</span>
+				<input value="MM / YY" readonly/>
+			</label>
+			<label>
+				<span>CVC</span>
+				<input value="•••" readonly/>
+			</label>
+			<label class="pwa-form-full">
+				<span>Name on card</span>
+				<input value="IVAN IVANOV" readonly/>
+			</label>
+		</div>
+		<p class="pwa-secure-note">{ data.SecureHint }</p>
+	</section>
+	@PrimaryLink("/payment/processing", data.PrimaryCTA)
+}

@@ -1,0 +1,198 @@
+{
+  "common": {
+    "brand_name": "FastyGo Tasks",
+    "app_name": "Tasks",
+    "install_hint": "Устанавливаемый PWA shell",
+    "open_menu_label": "Открыть меню навигации",
+    "close_menu_label": "Закрыть меню навигации",
+    "theme": {
+      "label": "Тема",
+      "switch_to_dark_label": "Переключить на темную тему",
+      "switch_to_light_label": "Переключить на светлую тему"
+    },
+    "language": {
+      "label": "Язык",
+      "current_label": "Русский",
+      "next_label": "English",
+      "next_locale": "en",
+      "available": ["en", "ru"],
+      "locale_labels": {
+        "en": "English",
+        "ru": "Русский"
+      }
+    },
+    "header_nav": [
+      { "label": "Дашборд", "path": "/", "icon": "home" },
+      { "label": "Онбординг", "path": "/onboarding", "icon": "sparkles" },
+      { "label": "Премиум", "path": "/paywall", "icon": "crown" },
+      { "label": "Подписка", "path": "/subscription", "icon": "settings" }
+    ]
+  },
+  "home": {
+    "kicker": "Сегодня",
+    "title": "Планируйте день без потери фокуса.",
+    "subtitle": "Компактный дашборд задач для PWA shell: быстро открывается, полезен офлайн и готов к установке на мобильном.",
+    "primary_cta": "Начать онбординг",
+    "secondary_cta": "Посмотреть премиум",
+    "tasks": [
+      { "title": "Проверить launch checklist", "time": "09:30", "status": "В работе", "priority": "Высокий" },
+      { "title": "Отправить weekly update", "time": "11:00", "status": "Запланировано", "priority": "Средний" },
+      { "title": "Подготовить payment mock", "time": "15:30", "status": "Премиум", "priority": "Низкий" }
+    ],
+    "stats": [
+      { "label": "Задач закрыто", "value": "7", "hint": "на 3 больше плана" },
+      { "label": "Фокус", "value": "4ч", "hint": "сэкономлено за неделю" },
+      { "label": "Офлайн", "value": "Да", "hint": "shell закэширован" }
+    ],
+    "benefits": [
+      { "title": "Offline app shell", "description": "Навигация возвращается к кэшированной странице без сети." },
+      { "title": "Готовность к установке", "description": "Manifest и icons позволяют браузеру воспринимать сайт как приложение." },
+      { "title": "Static cache", "description": "CSS, JS и shell routes подготавливает service worker." }
+    ],
+    "task_tools": {
+      "title": "Локальный редактор задач",
+      "description": "Создание, редактирование и удаление задач доступны после активации Premium. Данные остаются только на этом устройстве.",
+      "locked_hint": "Активируйте Premium, чтобы редактировать локальные задачи.",
+      "title_label": "Задача",
+      "time_label": "Время",
+      "status_label": "Статус",
+      "priority_label": "Приоритет",
+      "save_cta": "Сохранить задачу",
+      "reset_cta": "Отменить правку",
+      "edit_cta": "Изменить",
+      "delete_cta": "Удалить",
+      "active_status": "Premium активен",
+      "inactive_status": "Premium не активен",
+      "subscription_hint": "После отмены подписки задачи сохраняются до явной очистки PWA cache.",
+      "subscription_edit_cta": "Управление подпиской"
+    }
+  },
+  "onboarding": {
+    "title": "Три экрана до понятной ценности.",
+    "subtitle": "Нейтральный прототип мобильного онбординга из reference flow.",
+    "continue_cta": "Продолжить",
+    "skip_cta": "Пропустить",
+    "steps": [
+      { "label": "1", "title": "Добро пожаловать в Tasks", "description": "Собирайте задачи, цели и напоминания в одном устанавливаемом workspace.", "symbol": "✓" },
+      { "label": "2", "title": "Планируйте время", "description": "Создавайте понятный план дня и держите приоритеты перед глазами.", "symbol": "◷" },
+      { "label": "3", "title": "Не забывайте", "description": "Напоминания и кэшированный shell помогают даже при слабой сети.", "symbol": "!" }
+    ]
+  },
+  "paywall": {
+    "title": "Откройте полный task system.",
+    "subtitle": "Premium добавляет reminders, calendar sync, аналитику и offline-first уверенность.",
+    "badge": "Популярный",
+    "primary_cta": "Выбрать тариф",
+    "restore_cta": "Восстановить покупку",
+    "benefits": [
+      { "title": "Безлимитные задачи", "description": "Создавайте сколько угодно планов и повторяющихся дел." },
+      { "title": "Напоминания", "description": "Следующее действие видно в нужный момент." },
+      { "title": "Календарь и планирование", "description": "Прототип экранов, которые реальное приложение подключит к календарям." },
+      { "title": "Приоритетная поддержка", "description": "Показываем ценность подписки без настоящего billing." }
+    ]
+  },
+  "pricing": {
+    "title": "Выберите тариф.",
+    "subtitle": "Mock plans из типичного subscription flow. Выбранная карточка ведет к оплате.",
+    "primary_cta": "Перейти к оплате",
+    "compare_cta": "Сравнить тарифы",
+    "plans": [
+      { "name": "Premium", "price": "$2.99", "period": "месяц", "description": "Месячный доступ к premium tools.", "badge": "Выбран", "selected": true },
+      { "name": "Pro", "price": "$6.99", "period": "месяц", "description": "Больше automation и planning controls.", "badge": "", "selected": false },
+      { "name": "Business", "price": "$9.99", "period": "месяц", "description": "Mock tier для команд.", "badge": "", "selected": false }
+    ]
+  },
+  "payment": {
+    "title": "Выберите способ оплаты.",
+    "subtitle": "Это только UI prototype. Платежные данные не сохраняются и не отправляются.",
+    "method_title": "Доступные способы",
+    "card_title": "Добавить карту",
+    "primary_cta": "Оплатить $2.99",
+    "secure_hint": "Mock безопасного соединения. Данные защищены в прототипе.",
+    "payment_methods": [
+      { "label": "Банковская карта", "description": "Visa, Mastercard, МИР", "symbol": "CARD" },
+      { "label": "App Store / Google Play", "description": "Mock billing магазина", "symbol": "APP" },
+      { "label": "Быстрые платежи", "description": "Mock мгновенного перевода", "symbol": "PAY" },
+      { "label": "Другие кошельки", "description": "QMoney, Qiwi, YooMoney mock", "symbol": "WAL" }
+    ]
+  },
+  "processing": {
+    "title": "Обработка платежа.",
+    "subtitle": "Пожалуйста, подождите. В реальной интеграции это может занять несколько секунд.",
+    "secure_hint": "Безопасное соединение"
+  },
+  "success": {
+    "title": "Подписка активирована.",
+    "subtitle": "Спасибо за доверие к Tasks. Premium tools теперь доступны в прототипе.",
+    "primary_cta": "Начать пользоваться",
+    "manage_cta": "Управление подпиской",
+    "confirmation_no": "Mock receipt #PWA-2042"
+  },
+  "subscription": {
+    "title": "Управление подпиской.",
+    "subtitle": "Реалистичный экран управления тарифом, оплатой, историей, восстановлением и отменой.",
+    "plan_name": "Premium",
+    "plan_meta": "$2.99 / месяц · следующее списание 25 мая",
+    "status": "Активна",
+    "inactive_status": "Не активна",
+    "cancel_cta": "Отменить подписку",
+    "actions": [
+      { "label": "Изменить тариф", "description": "Переключиться между Premium, Pro и Business." },
+      { "label": "Способ оплаты", "description": "Visa заканчивается на 4242." },
+      { "label": "История платежей", "description": "Посмотреть receipts и mock invoices." },
+      { "label": "Восстановить покупку", "description": "Вернуть доступ на другом устройстве." }
+    ],
+    "local_data": {
+      "title": "Локальная база задач",
+      "description": "Экспортируйте задачи со статусами, импортируйте другую JSON-базу или очистите offline cache и локальные данные PWA.",
+      "export_cta": "Экспорт JSON",
+      "import_cta": "Импорт JSON",
+      "clear_cta": "Очистить кэш",
+      "hint": "Перед очисткой сделайте экспорт, если хотите восстановить эту локальную базу позже."
+    }
+  },
+  "cancel": {
+    "title": "Вы уверены, что хотите отменить?",
+    "subtitle": "Экран повторяет типичный retention flow без настоящей подписки.",
+    "primary_cta": "Отменить подписку",
+    "secondary_cta": "Остаться с Premium",
+    "reasons": [
+      { "title": "Данные в безопасности", "description": "Задачи не удаляются в этом прототипе." },
+      { "title": "Можно вернуться позже", "description": "Subscription state можно восстановить в реальном приложении." },
+      { "title": "Мы будем скучать", "description": "UI сохраняет ясный тон без dark patterns." }
+    ]
+  },
+  "offline": {
+    "title": "Вы офлайн.",
+    "subtitle": "PWA shell все еще доступен. Вернитесь на дашборд или подключитесь к сети для обновления.",
+    "primary_cta": "Вернуться на дашборд",
+    "cached_hint": "Эта страница отдана service worker navigation fallback."
+  },
+  "pomodoro": {
+    "kicker": "Секретная лаборатория",
+    "title": "Pomodoro для глубокой работы.",
+    "subtitle": "Тихий таймер для ПК и планшетов в Edge-сессии. Работает, пока открыта вкладка, и хранит настройки только на время текущей сессии.",
+    "mode_work": "Работа",
+    "mode_short_break": "Короткий перерыв",
+    "mode_long_break": "Длинный перерыв",
+    "start_cta": "Старт",
+    "pause_cta": "Пауза",
+    "reset_cta": "Сброс",
+    "skip_cta": "Пропустить",
+    "settings_title": "Настройки сессии",
+    "work_label": "Минут работы",
+    "short_break_label": "Короткий перерыв",
+    "long_break_label": "Длинный перерыв",
+    "round_label": "Длинный перерыв каждые",
+    "goal_label": "Цель на день",
+    "sound_label": "Звук",
+    "tick_label": "Мягкий тик",
+    "notifications_label": "Уведомления браузера",
+    "progress_label": "Сессия",
+    "goal_template": "0 из 12 помидорок",
+    "session_hint": "Настройки используют session storage и исчезают после закрытия вкладки.",
+    "mobile_title": "Pomodoro lab только для больших экранов.",
+    "mobile_subtitle": "Откройте секретную ссылку на ПК или планшете. На мобильном TASKS shell остается легким и показывает эту заглушку.",
+    "back_cta": "Назад к задачам"
+  }
+}

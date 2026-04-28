@@ -1,0 +1,28 @@
+{
+  "defaultScope": "layout",
+  "scopes": [
+    {
+      "name": "views",
+      "files": [
+        "**/internal/site/views/**"
+      ],
+      "spacing": "layout"
+    },
+    {
+      "name": "app-components",
+      "files": [
+        "web/static/css/*-components.css",
+        "**/web/static/css/*-components.css"
+      ],
+      "spacing": "control"
+    },
+    {
+      "name": "ui8kit-assets",
+      "files": [
+        "web/static/css/ui8kit/**",
+        "**/web/static/css/ui8kit/**"
+      ],
+      "spacing": "control"
+    }
+  ]
+}

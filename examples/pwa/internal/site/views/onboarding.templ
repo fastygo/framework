@@ -1,0 +1,26 @@
+package views
+
+templ OnboardingPage(data OnboardingPageData) {
+	@PageHeader(data.Header)
+	<div class="pwa-onboarding-grid" data-pwa-onboarding>
+		for index, step := range data.Steps {
+			if index == 0 {
+				<article class="pwa-card pwa-onboarding-card pwa-onboarding-card-active" data-pwa-onboarding-card>
+					@Placeholder(step.Symbol)
+					<h2>{ step.Title }</h2>
+					<p>{ step.Description }</p>
+				</article>
+			} else {
+				<article class="pwa-card pwa-onboarding-card" data-pwa-onboarding-card>
+					@Placeholder(step.Symbol)
+					<h2>{ step.Title }</h2>
+					<p>{ step.Description }</p>
+				</article>
+			}
+		}
+	</div>
+	<div class="pwa-actions-row">
+		<button class="pwa-button pwa-button-primary" type="button" data-pwa-onboarding-next>{ data.ContinueCTA }</button>
+		@SecondaryLink("/", data.SkipCTA)
+	</div>
+}

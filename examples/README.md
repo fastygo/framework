@@ -58,6 +58,7 @@ The root `package.json` exposes the same commands as scripts, but still uses `np
 | [`docs/`](./docs/) | Localized markdown documentation site | Product docs, internal handbooks |
 | [`dashboard/`](./dashboard/) | Sidebar shell, auth middleware, contacts CRUD | Internal tools, CRMs, admin panels |
 | [`instant/`](./instant/) | One prebuilt HTML page, inline CSS, no assets | Messenger WebViews, instant articles, ultra-fast entry pages |
+| [`pwa/`](./pwa/) | Installable TODO app shell, manifest, service worker, offline fallback | Mobile PWAs, offline-first app prototypes |
 
 ## How they share assets
 

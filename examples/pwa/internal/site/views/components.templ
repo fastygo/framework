@@ -1,0 +1,60 @@
+package views
+
+templ PageHeader(data PageHeaderData) {
+	<section class="pwa-page-header">
+		if data.Kicker != "" {
+			<p class="pwa-kicker">{ data.Kicker }</p>
+		}
+		<h1>{ data.Title }</h1>
+		if data.Subtitle != "" {
+			<p>{ data.Subtitle }</p>
+		}
+	</section>
+}
+
+templ Placeholder(symbol string) {
+	<div class="pwa-placeholder" aria-hidden="true">
+		if placeholderImage(symbol) != "" {
+			<img src={ placeholderImage(symbol) } alt="" loading="lazy" decoding="async"/>
+		} else {
+			<span>{ symbol }</span>
+		}
+	</div>
+}
+
+templ PrimaryLink(href string, label string) {
+	<a class="pwa-button pwa-button-primary" href={ href }>{ label }</a>
+}
+
+templ SecondaryLink(href string, label string) {
+	<a class="pwa-button pwa-button-secondary" href={ href }>{ label }</a>
+}
+
+templ BenefitList(items []TextItem) {
+	<div class="pwa-list">
+		for _, item := range items {
+			<article class="pwa-list-item">
+				<span class="pwa-check" aria-hidden="true">✓</span>
+				<span>
+					<strong>{ item.Title }</strong>
+					<small>{ item.Description }</small>
+				</span>
+			</article>
+		}
+	</div>
+}
+
+func placeholderImage(symbol string) string {
+	switch symbol {
+	case "✓":
+		return "/static/img/tasks-1.png"
+	case "◷":
+		return "/static/img/tasks-2.png"
+	case "!":
+		return "/static/img/tasks-3.png"
+	case "♛":
+		return "/static/img/tasks-4.png"
+	default:
+		return ""
+	}
+}

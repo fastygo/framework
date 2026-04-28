@@ -1,0 +1,32 @@
+package views
+
+templ PricingPage(data PricingPageData) {
+	@PageHeader(data.Header)
+	<div class="pwa-list">
+		for _, plan := range data.Plans {
+			<article class={ planClass(plan.Selected) }>
+				<div>
+					<div class="pwa-section-title">
+						<h2>{ plan.Name }</h2>
+						if plan.Badge != "" {
+							<span class="pwa-badge">{ plan.Badge }</span>
+						}
+					</div>
+					<p>{ plan.Description }</p>
+				</div>
+				<strong>{ plan.Price } <small>/ { plan.Period }</small></strong>
+			</article>
+		}
+	</div>
+	<div class="pwa-actions-row">
+		@PrimaryLink("/payment", data.PrimaryCTA)
+		@SecondaryLink("/paywall", data.CompareCTA)
+	</div>
+}
+
+func planClass(selected bool) string {
+	if selected {
+		return "pwa-card pwa-plan pwa-plan-selected"
+	}
+	return "pwa-card pwa-plan"
+}

@@ -110,6 +110,40 @@ It consumes:
 
 Use this starter for admin panels, internal tools, or CRM-like apps.
 
+### `examples/instant`
+
+A zero-asset instant article example. It serves one prebuilt HTML document
+with inline CSS from a fixed `pkg/web/instant.Store`.
+
+It consumes:
+
+- `pkg/web/instant` for immutable page snapshots with explicit page and byte
+  budgets.
+- `pkg/app` only for 12-factor HTTP/server configuration.
+- No UI8Kit assets, JavaScript, images, fonts, static directory, or runtime
+  rendering.
+
+Use this starter for messenger links, instant articles, emergency pages, or
+other entry points where first paint must be as small and predictable as
+possible.
+
+### `examples/pwa`
+
+A TODO-style installable PWA app shell with onboarding, subscription/payment
+mock screens, a web manifest, root-scoped service worker, static cache, and
+offline navigation fallback.
+
+It consumes:
+
+- `pkg/app`, `pkg/web/locale`, `pkg/cache`, and `web.CachedRender` for routed
+  feature composition, localized pages, and bounded HTML caching.
+- `Elements/toggles` for the theme switcher.
+- UI8Kit static assets, `theme.js`, `ui8kit.js`, and the Tailwind CSS build.
+- App-owned `pwa-components.css` for mobile app-shell styling.
+
+Use this starter for mobile PWAs, offline-first prototypes, installable app
+shells, and browser-behavior demos.
+
 ## Static Assets And CSS
 
 Each example has a `package.json` with the same basic scripts:
@@ -147,6 +181,8 @@ example CSS policy.
    - `blog` for markdown content and custom layout.
    - `docs` for localized documentation.
    - `dashboard` for authenticated app screens.
+   - `instant` for zero-asset prebuilt HTML.
+   - `pwa` for installable/offline app shells.
 
 2. Copy the example into a new module or app directory.
 

@@ -1,0 +1,14 @@
+package views
+
+templ PaywallPage(data PaywallPageData) {
+	<section class="pwa-card pwa-paywall">
+		<span class="pwa-badge">{ data.Badge }</span>
+		@Placeholder("♛")
+		@PageHeader(data.Header)
+		@BenefitList(data.Benefits)
+		<div class="pwa-actions-row">
+			@PrimaryLink("/pricing", data.PrimaryCTA)
+			@SecondaryLink("/subscription", data.RestoreCTA)
+		</div>
+	</section>
+}

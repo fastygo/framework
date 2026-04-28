@@ -1,0 +1,48 @@
+package views
+
+templ SubscriptionPage(data SubscriptionPageData) {
+	@PageHeader(data.Header)
+	<section class="pwa-card pwa-subscription-card">
+		<div class="pwa-section-title">
+			<h2>{ data.PlanName }</h2>
+			<span
+				class="pwa-badge"
+				data-pwa-subscription-status
+				data-pwa-active-label={ data.Status }
+				data-pwa-inactive-label={ data.InactiveStatus }
+			>{ data.Status }</span>
+		</div>
+		<p>{ data.PlanMeta }</p>
+	</section>
+	<div class="pwa-list">
+		for _, action := range data.Actions {
+			<a class="pwa-list-link" href="/subscription">
+				<span>
+					<strong>{ action.Label }</strong>
+					<small>{ action.Description }</small>
+				</span>
+				<span aria-hidden="true">›</span>
+			</a>
+		}
+	</div>
+	<section class="pwa-card pwa-data-card">
+		<div>
+			<h2>{ data.LocalData.Title }</h2>
+			<p>{ data.LocalData.Description }</p>
+		</div>
+		<div class="pwa-data-actions">
+			<button class="pwa-button pwa-button-secondary" type="button" data-pwa-export>
+				{ data.LocalData.ExportCTA }
+			</button>
+			<label class="pwa-button pwa-button-secondary">
+				<span>{ data.LocalData.ImportCTA }</span>
+				<input class="pwa-file-input" type="file" accept="application/json,.json" data-pwa-import/>
+			</label>
+			<button class="pwa-button pwa-button-danger" type="button" data-pwa-clear-cache>
+				{ data.LocalData.ClearCTA }
+			</button>
+		</div>
+		<p class="pwa-secure-note" data-pwa-data-status>{ data.LocalData.Hint }</p>
+	</section>
+	<a class="pwa-button pwa-button-danger" href="/subscription/cancel" data-pwa-requires-subscription>{ data.CancelCTA }</a>
+}

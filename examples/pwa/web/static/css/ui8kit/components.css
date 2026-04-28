@@ -1,0 +1,283 @@
+@layer components {
+  .ui-card {
+    @apply rounded border border-border bg-card p-4 shadow-sm;
+  }
+
+  .ui-card--kpi {
+    @apply p-3;
+  }
+
+  .ui-card--muted {
+    @apply border-border bg-muted/40;
+  }
+
+  .ui-card--ghost {
+    @apply border-dashed bg-background;
+  }
+
+  .ui-card--compact {
+    @apply p-3;
+  }
+
+  .ui-card--flat {
+    @apply shadow-none;
+  }
+
+  .ui-card--accent {
+    @apply border-transparent bg-accent/30;
+  }
+
+  .ui-sidebar-item {
+    @apply flex items-center gap-2 rounded-md px-4 py-2 text-sm;
+  }
+
+  .ui-sidebar-item-active {
+    @apply bg-accent text-accent-foreground;
+  }
+
+  .ui-sidebar-item-inactive {
+    @apply text-muted-foreground hover:bg-accent;
+  }
+
+  .ui-sidebar-item-icon {
+    @apply h-4 w-4;
+  }
+
+  .ui-sidebar-item-label {
+    @apply min-w-0;
+  }
+
+  .ui-sidebar-divider {
+    @apply my-2 border-t border-border;
+  }
+
+  .ui-card-header {
+    @apply border-b border-border px-4 py-2;
+  }
+
+  .ui-card-title {
+    @apply text-sm font-semibold;
+  }
+
+  .ui-card-content {
+    @apply p-4;
+  }
+
+  .ui-stack {
+    @apply flex flex-col gap-4 items-start justify-start;
+  }
+
+  .ui-group {
+    @apply flex gap-4 items-center justify-start min-w-0;
+  }
+
+  .ui-group-grow {
+    @apply w-full;
+  }
+
+  .ui-container {
+    @apply w-full max-w-7xl mx-auto;
+  }
+
+  .ui-field-wrap {
+    @apply flex flex-col gap-2;
+  }
+
+  .ui-field-label {
+    @apply text-sm text-muted-foreground;
+  }
+
+  .ui-field-hint {
+    @apply text-xs text-muted-foreground;
+  }
+
+  .ui-field-error {
+    @apply text-xs text-destructive;
+  }
+
+  .ui-button-disabled {
+    @apply pointer-events-none opacity-50;
+  }
+
+  .ui-auth-shell {
+    @apply flex min-h-screen items-center justify-center bg-background p-4;
+  }
+
+  .ui-auth-card {
+    @apply w-full max-w-sm;
+  }
+
+  .ui-icon {
+    @apply inline-block;
+  }
+
+  .ui-icon-xs {
+    @apply h-3 w-3;
+  }
+
+  .ui-icon-sm {
+    @apply h-4 w-4;
+  }
+
+  .ui-icon-md {
+    @apply h-5 w-5;
+  }
+
+  .ui-icon-lg {
+    @apply h-6 w-6;
+  }
+
+  .ui-image {
+    @apply max-w-full h-auto;
+  }
+
+  .ui-grid {
+    @apply grid gap-4;
+  }
+
+  .ui-card-footer {
+    @apply px-4 py-3 border-t border-border;
+  }
+
+  .ui-sheet-overlay {
+    @apply fixed inset-0 z-40 bg-card/50;
+  }
+
+  .ui-sheet-panel {
+    @apply fixed top-0 h-full max-w-full p-4 bg-card border-border;
+  }
+
+  .ui-sheet-header {
+    @apply flex items-center justify-between;
+  }
+
+  .ui-sheet-content {
+    @apply mt-4;
+  }
+
+  .ui-dialog {
+    @apply fixed inset-0 z-50;
+  }
+
+  .ui-dialog[data-state="open"] {
+    @apply block;
+  }
+
+  .ui-dialog[data-state="closed"] {
+    @apply hidden;
+  }
+
+  .ui-dialog-overlay {
+    @apply absolute inset-0 cursor-pointer bg-card/50;
+  }
+
+  .ui-dialog-content {
+    @apply relative h-full max-h-dvh w-full overflow-y-auto border-r border-border bg-card p-4;
+    width: 20rem;
+  }
+
+  .ui-alert-dialog {
+    @apply fixed inset-0 z-50;
+  }
+
+  .ui-alert-dialog-content {
+    @apply absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded border border-border bg-card p-4 shadow-lg;
+  }
+
+  .ui-alert {
+    @apply rounded border border-border p-4;
+  }
+
+  .ui-alert-default {
+    @apply bg-card text-card-foreground;
+  }
+
+  .ui-alert-success {
+    @apply border-primary bg-primary/10 text-primary;
+  }
+
+  .ui-alert-warning {
+    @apply border-border bg-accent text-accent-foreground;
+  }
+
+  .ui-alert-destructive {
+    @apply border-destructive bg-destructive/10 text-destructive;
+  }
+
+  .ui-breadcrumb {
+    @apply text-sm;
+  }
+
+  .ui-breadcrumb-list {
+    @apply flex flex-wrap items-center gap-2;
+  }
+
+  .ui-breadcrumb-item {
+    @apply inline-flex items-center;
+  }
+
+  .ui-breadcrumb-item::after {
+    content: "/";
+    @apply ml-2 text-muted-foreground;
+  }
+
+  .ui-breadcrumb-item:last-child::after {
+    @apply hidden;
+  }
+
+  .ui-tabs {
+    @apply grid gap-2;
+  }
+
+  .ui-combobox {
+    @apply grid gap-2;
+  }
+
+  .ui-tooltip {
+    @apply relative inline-flex;
+  }
+
+  /*
+   * Marketing / landing shell (e.g. welcome site): full width, no desktop sidebar,
+   * header uses a grid so title + HeaderExtra + theme share one row.
+   */
+  .ui-shell-body--marketing .ui-shell-desktop-aside {
+    @apply !hidden;
+  }
+
+  .ui-shell-body--marketing .ui-header {
+    @apply grid grid-cols-[auto_1fr] items-center;
+  }
+
+  .ui-shell-body--marketing .ui-header-actions {
+    @apply grid grid-cols-[1fr_auto_auto] items-center gap-4;
+  }
+
+  .ui-shell-body--marketing .ui-header-title {
+    @apply pr-4;
+  }
+
+  .ui-shell-body--marketing .ui-shell-nav-mobile {
+    @apply flex flex-col items-stretch gap-1 p-2;
+  }
+
+  .ui-shell-body--marketing .ui-shell-nav-mobile a,
+  .ui-shell-body--marketing .ui-shell-nav-mobile button {
+    @apply flex w-full items-center rounded-md px-3 py-2 text-inherit no-underline;
+  }
+
+  .ui-shell-body--marketing .ui-shell-nav-mobile a:hover,
+  .ui-shell-body--marketing .ui-shell-nav-mobile button:hover {
+    @apply bg-accent text-accent-foreground;
+  }
+
+  @media (max-width: 767px) {
+    .ui-shell-body--marketing .ui-header {
+      @apply flex flex-wrap;
+    }
+
+    .ui-shell-body--marketing .ui-header-actions {
+      @apply flex flex-1 justify-end;
+    }
+  }
+}
