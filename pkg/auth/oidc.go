@@ -181,14 +181,25 @@ func (c *OIDCClient) AppOrigin() string {
 
 // Discovery loads (and caches for 10 minutes) the issuer metadata.
 func (c *OIDCClient) Discovery() (*ProviderConfig, error) {
+	return c.DiscoveryContext(context.Background())
+}
+
+// DiscoveryContext loads (and caches for 10 minutes) the issuer metadata,
+// binding the outbound discovery request to ctx.
+func (c *OIDCClient) DiscoveryContext(ctx context.Context) (*ProviderConfig, error) {
+	if ctx == nil {
+		ctx = context.Background()
+	}
+
 	c.mu.RLock()
 	if c.provider != nil && time.Since(c.fetched) < 10*time.Minute {
-		defer c.mu.RUnlock()
-		return c.provider, nil
+		provider := c.provider
+		c.mu.RUnlock()
+		return provider, nil
 	}
 	c.mu.RUnlock()
 
-	req, err := http.NewRequestWithContext(context.Background(), http.MethodGet, c.issuer+"/.well-known/openid-configuration", nil)
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, c.issuer+"/.well-known/openid-configuration", nil)
 	if err != nil {
 		return nil, fmt.Errorf("auth: build discovery request: %w", err)
 	}
@@ -217,7 +228,17 @@ func (c *OIDCClient) Discovery() (*ProviderConfig, error) {
 
 // ExchangeCode swaps an authorization code for tokens.
 func (c *OIDCClient) ExchangeCode(code string) (*TokenResponse, error) {
-	provider, err := c.Discovery()
+	return c.ExchangeCodeContext(context.Background(), code)
+}
+
+// ExchangeCodeContext swaps an authorization code for tokens, binding
+// discovery and token endpoint requests to ctx.
+func (c *OIDCClient) ExchangeCodeContext(ctx context.Context, code string) (*TokenResponse, error) {
+	if ctx == nil {
+		ctx = context.Background()
+	}
+
+	provider, err := c.DiscoveryContext(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -230,7 +251,7 @@ func (c *OIDCClient) ExchangeCode(code string) (*TokenResponse, error) {
 		"client_secret": {c.clientSecret},
 	}
 
-	req, err := http.NewRequestWithContext(context.Background(), http.MethodPost, provider.TokenEndpoint, strings.NewReader(form.Encode()))
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, provider.TokenEndpoint, strings.NewReader(form.Encode()))
 	if err != nil {
 		return nil, fmt.Errorf("auth: build token request: %w", err)
 	}
@@ -254,7 +275,17 @@ func (c *OIDCClient) ExchangeCode(code string) (*TokenResponse, error) {
 
 // VerifyIDToken validates the RS256 signature and standard claims.
 func (c *OIDCClient) VerifyIDToken(idToken string) (*IDTokenClaims, error) {
-	provider, err := c.Discovery()
+	return c.VerifyIDTokenContext(context.Background(), idToken)
+}
+
+// VerifyIDTokenContext validates the RS256 signature and standard claims,
+// binding discovery and JWKS requests to ctx.
+func (c *OIDCClient) VerifyIDTokenContext(ctx context.Context, idToken string) (*IDTokenClaims, error) {
+	if ctx == nil {
+		ctx = context.Background()
+	}
+
+	provider, err := c.DiscoveryContext(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -277,7 +308,7 @@ func (c *OIDCClient) VerifyIDToken(idToken string) (*IDTokenClaims, error) {
 		return nil, fmt.Errorf("auth: parse header: %w", err)
 	}
 
-	pubKey, err := c.fetchPublicKey(provider.JWKSURI, header.Kid)
+	pubKey, err := c.fetchPublicKeyContext(ctx, provider.JWKSURI, header.Kid)
 	if err != nil {
 		return nil, fmt.Errorf("auth: fetch public key: %w", err)
 	}
@@ -316,7 +347,15 @@ func (c *OIDCClient) VerifyIDToken(idToken string) (*IDTokenClaims, error) {
 }
 
 func (c *OIDCClient) fetchPublicKey(jwksURI, kid string) (*rsa.PublicKey, error) {
-	req, err := http.NewRequestWithContext(context.Background(), http.MethodGet, jwksURI, nil)
+	return c.fetchPublicKeyContext(context.Background(), jwksURI, kid)
+}
+
+func (c *OIDCClient) fetchPublicKeyContext(ctx context.Context, jwksURI, kid string) (*rsa.PublicKey, error) {
+	if ctx == nil {
+		ctx = context.Background()
+	}
+
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, jwksURI, nil)
 	if err != nil {
 		return nil, fmt.Errorf("auth: build JWKS request: %w", err)
 	}

@@ -45,6 +45,68 @@ func TestWorkerServiceLifecycle(t *testing.T) {
 	}
 }
 
+func TestWorkerServiceStartIsIdempotent(t *testing.T) {
+	t.Parallel()
+
+	var runs int32
+	release := make(chan struct{})
+	ws := &WorkerService{}
+	ws.Add(BackgroundTask{
+		Name:     "single-start",
+		Interval: time.Hour,
+		Run: func(ctx context.Context) {
+			atomic.AddInt32(&runs, 1)
+			<-release
+		},
+	})
+
+	ctx, cancel := context.WithCancel(context.Background())
+	ws.Start(ctx)
+	for atomic.LoadInt32(&runs) == 0 {
+		time.Sleep(time.Millisecond)
+	}
+
+	ws.Start(ctx)
+	time.Sleep(20 * time.Millisecond)
+	if got := atomic.LoadInt32(&runs); got != 1 {
+		t.Fatalf("Start must not duplicate worker goroutines, got %d runs", got)
+	}
+
+	cancel()
+	close(release)
+	stopCtx, cancelStop := context.WithTimeout(context.Background(), time.Second)
+	defer cancelStop()
+	if err := ws.Stop(stopCtx); err != nil {
+		t.Fatalf("Stop returned error: %v", err)
+	}
+}
+
+func TestWorkerServiceAddAfterStartIsIgnored(t *testing.T) {
+	t.Parallel()
+
+	var runs int32
+	ws := &WorkerService{}
+	ctx, cancel := context.WithCancel(context.Background())
+	ws.Start(ctx)
+
+	ws.Add(BackgroundTask{
+		Name:     "too-late",
+		Interval: time.Millisecond,
+		Run: func(ctx context.Context) {
+			atomic.AddInt32(&runs, 1)
+		},
+	})
+	time.Sleep(20 * time.Millisecond)
+	cancel()
+
+	if err := ws.Stop(context.Background()); err != nil {
+		t.Fatalf("Stop returned error: %v", err)
+	}
+	if got := atomic.LoadInt32(&runs); got != 0 {
+		t.Fatalf("Add after Start must be ignored, got %d runs", got)
+	}
+}
+
 // TestWorker_StopWaitsForRunningTask ensures Stop blocks until an in-flight
 // task has actually returned. Without WaitGroup tracking the goroutine
 // would be orphaned and Stop would return immediately.
@@ -164,6 +226,38 @@ func TestWorker_StopHonoursContextDeadline(t *testing.T) {
 	err := ws.Stop(stopCtx)
 	if !errors.Is(err, context.DeadlineExceeded) {
 		t.Fatalf("expected DeadlineExceeded, got %v", err)
+	}
+}
+
+func TestWorker_StopCanWaitAgainAfterDeadline(t *testing.T) {
+	t.Parallel()
+
+	release := make(chan struct{})
+	ws := &WorkerService{}
+	ws.Add(BackgroundTask{
+		Name:     "retry-stop",
+		Interval: time.Hour,
+		Run: func(ctx context.Context) {
+			<-release
+		},
+	})
+
+	ctx, cancel := context.WithCancel(context.Background())
+	ws.Start(ctx)
+	time.Sleep(20 * time.Millisecond)
+	cancel()
+
+	deadlineCtx, cancelDeadline := context.WithTimeout(context.Background(), 30*time.Millisecond)
+	defer cancelDeadline()
+	if err := ws.Stop(deadlineCtx); !errors.Is(err, context.DeadlineExceeded) {
+		t.Fatalf("expected DeadlineExceeded, got %v", err)
+	}
+
+	close(release)
+	stopCtx, cancelStop := context.WithTimeout(context.Background(), time.Second)
+	defer cancelStop()
+	if err := ws.Stop(stopCtx); err != nil {
+		t.Fatalf("second Stop should wait for drained workers, got %v", err)
 	}
 }
 

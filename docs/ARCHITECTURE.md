@@ -69,6 +69,7 @@ fastygo/framework/
 │   └── web/                # HTTP layer
 │       ├── health/         # Aggregator, /healthz, /readyz
 │       ├── i18n/           # Translation store
+│       ├── instant/        # Fixed prebuilt page snapshot store
 │       ├── locale/         # Accept-Language negotiation
 │       ├── metrics/        # Prometheus text-format registry (no Prometheus dep)
 │       ├── middleware/     # RequestID, Recover, Logger, Tracing, Metrics, Correlation
@@ -130,6 +131,9 @@ Practical consequences:
 
 - `pkg/core` and `pkg/cache` never import anything HTTP-shaped. You
   can use them in a CLI tool with zero web baggage.
+- `pkg/web/instant` is HTTP-adjacent but deliberately static: fixed
+  prebuilt page snapshots, construction-time budgets, no TTL and no
+  background cleanup loop.
 - `pkg/observability` is interface-only. Importing it does not pull
   `go.opentelemetry.io/*` into your `go.sum`. The future
   `github.com/fastygo/otel` adapter will provide the real
@@ -310,17 +314,27 @@ goes through `WorkerService`. Features add tasks via
 The contract:
 
 - One supervised goroutine per task.
+- `Start(ctx)` is idempotent. `Add(task)` after start is ignored, so
+  the task set is frozen at runtime.
 - A panic in `Run` is recovered, logged with a stack trace, and the
   ticker keeps firing. One bad task cannot crash the process.
 - `Stop(ctx)` blocks on a `sync.WaitGroup` until every task returns
-  or `ctx` expires. The framework calls it from `App.Run` with a
-  budget of `HTTPShutdownTimeout`.
+  or `ctx` expires. A timed-out `Stop` does not consume the only wait:
+  callers may invoke `Stop` again after cancelling the run context.
+  The framework calls it from `App.Run` with a budget of
+  `HTTPShutdownTimeout`.
 - Tasks **must** respect their `ctx`. A `Run` that ignores
   cancellation will block graceful shutdown for the full timeout.
 
 Building a periodic cache eviction task is a one-liner thanks to
 the `app.CleanupTask[V]` helper, which bridges `*cache.Cache[V]` to
 `BackgroundTask` without introducing a circular import.
+
+`pkg/cache` exposes `Len()` and `Stats()` so applications can alert on
+unexpected cardinality. For user-controlled keys, configure a
+cardinality budget via cache options and still schedule cleanup.
+For Instant pages, prefer `pkg/web/instant`: it stores a known set of
+immutable page bytes with explicit page and byte budgets.
 
 ---
 

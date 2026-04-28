@@ -49,19 +49,20 @@ type Config struct {
 // DefaultConfig returns the recommended starting configuration:
 // HSTS off (enable explicitly when serving full HTTPS), DENY frames,
 // no CSP (set per-application), 1MB body cap, 50 req/sec per IP with
-// burst 100, proxy headers trusted, empty UA blocked, security on.
+// burst 100, proxy headers ignored unless explicitly trusted, empty UA
+// blocked, security on.
 func DefaultConfig() Config {
 	return Config{
-		HSTS:         false,
-		FrameOptions: "DENY",
-		CSP:          "",
-		Permissions:  "geolocation=(), microphone=(), camera=()",
-		MaxBodySize:  1 << 20, // 1MB
+		HSTS:          false,
+		FrameOptions:  "DENY",
+		CSP:           "",
+		Permissions:   "geolocation=(), microphone=(), camera=()",
+		MaxBodySize:   1 << 20, // 1MB
 		PageRateLimit: 50,
 		PageRateBurst: 100,
-		TrustProxy:   true,
-		BlockEmptyUA: true,
-		Enabled:      true,
+		TrustProxy:    false,
+		BlockEmptyUA:  true,
+		Enabled:       true,
 	}
 }
 

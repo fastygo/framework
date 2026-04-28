@@ -109,8 +109,9 @@ policy).
 | T3 | Panic in handler crashes process                  | framework | `RecoverMiddleware` returns 500 + `http.panic` slog event with stack                                     |
 | T4 | Panic in background worker crashes process        | framework | `WorkerService.safeRun` recovers + logs stack; ticker keeps firing                                       |
 | T5 | Unbounded request body (memory pressure)          | framework | `BodyLimitMiddleware` rejects 413 above `MaxBodySize`; wraps body in `http.MaxBytesReader`               |
-| T6 | Unbounded cache growth (memory leak)              | framework | `pkg/cache` sharded TTL + `app.CleanupTask` background eviction                                          |
+| T6 | Unbounded cache growth (memory leak)              | framework | `pkg/cache` sharded TTL + `Len`/`Stats` + optional `MaxEntries` + `app.CleanupTask` eviction             |
 | T7 | Unbounded rate-limit map growth                   | framework | `RateLimiter.Cleanup` background task drops idle visitors every minute (5-min staleness)                 |
+| T7a| Unbounded Instant page snapshots                  | framework | `pkg/web/instant` validates fixed page count and byte budgets at startup                                 |
 | T8 | Brute force / credential stuffing on a single IP  | framework | Sharded token-bucket `RateLimitMiddleware`; defaults 50 r/s, burst 100                                   |
 | T9 | Reconnaissance scanners (sqlmap, nikto, …)        | framework | `AntiBotMiddleware` blocks empty UA + 7 known scanner signatures                                         |
 | T10| Path traversal / dotfile reads on static assets   | framework | `SecureFileServer` rejects `..`, dot-segments, returns 404/403 before stdlib FS sees the path            |
@@ -155,7 +156,7 @@ The defaults below are what `app.New(cfg)` produces with
 | `Permissions`                   | `geolocation=(), microphone=(), camera=()`| `security.DefaultConfig`             |
 | `MaxBodySize`                   | 1 MiB                                     | `security.DefaultConfig`             |
 | `PageRateLimit` / `PageRateBurst` | 50 r/s / burst 100                      | `security.DefaultConfig`             |
-| `TrustProxy`                    | `true` (assumes a trusted edge)           | `security.DefaultConfig`             |
+| `TrustProxy`                    | `false` (explicit trusted-edge opt-in)    | `security.DefaultConfig`             |
 | `BlockEmptyUA`                  | `true`                                    | `security.DefaultConfig`             |
 | `HTTPReadHeaderTimeout`         | non-zero (filled by `applyHTTPDefaults`)  | `app.New`                            |
 | `HTTPShutdownTimeout`           | non-zero (filled by `applyHTTPDefaults`)  | `app.New`                            |
@@ -213,7 +214,8 @@ Tick this list before exposing an application to the internet.
       committed to the repo.
 - [ ] `APP_SECURITY_HSTS=true` once the entire site is HTTPS.
 - [ ] `APP_SECURITY_TRUST_PROXY` matches the deployment topology.
-      It is `true` only when a trusted reverse proxy strips
+      The default is `false`; set it to `true` only when a trusted
+      reverse proxy strips
       client-supplied `X-Forwarded-For` / `X-Real-IP`.
 - [ ] `APP_SECURITY_CSP` is set to a strict policy. As a starting
       point: `default-src 'self'; script-src 'self' 'nonce-{nonce}'`.
@@ -275,8 +277,9 @@ Tick this list before exposing an application to the internet.
 - [ ] The process runs as a non-root user.
 - [ ] The container is read-only filesystem (the framework writes
       no files at runtime).
-- [ ] CPU/memory requests reflect the steady-state RSS (the cache
-      cleanup task keeps it bounded; benchmark before tightening).
+- [ ] CPU/memory requests reflect the steady-state RSS. Monitor
+      `pkg/cache` `Stats()` for unexpected cardinality, and keep
+      Instant page snapshots within explicit byte budgets.
 - [ ] Graceful shutdown is plumbed: orchestrator sends SIGTERM and
       waits at least `HTTP_SHUTDOWN_TIMEOUT` before SIGKILL.
 

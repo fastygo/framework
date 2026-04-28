@@ -42,6 +42,21 @@ Go's `time.ParseDuration` syntax (`500ms`, `2s`, `1m30s`).
 | `OIDC_REDIRECT_URI`  | —       | III    | post-callback redirect |
 | `SESSION_KEY`        | —       | III    | HMAC key for cookie sessions |
 
+## Security middleware
+
+| Variable                         | Default                                  | Factor | Notes |
+| -------------------------------- | ---------------------------------------- | ------ | ----- |
+| `APP_SECURITY_HSTS`              | `false`                                  | III    | enable only when the full site is HTTPS |
+| `APP_SECURITY_FRAME_OPTIONS`     | `DENY`                                   | III    | set empty to disable |
+| `APP_SECURITY_CSP`               | —                                        | III    | app-owned Content-Security-Policy |
+| `APP_SECURITY_PERMISSIONS`       | `geolocation=(), microphone=(), camera=()` | III | browser permission policy |
+| `APP_SECURITY_MAX_BODY_BYTES`    | `1048576`                                | III    | request body cap |
+| `APP_SECURITY_RATE_PER_IP`       | `50`                                     | III    | rate-limit tokens per second |
+| `APP_SECURITY_RATE_BURST`        | `100`                                    | III    | per-IP token bucket burst |
+| `APP_SECURITY_TRUST_PROXY`       | `false`                                  | III    | opt in only behind a trusted header-scrubbing proxy |
+| `APP_SECURITY_BLOCK_EMPTY_UA`    | `true`                                   | III    | reject empty User-Agent |
+| `APP_SECURITY_ENABLED`           | `true`                                   | III    | master switch for security middleware |
+
 ## Observability (introduced in v0.2.0 — Phase 2)
 
 | Variable                       | Default | Factor | Notes |

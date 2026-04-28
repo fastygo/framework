@@ -35,10 +35,11 @@ type BackgroundTask struct {
 //   - Stop blocks until every task goroutine has returned (or the caller's
 //     context expires), so App.Run can drain workers before exiting.
 type WorkerService struct {
-	mu       sync.Mutex
-	tasks    []BackgroundTask
-	wg       sync.WaitGroup
-	stopOnce sync.Once
+	mu      sync.Mutex
+	tasks   []BackgroundTask
+	wg      sync.WaitGroup
+	started bool
+	done    chan struct{}
 }
 
 // Add registers a task. Safe to call before Start; calls after Start are a
@@ -53,8 +54,11 @@ func (w *WorkerService) Add(task BackgroundTask) {
 	}
 
 	w.mu.Lock()
+	defer w.mu.Unlock()
+	if w.started {
+		return
+	}
 	w.tasks = append(w.tasks, task)
-	w.mu.Unlock()
 }
 
 // Start launches one supervised goroutine per registered task. The
@@ -62,7 +66,14 @@ func (w *WorkerService) Add(task BackgroundTask) {
 // finish draining.
 func (w *WorkerService) Start(ctx context.Context) {
 	w.mu.Lock()
+	if w.started {
+		w.mu.Unlock()
+		return
+	}
+	w.started = true
 	tasks := append([]BackgroundTask(nil), w.tasks...)
+	done := make(chan struct{})
+	w.done = done
 	w.mu.Unlock()
 
 	for _, task := range tasks {
@@ -86,6 +97,11 @@ func (w *WorkerService) Start(ctx context.Context) {
 			}
 		}(task)
 	}
+
+	go func() {
+		w.wg.Wait()
+		close(done)
+	}()
 }
 
 // Stop blocks until every task goroutine returns or until ctx is done.
@@ -94,26 +110,25 @@ func (w *WorkerService) Start(ctx context.Context) {
 // before invoking Stop. Stop is safe to call multiple times and a no-op if
 // Start was never called.
 func (w *WorkerService) Stop(ctx context.Context) error {
-	var err error
-	w.stopOnce.Do(func() {
-		done := make(chan struct{})
-		go func() {
-			w.wg.Wait()
-			close(done)
-		}()
+	w.mu.Lock()
+	done := w.done
+	started := w.started
+	w.mu.Unlock()
+	if !started || done == nil {
+		return nil
+	}
 
-		if ctx == nil {
-			<-done
-			return
-		}
+	if ctx == nil {
+		<-done
+		return nil
+	}
 
-		select {
-		case <-done:
-		case <-ctx.Done():
-			err = ctx.Err()
-		}
-	})
-	return err
+	select {
+	case <-done:
+		return nil
+	case <-ctx.Done():
+		return ctx.Err()
+	}
 }
 
 // safeRun executes task.Run with a recover guard so that a single panicking

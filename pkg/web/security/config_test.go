@@ -21,8 +21,8 @@ func TestDefaultConfig_Sane(t *testing.T) {
 	if !cfg.BlockEmptyUA {
 		t.Errorf("BlockEmptyUA: default must be true")
 	}
-	if !cfg.TrustProxy {
-		t.Errorf("TrustProxy: default must be true")
+	if cfg.TrustProxy {
+		t.Errorf("TrustProxy: default must be false")
 	}
 }
 
@@ -44,7 +44,7 @@ func TestLoadConfig_OverlaysEnv(t *testing.T) {
 	t.Setenv("APP_SECURITY_MAX_BODY_BYTES", "2048")
 	t.Setenv("APP_SECURITY_RATE_PER_IP", "10.5")
 	t.Setenv("APP_SECURITY_RATE_BURST", "20")
-	t.Setenv("APP_SECURITY_TRUST_PROXY", "false")
+	t.Setenv("APP_SECURITY_TRUST_PROXY", "true")
 	t.Setenv("APP_SECURITY_BLOCK_EMPTY_UA", "false")
 	t.Setenv("APP_SECURITY_ENABLED", "false")
 
@@ -71,8 +71,8 @@ func TestLoadConfig_OverlaysEnv(t *testing.T) {
 	if got.PageRateBurst != 20 {
 		t.Errorf("PageRateBurst: got %d, want 20", got.PageRateBurst)
 	}
-	if got.TrustProxy {
-		t.Errorf("TrustProxy: got true, want false")
+	if !got.TrustProxy {
+		t.Errorf("TrustProxy: got false, want true")
 	}
 	if got.BlockEmptyUA {
 		t.Errorf("BlockEmptyUA: got true, want false")

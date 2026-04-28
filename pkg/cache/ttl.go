@@ -3,6 +3,7 @@ package cache
 import (
 	"hash/fnv"
 	"sync"
+	"sync/atomic"
 	"time"
 )
 
@@ -19,8 +20,28 @@ const cacheShards = 16
 //
 // The zero value is not usable. Construct via New.
 type Cache[V any] struct {
-	ttl    time.Duration
-	shards [cacheShards]cacheShard[V]
+	ttl        time.Duration
+	maxEntries int
+	entries    atomic.Int64
+	shards     [cacheShards]cacheShard[V]
+}
+
+// Options configures optional cache limits. The zero value preserves the
+// unbounded behavior of New.
+type Options struct {
+	// MaxEntries caps the number of distinct keys stored in the cache.
+	// Updates to existing keys are still allowed when the cache is full.
+	// Values <= 0 disable the cap.
+	MaxEntries int
+}
+
+// Stats reports cache cardinality and configured limits. It intentionally
+// does not estimate byte usage because value sizes are type-specific.
+type Stats struct {
+	Entries    int
+	Shards     int
+	TTL        time.Duration
+	MaxEntries int
 }
 
 type cacheShard[V any] struct {
@@ -45,9 +66,21 @@ type cacheItem[V any] struct {
 //	builder.AddBackgroundTask(app.CleanupTask("html-cache-cleanup", time.Minute, htmlCache))
 //
 // Pass ttl <= 0 to disable expiry entirely (entries live until process
-// exit; suitable only for fixed-size lookup tables).
+// exit; suitable only for fixed-size lookup tables). Do not use raw
+// user-controlled input as a key unless you also configure a cardinality
+// budget and cleanup strategy.
 func New[V any](ttl time.Duration) *Cache[V] {
+	return NewWithOptions[V](ttl, Options{})
+}
+
+// NewWithOptions creates a sharded TTL cache with optional cardinality
+// limits. When MaxEntries is reached, Set silently ignores new keys while
+// still allowing updates to keys that are already present.
+func NewWithOptions[V any](ttl time.Duration, opts Options) *Cache[V] {
 	c := &Cache[V]{ttl: ttl}
+	if opts.MaxEntries > 0 {
+		c.maxEntries = opts.MaxEntries
+	}
 	for i := range c.shards {
 		c.shards[i].items = make(map[string]cacheItem[V])
 	}
@@ -83,7 +116,10 @@ func (c *Cache[V]) Get(key string) (V, bool) {
 	}
 	if c.ttl > 0 && now.After(item.expiresAt) {
 		shard.mu.Lock()
-		delete(shard.items, key)
+		if current, ok := shard.items[key]; ok && current.expiresAt.Equal(item.expiresAt) {
+			delete(shard.items, key)
+			c.releaseEntry()
+		}
 		shard.mu.Unlock()
 		return empty, false
 	}
@@ -105,6 +141,10 @@ func (c *Cache[V]) Set(key string, value V) {
 
 	shard := c.keyShard(key)
 	shard.mu.Lock()
+	if _, exists := shard.items[key]; !exists && !c.reserveEntry() {
+		shard.mu.Unlock()
+		return
+	}
 	shard.items[key] = cacheItem[V]{value: value, expiresAt: expiresAt}
 	shard.mu.Unlock()
 }
@@ -125,8 +165,52 @@ func (c *Cache[V]) Cleanup() {
 		for key, item := range shard.items {
 			if now.After(item.expiresAt) {
 				delete(shard.items, key)
+				c.releaseEntry()
 			}
 		}
 		shard.mu.Unlock()
 	}
+}
+
+// Len returns the number of entries currently retained by the cache. Expired
+// entries are counted until they are removed by Get or Cleanup.
+func (c *Cache[V]) Len() int {
+	if c == nil {
+		return 0
+	}
+	return int(c.entries.Load())
+}
+
+// Stats returns cache cardinality and configured limits. A nil cache returns
+// the zero Stats value.
+func (c *Cache[V]) Stats() Stats {
+	if c == nil {
+		return Stats{}
+	}
+	return Stats{
+		Entries:    c.Len(),
+		Shards:     cacheShards,
+		TTL:        c.ttl,
+		MaxEntries: c.maxEntries,
+	}
+}
+
+func (c *Cache[V]) reserveEntry() bool {
+	if c.maxEntries <= 0 {
+		c.entries.Add(1)
+		return true
+	}
+	for {
+		current := c.entries.Load()
+		if current >= int64(c.maxEntries) {
+			return false
+		}
+		if c.entries.CompareAndSwap(current, current+1) {
+			return true
+		}
+	}
+}
+
+func (c *Cache[V]) releaseEntry() {
+	c.entries.Add(-1)
 }

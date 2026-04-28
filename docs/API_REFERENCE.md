@@ -634,3 +634,57 @@ Used for passing view-state into templates.
   - API envelope/router,
   - persistence and caching abstractions.
 - These extensions are not yet reflected in this file because the current phase intentionally remains minimal.
+
+---
+
+## 6) Memory and lifecycle hardening additions
+
+### `pkg/app/worker.go`
+
+`WorkerService` supervises fixed background tasks.
+
+- `func (w *WorkerService) Add(task BackgroundTask)`
+  - Adds valid tasks before start.
+  - Calls after `Start` are ignored.
+- `func (w *WorkerService) Start(ctx context.Context)`
+  - Idempotent; repeated calls do not duplicate worker goroutines.
+- `func (w *WorkerService) Stop(ctx context.Context) error`
+  - Waits until workers drain or `ctx` expires.
+  - Can be called again after a timeout to wait for later drain.
+
+### `pkg/auth/oidc.go`
+
+Context-aware OIDC methods are additive; existing methods remain as
+`context.Background()` wrappers.
+
+- `func (c *OIDCClient) DiscoveryContext(ctx context.Context) (*ProviderConfig, error)`
+- `func (c *OIDCClient) ExchangeCodeContext(ctx context.Context, code string) (*TokenResponse, error)`
+- `func (c *OIDCClient) VerifyIDTokenContext(ctx context.Context, idToken string) (*IDTokenClaims, error)`
+
+### `pkg/cache/ttl.go`
+
+The TTL cache exposes cardinality stats and an optional entry budget.
+
+- `type Options struct { MaxEntries int }`
+- `type Stats struct { Entries, Shards int; TTL time.Duration; MaxEntries int }`
+- `func NewWithOptions[V any](ttl time.Duration, opts Options) *Cache[V]`
+- `func (c *Cache[V]) Len() int`
+- `func (c *Cache[V]) Stats() Stats`
+
+Do not use unbounded user-controlled keys without cleanup and a
+cardinality budget.
+
+### `pkg/web/instant`
+
+`instant` stores fixed, prebuilt page snapshots for startup-warmed
+HTML responses.
+
+- `type Page struct { Key string; Body []byte; ContentType, CacheControl, ETag string }`
+- `type Options struct { MaxPages, MaxBytes int }`
+- `type Stats struct { Pages, Bytes, MaxPages, MaxBytes int }`
+- `func NewStore(pages []Page, opts Options) (*Store, error)`
+- `func (s *Store) Get(key string) (Page, bool)`
+- `func (s *Store) Stats() Stats`
+
+The store copies input/output bodies, enforces budgets at construction
+time, and starts no goroutines.

@@ -344,7 +344,7 @@ func TestWorkerService_Add_RejectsInvalid(t *testing.T) {
 	t.Parallel()
 	w := &WorkerService{}
 
-	w.Add(BackgroundTask{Name: "no-fn", Interval: time.Second})              // Run nil
+	w.Add(BackgroundTask{Name: "no-fn", Interval: time.Second})               // Run nil
 	w.Add(BackgroundTask{Name: "no-interval", Run: func(context.Context) {}}) // Interval 0
 	w.Add(BackgroundTask{
 		Name:     "negative-interval",
@@ -403,18 +403,11 @@ func TestWorkerService_Stop_ContextDeadline_ReturnsErr(t *testing.T) {
 	if err == nil {
 		t.Fatalf("Stop must return an error when its context expires before tasks return")
 	}
-	cancelRun() // let workers finish for goleak
-	// Drain the workers so the test does not leak. Stop is once-only,
-	// so we drain via a fresh wait.
-	done := make(chan struct{})
-	go func() {
-		w.wg.Wait()
-		close(done)
-	}()
-	select {
-	case <-done:
-	case <-time.After(2 * time.Second):
-		t.Fatal("workers never returned after runCtx cancel")
+	cancelRun()
+	drainCtx, cancelDrain := context.WithTimeout(context.Background(), 2*time.Second)
+	defer cancelDrain()
+	if err := w.Stop(drainCtx); err != nil {
+		t.Fatalf("workers never returned after runCtx cancel: %v", err)
 	}
 }
 
@@ -436,18 +429,18 @@ type navFeature struct {
 	items []NavItem
 }
 
-func (f navFeature) ID() string                  { return "nav" }
-func (f navFeature) NavItems() []NavItem         { return f.items }
-func (f navFeature) Routes(_ *http.ServeMux)     {}
+func (f navFeature) ID() string              { return "nav" }
+func (f navFeature) NavItems() []NavItem     { return f.items }
+func (f navFeature) Routes(_ *http.ServeMux) {}
 
 type initErrFeature struct {
 	err error
 }
 
-func (f initErrFeature) ID() string                       { return "init-err" }
-func (f initErrFeature) NavItems() []NavItem              { return nil }
-func (f initErrFeature) Routes(_ *http.ServeMux)          {}
-func (f initErrFeature) Init(_ context.Context) error     { return f.err }
+func (f initErrFeature) ID() string                   { return "init-err" }
+func (f initErrFeature) NavItems() []NavItem          { return nil }
+func (f initErrFeature) Routes(_ *http.ServeMux)      {}
+func (f initErrFeature) Init(_ context.Context) error { return f.err }
 
 type orderRecorder struct {
 	mu     sync.Mutex
@@ -482,7 +475,7 @@ type routesFeature struct {
 	path string
 }
 
-func (f routesFeature) ID() string         { return "routes" }
+func (f routesFeature) ID() string          { return "routes" }
 func (f routesFeature) NavItems() []NavItem { return nil }
 func (f routesFeature) Routes(mux *http.ServeMux) {
 	mux.HandleFunc(f.path, func(w http.ResponseWriter, _ *http.Request) {

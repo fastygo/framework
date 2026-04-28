@@ -1,12 +1,14 @@
 package auth
 
 import (
+	"context"
 	"crypto"
 	"crypto/rand"
 	"crypto/rsa"
 	"crypto/sha256"
 	"encoding/base64"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"math/big"
@@ -69,14 +71,14 @@ func jwksFromKey(t *testing.T, key *rsa.PrivateKey, kid string) []byte {
 // token endpoints. Each handler counts hits so tests can assert
 // caching behaviour.
 type oidcMock struct {
-	server      *httptest.Server
+	server        *httptest.Server
 	discoveryHits atomic.Int32
 	jwksHits      atomic.Int32
 	tokenHits     atomic.Int32
 
-	jwks         []byte
-	tokenStatus  int  // override for token endpoint
-	tokenBody    []byte
+	jwks          []byte
+	tokenStatus   int // override for token endpoint
+	tokenBody     []byte
 	failDiscovery bool
 }
 
@@ -276,6 +278,20 @@ func TestOIDCClient_Discovery_PropagatesNon200(t *testing.T) {
 	}
 }
 
+func TestOIDCClient_DiscoveryContext_UsesCancellation(t *testing.T) {
+	key, _ := rsa.GenerateKey(rand.Reader, 2048)
+	m := newOIDCMock(t, key, "k1")
+	c := newClient(t, m)
+
+	ctx, cancel := context.WithCancel(context.Background())
+	cancel()
+
+	_, err := c.DiscoveryContext(ctx)
+	if !errors.Is(err, context.Canceled) {
+		t.Fatalf("DiscoveryContext must return context cancellation, got %v", err)
+	}
+}
+
 func TestOIDCClient_ExchangeCode_RoundTrip(t *testing.T) {
 	key, _ := rsa.GenerateKey(rand.Reader, 2048)
 	m := newOIDCMock(t, key, "k1")
@@ -290,6 +306,23 @@ func TestOIDCClient_ExchangeCode_RoundTrip(t *testing.T) {
 	}
 	if tr.TokenType != "Bearer" {
 		t.Errorf("TokenType: got %q", tr.TokenType)
+	}
+}
+
+func TestOIDCClient_ExchangeCodeContext_UsesCancellation(t *testing.T) {
+	key, _ := rsa.GenerateKey(rand.Reader, 2048)
+	m := newOIDCMock(t, key, "k1")
+	c := newClient(t, m)
+	if _, err := c.Discovery(); err != nil {
+		t.Fatalf("Discovery: %v", err)
+	}
+
+	ctx, cancel := context.WithCancel(context.Background())
+	cancel()
+
+	_, err := c.ExchangeCodeContext(ctx, "auth-code-1")
+	if !errors.Is(err, context.Canceled) {
+		t.Fatalf("ExchangeCodeContext must return context cancellation, got %v", err)
 	}
 }
 
@@ -344,6 +377,29 @@ func TestOIDCClient_VerifyIDToken_Success(t *testing.T) {
 	}
 	if claims.Email != "ada@example.com" {
 		t.Errorf("Email: got %q", claims.Email)
+	}
+}
+
+func TestOIDCClient_VerifyIDTokenContext_UsesCancellationForJWKS(t *testing.T) {
+	key, _ := rsa.GenerateKey(rand.Reader, 2048)
+	m := newOIDCMock(t, key, "kid-1")
+	c := newClient(t, m)
+	if _, err := c.Discovery(); err != nil {
+		t.Fatalf("Discovery: %v", err)
+	}
+
+	idToken := signIDToken(t, key, "kid-1", map[string]any{
+		"iss": m.server.URL,
+		"sub": "user-123",
+		"aud": "test-client",
+		"exp": time.Now().Add(time.Hour).Unix(),
+	})
+	ctx, cancel := context.WithCancel(context.Background())
+	cancel()
+
+	_, err := c.VerifyIDTokenContext(ctx, idToken)
+	if !errors.Is(err, context.Canceled) {
+		t.Fatalf("VerifyIDTokenContext must return context cancellation, got %v", err)
 	}
 }
 
