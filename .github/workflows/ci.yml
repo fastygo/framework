@@ -64,6 +64,16 @@ jobs:
           repository: fastygo/ui8kit
           path: '@UI8Kit'
 
+      - uses: actions/checkout@v4
+        with:
+          repository: fastygo/blocks
+          path: Blocks
+
+      - uses: actions/checkout@v4
+        with:
+          repository: fastygo/elements
+          path: Elements
+
       - uses: actions/setup-go@v5
         with:
           go-version-file: framework/go.mod
