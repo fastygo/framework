@@ -12,16 +12,19 @@
     "vendor:assets:dashboard": "cd examples/dashboard && bun run vendor:assets",
     "vendor:assets:docs": "cd examples/docs && bun run vendor:assets",
     "vendor:assets:pwa": "cd examples/pwa && bun run vendor:assets",
-    "vendor:assets:all": "bun run vendor:assets:landing && bun run vendor:assets:web && bun run vendor:assets:blog && bun run vendor:assets:dashboard && bun run vendor:assets:docs && bun run vendor:assets:pwa",
+    "vendor:assets:storefront": "cd examples/storefront && bun run vendor:assets",
+    "vendor:assets:all": "bun run vendor:assets:landing && bun run vendor:assets:web && bun run vendor:assets:blog && bun run vendor:assets:dashboard && bun run vendor:assets:docs && bun run vendor:assets:pwa && bun run vendor:assets:storefront",
     "build:css:landing": "tailwindcss -i ./examples/landing/web/static/css/input.css -o ./examples/landing/web/static/css/app.css --minify",
     "build:css:web": "tailwindcss -i ./examples/web/web/static/css/input.css -o ./examples/web/web/static/css/app.css --minify",
     "build:css:blog": "tailwindcss -i ./examples/blog/web/static/css/input.css -o ./examples/blog/web/static/css/app.css --minify",
     "build:css:dashboard": "tailwindcss -i ./examples/dashboard/web/static/css/input.css -o ./examples/dashboard/web/static/css/app.css --minify",
     "build:css:docs": "tailwindcss -i ./examples/docs/web/static/css/input.css -o ./examples/docs/web/static/css/app.css --minify",
     "build:css:pwa": "tailwindcss -i ./examples/pwa/web/static/css/input.css -o ./examples/pwa/web/static/css/app.css --minify",
-    "build:css:all": "bun run build:css:landing && bun run build:css:web && bun run build:css:blog && bun run build:css:dashboard && bun run build:css:docs && bun run build:css:pwa",
+    "build:css:storefront": "cd examples/storefront && bun run build:css",
+    "build:css:all": "bun run build:css:landing && bun run build:css:web && bun run build:css:blog && bun run build:css:dashboard && bun run build:css:docs && bun run build:css:pwa && bun run build:css:storefront",
     "build:instant": "cd examples/instant && bun run build",
-    "build:all": "bun run vendor:assets:all && bun run build:css:all"
+    "build:storefront": "cd examples/storefront && bun run build",
+    "build:all": "bun run vendor:assets:all && bun run build:css:all && bun run build:storefront"
   },
   "devDependencies": {
     "@tailwindcss/cli": "^4.2.1",

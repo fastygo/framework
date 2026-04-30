@@ -1,0 +1,183 @@
+{
+  "brand_name": "Studio",
+  "title": "Storefront Prototype",
+  "theme": {
+    "label": "Theme",
+    "switch_to_dark_label": "Switch to dark mode",
+    "switch_to_light_label": "Switch to light mode"
+  },
+  "language": {
+    "label": "Language",
+    "current_label": "EN",
+    "next_label": "RU",
+    "next_locale": "ru",
+    "available": ["en", "ru"],
+    "locale_labels": {
+      "en": "EN",
+      "ru": "RU"
+    }
+  },
+  "nav": [
+    { "label": "Catalog", "href": "/", "aria_label": "Open catalog" },
+    { "label": "Collections", "href": "#collections", "aria_label": "View collections" },
+    { "label": "About", "href": "#about", "aria_label": "About the store" },
+    { "label": "Delivery", "href": "#delivery", "aria_label": "Delivery information" },
+    { "label": "Contacts", "href": "#contacts", "aria_label": "Contact information" }
+  ],
+  "header": {
+    "search_label": "Search",
+    "account_label": "Account",
+    "cart_label": "Cart",
+    "cart_count": "2"
+  },
+  "hero": {
+    "kicker": "Author furniture and interior objects",
+    "title": "Design you want to live in",
+    "description": "A calm prototype for a furniture storefront, composed from neutral blocks and UI8Kit primitives.",
+    "primary": { "label": "View collection", "href": "#collections", "aria_label": "View collection" },
+    "slide_current": "01",
+    "slide_total": "03",
+    "previous": { "label": "Previous", "href": "#", "aria_label": "Previous slide" },
+    "next": { "label": "Next", "href": "#", "aria_label": "Next slide" },
+    "image": { "alt": "Neutral interior placeholder" }
+  },
+  "categories": [
+    { "title": "Sofas", "count": "26 items", "href": "#", "image": { "alt": "Sofa placeholder" } },
+    { "title": "Tables", "count": "18 items", "href": "#", "image": { "alt": "Table placeholder" } },
+    { "title": "Lighting", "count": "36 items", "href": "#", "image": { "alt": "Lamp placeholder" } },
+    { "title": "Decor", "count": "42 items", "href": "#", "image": { "alt": "Decor placeholder" } }
+  ],
+  "collections": [
+    { "label": "New", "title": "Soft Balance", "description": "Soft silhouettes for quiet interiors.", "href": "#", "image": { "alt": "Soft chair placeholder" } },
+    { "label": "", "title": "Japandi Light", "description": "Warm minimalism and tactile materials.", "href": "#", "image": { "alt": "Japandi room placeholder" } },
+    { "label": "Limited", "title": "Nordic Form", "description": "Graphical objects for dining zones.", "href": "#", "image": { "alt": "Dining table placeholder" } }
+  ],
+  "benefits": [
+    { "icon": "leaf", "title": "Natural materials", "description": "Responsible and durable" },
+    { "icon": "hand", "title": "Hand work", "description": "Every detail is finished carefully" },
+    { "icon": "globe", "title": "European production", "description": "Stable quality control" },
+    { "icon": "truck", "title": "Fast delivery", "description": "Across the city and region" }
+  ],
+  "product": {
+    "badge": "New",
+    "name": "Soft Curve Chair",
+    "price": "$459",
+    "old_price": "",
+    "description": "A compact lounge chair with a rounded back, soft volume, and neutral textile texture.",
+    "gallery": [
+      { "alt": "Product thumbnail one" },
+      { "alt": "Product thumbnail two" },
+      { "alt": "Product thumbnail three" },
+      { "alt": "Product thumbnail four" }
+    ],
+    "main_image": { "alt": "Soft Curve Chair placeholder" },
+    "colors_label": "Color",
+    "colors": [
+      { "label": "Warm neutral", "value": "warm", "class": "bg-muted", "selected": true },
+      { "label": "Card tone", "value": "card", "class": "bg-card", "selected": false },
+      { "label": "Accent tone", "value": "accent", "class": "bg-accent", "selected": false },
+      { "label": "Primary tone", "value": "primary", "class": "bg-primary", "selected": false }
+    ],
+    "selected_color": "warm",
+    "quantity": {
+      "label": "Quantity",
+      "value": "1",
+      "minus_label": "Decrease quantity",
+      "plus_label": "Increase quantity"
+    },
+    "add_action": { "label": "Add to cart", "href": "#", "aria_label": "Add Soft Curve Chair to cart" },
+    "favorite_action": { "label": "Favorite", "href": "#", "aria_label": "Add to favorites" },
+    "details": [
+      { "label": "Characteristics", "value": "+" },
+      { "label": "Delivery and payment", "value": "+" },
+      { "label": "Warranty and returns", "value": "+" }
+    ]
+  },
+  "rail": {
+    "cart": {
+      "title": "Cart",
+      "count_label": "2",
+      "items": [
+        { "title": "Soft Curve Chair", "subtitle": "Warm neutral", "price": "$459", "image": { "alt": "Cart chair placeholder" } },
+        { "title": "Torna Round Table", "subtitle": "Warm stone", "price": "$287", "image": { "alt": "Cart table placeholder" } }
+      ],
+      "total_label": "Total",
+      "total": "$746",
+      "checkout_action": { "label": "Checkout", "href": "#", "aria_label": "Checkout" },
+      "view_cart_action": { "label": "Go to cart", "href": "#", "aria_label": "Go to cart" }
+    },
+    "filter": {
+      "title": "Filter",
+      "reset_label": "Reset",
+      "category_label": "Category",
+      "category_value": "Sofas",
+      "material_label": "Material",
+      "materials": [
+        { "label": "Textile", "value": "textile", "class": "bg-muted", "selected": true },
+        { "label": "Wood", "value": "wood", "class": "bg-secondary", "selected": false },
+        { "label": "Stone", "value": "stone", "class": "bg-card", "selected": false },
+        { "label": "Metal", "value": "metal", "class": "bg-primary", "selected": false }
+      ],
+      "price": {
+        "label": "Price",
+        "min_label": "from $100",
+        "max_label": "to $2000",
+        "value": "$100 - $2000"
+      },
+      "color_label": "Color",
+      "colors": [
+        { "label": "Light", "value": "light", "class": "bg-card", "selected": true },
+        { "label": "Muted", "value": "muted", "class": "bg-muted", "selected": false },
+        { "label": "Accent", "value": "accent", "class": "bg-accent", "selected": false },
+        { "label": "Primary", "value": "primary", "class": "bg-primary", "selected": false }
+      ],
+      "show_all_action": { "label": "Show 36 items", "href": "#", "aria_label": "Show filtered items" }
+    },
+    "inspiration": {
+      "title": "Inspiration for your interior",
+      "description": "Static card prepared for future editorial content.",
+      "action": { "label": "View ideas →", "href": "#", "aria_label": "View interior ideas" },
+      "image": { "alt": "Interior inspiration placeholder" }
+    },
+    "newsletter": {
+      "title": "Stay updated",
+      "description": "Subscribe to new collections and special offers.",
+      "placeholder": "Enter email",
+      "submit_label": "Subscribe"
+    },
+    "socials": [
+      { "label": "IG", "href": "#", "aria_label": "Instagram" },
+      { "label": "PI", "href": "#", "aria_label": "Pinterest" },
+      { "label": "TG", "href": "#", "aria_label": "Telegram" }
+    ]
+  },
+  "footer": {
+    "copyright": "© 2026 Storefront prototype",
+    "groups": [
+      {
+        "title": "Catalog",
+        "links": [
+          { "label": "Sofas", "href": "#", "aria_label": "Sofas" },
+          { "label": "Tables", "href": "#", "aria_label": "Tables" },
+          { "label": "Lighting", "href": "#", "aria_label": "Lighting" }
+        ]
+      },
+      {
+        "title": "Customers",
+        "links": [
+          { "label": "Delivery", "href": "#", "aria_label": "Delivery" },
+          { "label": "Payment", "href": "#", "aria_label": "Payment" },
+          { "label": "Returns", "href": "#", "aria_label": "Returns" }
+        ]
+      },
+      {
+        "title": "Contacts",
+        "links": [
+          { "label": "+1 800 235 45 67", "href": "#", "aria_label": "Phone" },
+          { "label": "info@example.test", "href": "#", "aria_label": "Email" },
+          { "label": "Example street, 15", "href": "#", "aria_label": "Address" }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,183 @@
+{
+  "brand_name": "Studio",
+  "title": "Прототип витрины",
+  "theme": {
+    "label": "Тема",
+    "switch_to_dark_label": "Переключить на тёмный режим",
+    "switch_to_light_label": "Переключить на светлый режим"
+  },
+  "language": {
+    "label": "Язык",
+    "current_label": "RU",
+    "next_label": "EN",
+    "next_locale": "en",
+    "available": ["en", "ru"],
+    "locale_labels": {
+      "en": "EN",
+      "ru": "RU"
+    }
+  },
+  "nav": [
+    { "label": "Каталог", "href": "/", "aria_label": "Открыть каталог" },
+    { "label": "Коллекции", "href": "#collections", "aria_label": "Смотреть коллекции" },
+    { "label": "О нас", "href": "#about", "aria_label": "О магазине" },
+    { "label": "Доставка", "href": "#delivery", "aria_label": "Информация о доставке" },
+    { "label": "Контакты", "href": "#contacts", "aria_label": "Контакты" }
+  ],
+  "header": {
+    "search_label": "Поиск",
+    "account_label": "Аккаунт",
+    "cart_label": "Корзина",
+    "cart_count": "2"
+  },
+  "hero": {
+    "kicker": "Авторская мебель и предметы интерьера",
+    "title": "Дизайн, в котором хочется жить",
+    "description": "Нейтральный прототип мебельной витрины, собранный из блоков и примитивов UI8Kit.",
+    "primary": { "label": "Смотреть коллекцию", "href": "#collections", "aria_label": "Смотреть коллекцию" },
+    "slide_current": "01",
+    "slide_total": "03",
+    "previous": { "label": "Назад", "href": "#", "aria_label": "Предыдущий слайд" },
+    "next": { "label": "Далее", "href": "#", "aria_label": "Следующий слайд" },
+    "image": { "alt": "Заглушка нейтрального интерьера" }
+  },
+  "categories": [
+    { "title": "Диваны", "count": "26 товаров", "href": "#", "image": { "alt": "Заглушка дивана" } },
+    { "title": "Столы", "count": "18 товаров", "href": "#", "image": { "alt": "Заглушка стола" } },
+    { "title": "Освещение", "count": "36 товаров", "href": "#", "image": { "alt": "Заглушка лампы" } },
+    { "title": "Декор", "count": "42 товара", "href": "#", "image": { "alt": "Заглушка декора" } }
+  ],
+  "collections": [
+    { "label": "New", "title": "Soft Balance", "description": "Мягкие силуэты для спокойных интерьеров.", "href": "#", "image": { "alt": "Заглушка кресла" } },
+    { "label": "", "title": "Japandi Light", "description": "Тёплый минимализм и тактильные материалы.", "href": "#", "image": { "alt": "Заглушка комнаты" } },
+    { "label": "Limited", "title": "Nordic Form", "description": "Графичные объекты для столовой зоны.", "href": "#", "image": { "alt": "Заглушка стола" } }
+  ],
+  "benefits": [
+    { "icon": "leaf", "title": "Натуральные материалы", "description": "Экологично и безопасно" },
+    { "icon": "hand", "title": "Ручная работа", "description": "Каждая деталь обработана вручную" },
+    { "icon": "globe", "title": "Европейское производство", "description": "Стабильный контроль качества" },
+    { "icon": "truck", "title": "Быстрая доставка", "description": "По городу и области" }
+  ],
+  "product": {
+    "badge": "New",
+    "name": "Кресло Soft Curve",
+    "price": "45 900 ₽",
+    "old_price": "",
+    "description": "Компактное лаунж-кресло с округлой спинкой, мягким объёмом и нейтральной текстильной фактурой.",
+    "gallery": [
+      { "alt": "Миниатюра товара один" },
+      { "alt": "Миниатюра товара два" },
+      { "alt": "Миниатюра товара три" },
+      { "alt": "Миниатюра товара четыре" }
+    ],
+    "main_image": { "alt": "Заглушка кресла Soft Curve" },
+    "colors_label": "Цвет",
+    "colors": [
+      { "label": "Тёплый нейтральный", "value": "warm", "class": "bg-muted", "selected": true },
+      { "label": "Тон карточки", "value": "card", "class": "bg-card", "selected": false },
+      { "label": "Акцентный тон", "value": "accent", "class": "bg-accent", "selected": false },
+      { "label": "Основной тон", "value": "primary", "class": "bg-primary", "selected": false }
+    ],
+    "selected_color": "warm",
+    "quantity": {
+      "label": "Количество",
+      "value": "1",
+      "minus_label": "Уменьшить количество",
+      "plus_label": "Увеличить количество"
+    },
+    "add_action": { "label": "В корзину", "href": "#", "aria_label": "Добавить кресло Soft Curve в корзину" },
+    "favorite_action": { "label": "Избранное", "href": "#", "aria_label": "Добавить в избранное" },
+    "details": [
+      { "label": "Характеристики", "value": "+" },
+      { "label": "Доставка и оплата", "value": "+" },
+      { "label": "Гарантия и возврат", "value": "+" }
+    ]
+  },
+  "rail": {
+    "cart": {
+      "title": "Корзина",
+      "count_label": "2",
+      "items": [
+        { "title": "Кресло Soft Curve", "subtitle": "Тёплый нейтральный", "price": "45 900 ₽", "image": { "alt": "Заглушка кресла в корзине" } },
+        { "title": "Журнальный стол Torna Round", "subtitle": "Тёплый камень", "price": "28 700 ₽", "image": { "alt": "Заглушка стола в корзине" } }
+      ],
+      "total_label": "Итого",
+      "total": "74 600 ₽",
+      "checkout_action": { "label": "Оформить заказ", "href": "#", "aria_label": "Оформить заказ" },
+      "view_cart_action": { "label": "Перейти в корзину", "href": "#", "aria_label": "Перейти в корзину" }
+    },
+    "filter": {
+      "title": "Фильтр",
+      "reset_label": "Сбросить",
+      "category_label": "Категория",
+      "category_value": "Диваны",
+      "material_label": "Материал",
+      "materials": [
+        { "label": "Текстиль", "value": "textile", "class": "bg-muted", "selected": true },
+        { "label": "Дерево", "value": "wood", "class": "bg-secondary", "selected": false },
+        { "label": "Камень", "value": "stone", "class": "bg-card", "selected": false },
+        { "label": "Металл", "value": "metal", "class": "bg-primary", "selected": false }
+      ],
+      "price": {
+        "label": "Цена",
+        "min_label": "от 10 000 ₽",
+        "max_label": "до 200 000 ₽",
+        "value": "10 000 ₽ - 200 000 ₽"
+      },
+      "color_label": "Цвет",
+      "colors": [
+        { "label": "Светлый", "value": "light", "class": "bg-card", "selected": true },
+        { "label": "Приглушённый", "value": "muted", "class": "bg-muted", "selected": false },
+        { "label": "Акцентный", "value": "accent", "class": "bg-accent", "selected": false },
+        { "label": "Основной", "value": "primary", "class": "bg-primary", "selected": false }
+      ],
+      "show_all_action": { "label": "Показать 36 товаров", "href": "#", "aria_label": "Показать отфильтрованные товары" }
+    },
+    "inspiration": {
+      "title": "Вдохновение для вашего интерьера",
+      "description": "Статичная карточка для будущего редакционного контента.",
+      "action": { "label": "Смотреть идеи →", "href": "#", "aria_label": "Смотреть идеи интерьера" },
+      "image": { "alt": "Заглушка интерьерного вдохновения" }
+    },
+    "newsletter": {
+      "title": "Будьте в курсе новинок",
+      "description": "Подпишитесь на новые коллекции и специальные предложения.",
+      "placeholder": "Введите email",
+      "submit_label": "Подписаться"
+    },
+    "socials": [
+      { "label": "IG", "href": "#", "aria_label": "Instagram" },
+      { "label": "PI", "href": "#", "aria_label": "Pinterest" },
+      { "label": "TG", "href": "#", "aria_label": "Telegram" }
+    ]
+  },
+  "footer": {
+    "copyright": "© 2026 Прототип витрины",
+    "groups": [
+      {
+        "title": "Каталог",
+        "links": [
+          { "label": "Диваны", "href": "#", "aria_label": "Диваны" },
+          { "label": "Столы", "href": "#", "aria_label": "Столы" },
+          { "label": "Освещение", "href": "#", "aria_label": "Освещение" }
+        ]
+      },
+      {
+        "title": "Покупателям",
+        "links": [
+          { "label": "Доставка", "href": "#", "aria_label": "Доставка" },
+          { "label": "Оплата", "href": "#", "aria_label": "Оплата" },
+          { "label": "Возврат", "href": "#", "aria_label": "Возврат" }
+        ]
+      },
+      {
+        "title": "Контакты",
+        "links": [
+          { "label": "+7 800 235 45 67", "href": "#", "aria_label": "Телефон" },
+          { "label": "info@example.test", "href": "#", "aria_label": "Email" },
+          { "label": "Примерная улица, 15", "href": "#", "aria_label": "Адрес" }
+        ]
+      }
+    ]
+  }
+}

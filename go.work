@@ -12,4 +12,5 @@ use (
 	./examples/instant
 	./examples/pwa
 	./examples/dashboard
+	./examples/storefront
 )

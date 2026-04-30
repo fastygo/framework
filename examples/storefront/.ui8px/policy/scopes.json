@@ -1,0 +1,41 @@
+{
+  "defaultScope": "layout",
+  "scopes": [
+    {
+      "name": "views",
+      "files": [
+        "**/internal/site/views/**",
+        "**/Blocks/storefront/**"
+      ],
+      "spacing": "layout"
+    },
+    {
+      "name": "elements",
+      "files": [
+        "**/Elements/commerce/**",
+        "**/Elements/selection/**"
+      ],
+      "spacing": "control"
+    },
+    {
+      "name": "app-theme",
+      "files": [
+        "web/static/css/shadcn.css",
+        "web/static/css/theme.css",
+        "web/static/css/tokens.css",
+        "**/web/static/css/shadcn.css",
+        "**/web/static/css/theme.css",
+        "**/web/static/css/tokens.css"
+      ],
+      "spacing": "control"
+    },
+    {
+      "name": "ui8kit-assets",
+      "files": [
+        "web/static/css/ui8kit/**",
+        "**/web/static/css/ui8kit/**"
+      ],
+      "spacing": "control"
+    }
+  ]
+}
