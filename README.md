@@ -3,8 +3,13 @@
 [![ci](https://github.com/fastygo/framework/actions/workflows/ci.yml/badge.svg)](https://github.com/fastygo/framework/actions/workflows/ci.yml)
 
 A small, opinionated Go framework for building server-rendered websites
-and dashboards on top of `net/http`, [`a-h/templ`](https://templ.guide/),
-and [`fastygo/ui8kit`](https://github.com/fastygo/ui8kit).
+and dashboards on top of `net/http` and [`a-h/templ`](https://templ.guide/).
+
+**UI stack for new apps:** [`github.com/fastygo/templ`](https://github.com/fastygo/templ)
+(primitives + composites) on top of this framework. Reference shell:
+[`github.com/fastygo/blank`](https://github.com/fastygo/blank) (`framework` + `templ` only).
+The `examples/*` modules below still use the **legacy** UI8Kit/Elements/Blocks stack — see
+[`docs/EXAMPLES.md`](./docs/EXAMPLES.md).
 
 This repository contains:
 
@@ -23,7 +28,7 @@ own projects:
 
 | Developer | Wants to build | What they actually need |
 |---|---|---|
-| 1 | Blog + product showcase | `pkg/app`, `pkg/web`, `pkg/cache`, UI8Kit, content library |
+| 1 | Blog + product showcase | `pkg/app`, `pkg/web`, `pkg/cache`, `fastygo/templ`, content library |
 | 2 | CRM + chat + internal docs | `pkg/app`, `pkg/web`, `pkg/auth`, eventually WebSockets |
 | 3 | Marketplace with seller/buyer/admin cabinets | `pkg/app` × N composition roots, role-based middleware |
 | 4 | Social network with feed + messaging | `pkg/app`, `pkg/web`, real-time, no UI kit |
@@ -80,7 +85,7 @@ they import.
 | `pkg/web/middleware` | request-id, logger, panic recovery | Wired in by `AppBuilder` |
 | `pkg/web/security` | secure headers, body limit, antibot, ratelimit, secure file server | Configurable, opt-out friendly |
 | `pkg/web/view` | Shared layout / theme / language-toggle data types | UI-kit agnostic |
-| `pkg/fonts` | Embedded Outfit font files | Convenience for UI8Kit consumers |
+| `pkg/fonts` | Embedded Outfit font files | Convenience for examples and apps that bundle Outfit |
 
 The framework **does not** ship templates, JSON locale bundles, demo
 features, or a default UI kit. Those concerns live in `examples/*` (which
@@ -88,7 +93,12 @@ import the framework as a regular Go module).
 
 ## Examples
 
-Each example is an **independent Go module**. Pick the one that resembles
+> **New projects:** start from [`github.com/fastygo/blank`](https://github.com/fastygo/blank)
+> (`framework` + `templ`). The modules under `examples/` are **legacy starters** that still
+> depend on canceled `ui8kit` / `elements` / `blocks` — useful for maintenance and migration
+> reference, not the target stack. See [`docs/EXAMPLES.md`](./docs/EXAMPLES.md).
+
+Each legacy example is an **independent Go module**. Pick the one that resembles
 the project you want to build and clone its directory into a new
 repository. The first thing to delete from the copied example is the
 `replace github.com/fastygo/framework => ../..` directive in `go.mod` —
@@ -104,7 +114,7 @@ during monorepo development.
 | `examples/dashboard` | `/`, `/contacts`, `/auth/...` | Sidebar shell + auth middleware + CRUD scaffold |
 
 See each example's `README.md` for the local quick start and
-[`docs/EXAMPLES.md`](./docs/EXAMPLES.md) for the shared UI layering guide.
+[`docs/EXAMPLES.md`](./docs/EXAMPLES.md) for the active Templ stack and legacy example notes.
 
 ## Local development with `go.work`
 
@@ -144,9 +154,10 @@ The framework is a normal Go module. To release a new version:
 - The framework module is **never** allowed to import packages outside
   `pkg/`. The check is enforced by `scripts/check-no-root-imports.go` and
   runs in CI.
-- Examples are **allowed** to depend on the framework, on UI8Kit, and on
-  any third-party library they need. They live behind their own `go.mod`
-  precisely so they can.
+- Examples are **allowed** to depend on the framework and on any third-party
+  library they need. Legacy examples still pin `ui8kit` / `elements` / `blocks`;
+  new apps should use `github.com/fastygo/templ` instead (see `docs/EXAMPLES.md`).
+  Examples live behind their own `go.mod` precisely so they can evolve independently.
 
 ## Versioning
 

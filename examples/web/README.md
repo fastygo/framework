@@ -1,8 +1,12 @@
 # examples/web
 
+> **Legacy starter** (UI8Kit + Blocks/Elements). New apps: use
+> [`github.com/fastygo/blank`](https://github.com/fastygo/blank) + `fastygo/templ`.
+> See [`../../docs/EXAMPLES.md`](../../docs/EXAMPLES.md).
+
 A small marketing-style website that demonstrates how to compose
 **[fastygo/framework](https://github.com/fastygo/framework)** features with
-**[fastygo/ui8kit](https://github.com/fastygo/ui8kit)** primitives.
+legacy **[fastygo/ui8kit](https://github.com/fastygo/ui8kit)** primitives.
 
 It ships:
 

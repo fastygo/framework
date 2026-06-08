@@ -36,7 +36,8 @@ Out of scope:
 
 - Authorization logic (RBAC, ABAC, row-level filters): the
   framework provides typed sessions; what they grant is a feature
-  decision.
+  decision. On Platform products, capability checks and BFF action
+  tokens are application/BFF semantics, not Framework middleware.
 - Cryptographic key management: the framework consumes
   `SESSION_KEY`; rotation, vaulting, and HSM integration are
   operational concerns.
@@ -45,6 +46,10 @@ Out of scope:
 - Supply-chain vetting beyond the framework's own three-pillars
   rule (no unnecessary dependencies). Applications are responsible
   for vetting their own `go.sum`.
+
+See also: Platform BFF semantic security in
+`github.com/fastygo/platform/docs/bff.md` and
+`.project/roadmab-fullstack-bff.md` (edge vs BFF split).
 
 ---
 

@@ -1,31 +1,62 @@
 ---
-description: Framework — respect UI8Kit / Elements / Blocks layering
-alwaysApply: true
+description: Framework + Templ UI stack — dependency direction and styling guardrails
+globs: "**/*.templ,**/internal/ui/**,**/internal/views/**,examples/**,pkg/web/**"
+alwaysApply: false
 ---
 
 # Framework (workspace)
 
-**Role:** Core framework and **examples** live here. UI examples should **consume** the stack, not redefine lower layers.
+**Role:** Core framework host (HTTP, sessions, middleware) and **examples**. Framework core stays UI-agnostic.
 
-**Dependency direction (never reverse)**  
-`App / examples` → `Blocks` → `Elements` → `UI8Kit`  
-(`go.work` may list `@Framework`, `@UI8Kit`, `Elements`, `Blocks` as siblings.)
+## Active UI stack
 
-**When changing UI**
-- **Tokens / atoms / layout grammar** → `UI8Kit`.
-- **Reusable widget behavior** → `Elements`.
-- **Page sections and composition** → `Blocks`; accumulate shared pieces in block `internal/` or `pkg/` before promoting to Elements.
-- **Brand, gradients, campaign layout** → app or example CSS — not in kit or Elements.
+**Dependency direction (never reverse)**
 
-**Styling after UI8Kit explicit-class refactor**
-- Explicit Tailwind utility classes are allowed across examples and apps, but they must stay visible in source and pass `ui8px` policy.
-- Use repo-root `.ui8px/` policy where a repo owns templates/CSS. Keep examples and page-like views in **layout** scope; keep reusable controls/widgets in **control** scope.
-- Layout scope follows the 8px rhythm (`px-2`, `px-4`, `px-6`, `gap-4`, etc.). Control scope may use finer 4px tuning (`px-3`, `py-1`, `h-7`) for compact primitives.
+`App / product` → `internal/ui` + `internal/views` → `github.com/fastygo/templ`
+
+Reference implementation: `@Blank` (`github.com/fastygo/blank`) — `framework` + `templ` only. See `@Blank/go.mod`.
+
+**Templ layering inside `github.com/fastygo/templ`**
+
+| Layer | Path | Role |
+|-------|------|------|
+| Helpers | `utils/` | CVA (`Compose`), `Cn`, attrs, ARIA, `tags.go` |
+| Primitives | `ui/` | button, input, form, layout, badge, … |
+| Composites | `components/` | card, alert, breadcrumb, … |
+| App shell | `internal/ui/` | layout, header, mobile sheet, toggles |
+| Pages | `internal/views/` | view models and page bodies only |
+
+Import shape in apps: `import "github.com/fastygo/templ/ui"` — do not deep-import `templ/ui/button` etc. in product code.
+
+## Canceled — do not use for new work
+
+- `github.com/fastygo/ui8kit` Go module
+- `github.com/fastygo/elements`, `github.com/fastygo/blocks`
+- Legacy `go-ui8kit/en` profile and UI8Kit-powered example patterns
+
+Legacy Framework examples and docs may still mention UI8Kit — treat as historical archive, not the target stack.
+
+## When changing UI
+
+- **Reusable bricks** → `github.com/fastygo/templ` with matching `{name}.spec.md` (see `@Templ/.cursor/rules/templ-component-spec.mdc`).
+- **App shell and chrome** → app `internal/ui/`; adapt patterns from `@Blank/internal/ui/layout/`.
+- **Brand, tokens, campaign layout** → app CSS under `web/static/css/` — not in the templ registry.
+
+## Styling
+
+- Explicit Tailwind utility classes in `.templ` source; pass repo-root `.ui8px/` policy when present.
+- Layout scope: 8px rhythm (`px-2`, `px-4`, `px-6`, `gap-4`). Control scope: finer 4px tuning (`px-3`, `py-1`, `h-7`) for compact primitives.
 - Prefer semantic token classes (`bg-card`, `text-muted-foreground`, `border-border`) over raw palette utilities.
-- Do not reintroduce UI8Kit `UtilityProps` or safelist-generation patterns; Tailwind should see explicit classes or CSS `@apply`.
+- No `UtilityProps`, safelist generation, or hidden class indirection — Tailwind must see explicit classes or CSS `@apply`.
 
-**API shape**
-- Higher layers should not export lower-layer props as their public contract. Blocks expose scene props; Elements expose widget props; UI8Kit props are used internally.
+## Client behavior (not the UI8Kit Go module)
+
+Dialog/sheet/mobile-menu behavior may use a committed `@ui8kit/aria` bundle in `web/static/js/ui8kit.js` plus `theme.js` for dark/light — see `@Blank`. This is a small static JS contract, not a `ui8kit` Go dependency.
+
+## API shape
+
+- Higher layers must not export lower-layer prop structs as their public contract.
 - `Class string` and small part-class override structs are acceptable extension points.
+- Compose `templ/ui` primitives in views; keep shell markup in `internal/ui/layout`.
 
-**Examples:** compose primitives, Elements, and Blocks directly; keep app/brand styling in examples or app CSS; align with sibling repos’ `.cursor/rules` and `ui8px` policies.
+**Examples:** New work follows `@Blank` + `templ`. Align with sibling repos' `.cursor/rules` and `ui8px` policies.

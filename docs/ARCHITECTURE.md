@@ -11,6 +11,32 @@
 
 ---
 
+## Documentation ownership (F0.5)
+
+HTTP, auth, session, and perimeter-runtime guidance from legacy `GoCMS/go-stack/en`
+belongs in Framework docs and `pkg/web`, `pkg/auth`, `pkg/app` — not in codex,
+Platform BFF contracts, or UI toolkit profiles.
+
+Framework owns cross-cutting transport/runtime concerns:
+
+- HTTP server lifecycle and graceful shutdown;
+- middleware chain (request ID, recover, logger, tracing, metrics);
+- security headers, body limits, method guard, anti-bot, rate limits;
+- signed cookie sessions and OIDC client primitives (`pkg/auth`);
+- health/readiness/metrics endpoints;
+- reverse-proxy trust boundaries (`APP_SECURITY_TRUST_PROXY`).
+
+Framework does **not** own:
+
+- BFF screen models, nav/session projection, or renderer adapters (Platform);
+- CMS/CRM domain logic or module schemas (Platform modules + product apps);
+- UI8Kit or legacy `go-ui8kit/en` profile rules (canceled archive only).
+
+Platform applications compose Framework primitives; semantic authorization,
+capabilities, and BFF action tokens remain application/BFF responsibilities.
+
+---
+
 ## 1. Goals and non-goals
 
 ### The three pillars

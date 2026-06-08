@@ -1,10 +1,23 @@
 # examples/
 
+> **Legacy / maintenance only.** These starters still depend on canceled
+> `github.com/fastygo/ui8kit`, `elements`, and `blocks`. **New apps should use
+> [`github.com/fastygo/blank`](https://github.com/fastygo/blank)** (`framework` + `templ`).
+> See [`../docs/EXAMPLES.md`](../docs/EXAMPLES.md) for the active stack and porting notes.
+
 Each subdirectory is an **independent Go module** that depends on
-[`github.com/fastygo/framework`](../README.md) and (usually)
-[`github.com/fastygo/ui8kit`](https://github.com/fastygo/ui8kit). They are
-designed to be cloned out into their own GitHub repositories the moment
-the team behind them is ready.
+[`github.com/fastygo/framework`](../README.md) and (for UI examples)
+the legacy [`github.com/fastygo/ui8kit`](https://github.com/fastygo/ui8kit) stack.
+They remain in the monorepo for CI coverage and migration reference until ported or retired.
+
+## Recommended starting point
+
+| App | Module | Stack |
+|---|---|---|
+| **Blank** (external) | `github.com/fastygo/blank` | `framework` + `templ` — shell, i18n, theme, mobile sheet |
+
+Copy Blank when starting a product app, CMS admin shell, or internal tool.
+Use `examples/instant/` only when you need zero-asset prebuilt HTML (no UI kit at all).
 
 ## Local workspace
 
@@ -15,14 +28,14 @@ cd e:/_@Go/.WorkSpace-Framework
 go work sync
 ```
 
-Most UI examples keep local replaces for Framework and UI8Kit during development:
+Legacy UI examples keep local replaces for Framework and UI8Kit:
 
 ```text
 replace github.com/fastygo/framework => ../..
 replace github.com/fastygo/ui8kit => ../../../@UI8Kit
 ```
 
-Add local `elements` or `blocks` requirements and replaces only when an example imports those modules directly:
+Add local `elements` or `blocks` replaces only when an example imports those modules:
 
 ```text
 require github.com/fastygo/blocks v0.0.0-00010101000000-000000000000
@@ -31,49 +44,39 @@ replace github.com/fastygo/blocks => ../../../Blocks
 replace github.com/fastygo/elements => ../../../Elements
 ```
 
-Before publishing or cutting a distributable example, replace pseudo-zero requirements with tagged module versions. `instant/` is the exception: it is intentionally authored without local `replace` directives so it can be copied into a standalone repository with minimal cleanup.
+Before publishing or cutting a distributable example, replace pseudo-zero requirements with tagged module versions — or port to Templ and drop UI8Kit. `instant/` is the exception: no asset pipeline and no UI kit.
 
 ## ui8px policy
 
-The examples keep their own `.ui8px/` policy tree because apps can contain brand-owned classes while shared UI8Kit assets still need grid and ARIA checks.
-
-`ui8px` is intentionally not installed as a dependency; call it through `npx`:
+Legacy examples keep their own `.ui8px/` policy tree. Call `ui8px` through `npx`:
 
 ```bash
 npx ui8px@latest lint ./...
-npx ui8px@latest lint ./... --learn
 npx ui8px@latest validate aria ./...
-npx ui8px@latest validate patterns ./...
 ```
 
-The root `package.json` exposes the same commands as scripts, but still uses `npx` rather than a local dependency.
-
-## Available starters
+## Available legacy starters
 
 | Directory | One-liner | Best fit |
 |---|---|---|
-| [`landing/`](./landing/) | One templ page, no i18n, one feature | Static marketing sites, conference pages |
-| [`web/`](./web/) | i18n marketing site + optional OIDC cabinet | Public-facing product websites |
-| [`blog/`](./blog/) | Markdown posts pre-rendered at startup | Personal/team blogs, changelog feeds |
-| [`docs/`](./docs/) | Localized markdown documentation site | Product docs, internal handbooks |
-| [`dashboard/`](./dashboard/) | Sidebar shell, auth middleware, contacts CRUD | Internal tools, CRMs, admin panels |
-| [`instant/`](./instant/) | One prebuilt HTML page, inline CSS, no assets | Messenger WebViews, instant articles, ultra-fast entry pages |
-| [`pwa/`](./pwa/) | Installable TODO app shell, manifest, service worker, offline fallback | Mobile PWAs, offline-first app prototypes |
+| [`landing/`](./landing/) | One templ page, no i18n | Static marketing (legacy UI8Kit) |
+| [`web/`](./web/) | i18n marketing + optional OIDC | Public product sites (legacy) |
+| [`blog/`](./blog/) | Markdown posts at startup | Blogs (legacy Blocks/Elements) |
+| [`docs/`](./docs/) | Localized markdown docs | Handbooks (legacy) |
+| [`dashboard/`](./dashboard/) | Sidebar shell, auth, CRUD | Admin panels (legacy) |
+| [`instant/`](./instant/) | One prebuilt HTML page, no assets | Messenger WebViews, instant articles |
+| [`pwa/`](./pwa/) | PWA shell, manifest, service worker | Offline prototypes (legacy UI8Kit) |
 
-## How they share assets
+## Legacy asset pipeline
 
-- `web/static/css/*.css`, `web/static/js/theme.js`, and
-  `web/static/js/ui8kit.js` are vendored by the UI8Kit CLI:
+- `web/static/css/*.css`, `theme.js`, `ui8kit.js` are vendored by the UI8Kit CLI:
   `go run github.com/fastygo/ui8kit/scripts/cmd/sync-assets web/static`.
-- Each example's `package.json` exposes that as `bun run vendor:assets`.
-- The Outfit font files still come from `pkg/fonts/`, but the copy logic now
-  lives in the same UI8Kit CLI rather than a Framework-local bash script.
-- Tailwind 4 builds CSS from `web/static/css/input.css` to
-  `web/static/css/app.css` (gitignored).
+- Each example's `package.json` exposes `bun run vendor:assets`.
+- Tailwind 4 builds from `web/static/css/input.css` to `web/static/css/app.css`.
 
 ## How they consume the framework
 
-Most UI example `go.mod` files look like:
+Legacy UI example `go.mod` files typically look like:
 
 ```go
 module github.com/fastygo/framework/examples/<name>
@@ -87,28 +90,17 @@ require (
 )
 
 replace github.com/fastygo/framework => ../..
-
 replace github.com/fastygo/ui8kit => ../../../@UI8Kit
 ```
 
-The `replace` directives resolve the local Framework and UI8Kit modules during
-monorepo development. When you copy an example out into its own
-repository, delete the local replaces and bump the requirements to tagged
-releases.
-
-The `instant/` example has no asset pipeline and no local replaces. It uses
-`go.work` inside this repository and expects a tagged `github.com/fastygo/framework`
-version when published as a separate repository.
+When copying out of the monorepo, delete local replaces and bump requirements — or migrate to `github.com/fastygo/templ` per `docs/EXAMPLES.md`.
 
 ## Adding a new example
 
-1. Create `examples/<name>/` with at least:
-   - `cmd/server/main.go` (composition root)
-   - `internal/site/...` for templates and features
-   - `web/static/css/input.css` for Tailwind when the example has assets
-   - `go.mod` with local replaces unless the example is intentionally standalone
-   - `package.json` exposing the build steps the CI matrix should run
-   - `Makefile` exposing `dev`, `build`, `vendor-assets`, `css`, `generate`
-   - `README.md` describing the goal and quick start
-2. Add `./examples/<name>` to the top-level `go.work`.
-3. Add the example to `.github/workflows/ci.yml` under the `build-examples` matrix.
+**Prefer adding Templ-based samples outside this tree** (e.g. in `github.com/fastygo/blank` or product repos).
+
+If you must add under `examples/` for CI:
+
+1. Create `examples/<name>/` with `cmd/server`, `internal/`, `go.mod`, `README.md`.
+2. Document whether it is legacy (UI8Kit) or kit-free (`instant` style).
+3. Add to top-level `go.work` and `.github/workflows/ci.yml` matrix.

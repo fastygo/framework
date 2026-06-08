@@ -1,12 +1,16 @@
 # FastyGO Framework Developer Guide (Phase 0)
 
-This guide describes the current implemented architecture in English, focused on onboarding a developer quickly.
+> **Note:** This guide describes the **legacy Phase 0 dashboard** pattern (UI8Kit shell).
+> **New apps** should use [`github.com/fastygo/blank`](https://github.com/fastygo/blank) +
+> [`github.com/fastygo/templ`](https://github.com/fastygo/templ). See [`docs/EXAMPLES.md`](./EXAMPLES.md).
+
+This guide describes an older implemented architecture in English, focused on onboarding a developer quickly.
 
 ## What this repository is
 
 This project is a **Phase 0 dashboard skeleton** (zero domain logic), including:
 
-- UI8Kit-powered dashboard shell (`Shell`, sidebar, mobile sheet)
+- Legacy UI8Kit-powered dashboard shell (`Shell`, sidebar, mobile sheet)
 - SSR via `a-h/templ`
 - Theme toggle and locale switcher
 - CQRS request flow

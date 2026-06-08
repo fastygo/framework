@@ -31,6 +31,9 @@ Key settings:
 
 The `build examples` job runs after the framework job passes.
 
+This matrix covers **legacy** UI8Kit/Elements/Blocks examples only. New Templ-based
+apps (`github.com/fastygo/blank`, product repos) are validated in their own repositories.
+
 The job uses a matrix for:
 
 - `landing`

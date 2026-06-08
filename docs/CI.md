@@ -63,7 +63,11 @@ go run ./scripts/coverage-gate -profile=coverage.out
 
 ## Examples Job
 
-The examples job builds each example application from the matrix:
+> **Legacy stack.** The examples matrix still builds UI8Kit/Elements/Blocks starters for
+> regression coverage. New apps use `github.com/fastygo/blank` + `fastygo/templ` and are
+> not part of this job. See [`docs/EXAMPLES.md`](./EXAMPLES.md).
+
+The examples job builds each **legacy** example application from the matrix:
 
 - `landing`
 - `web`
