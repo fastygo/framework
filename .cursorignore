@@ -22,6 +22,8 @@ tmp/
 # Repo-local docs not meant for broad indexing
 .manual/
 .roadmap/
+examples/
+docs/
 
 # Generated CSS (large, rebuilt often)
 internal/site/web/static/css/app.css
