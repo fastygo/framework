@@ -26,6 +26,9 @@ In scope:
 - The default HTTP middleware chain (`pkg/web/security/*`,
   `pkg/web/middleware/*`).
 - HMAC-signed cookie sessions and the OIDC client (`pkg/auth`).
+- The mail client core and its JMAP transport (`pkg/mail`,
+  `pkg/mail/jmap`): credential injection, log redaction, bounded
+  reads, audited insecure-TLS opt-out.
 - The Prometheus text-format metrics endpoint
   (`pkg/web/metrics`) and health endpoints (`pkg/web/health`).
 - The secure static-file server (`pkg/web/security/staticfs.go`).
@@ -327,3 +330,10 @@ addition to `CHANGELOG.md`. Older changes are recorded in ADRs.
 - **Phase 2.5** — `RequestIDMiddleware` no longer depends on
   `google/uuid`; `Registry.Write` snapshot pattern (T29) removes
   scrape vs. observation contention. See `CHANGELOG.md` `[0.2.1]`.
+- **Mail core** — `pkg/mail` + `pkg/mail/jmap` (stdlib-only JMAP
+  client). Injected `Authenticator` keeps credentials out of the
+  package; `mail.audit` slog events (`auth_failed`,
+  `insecure_tls_enabled`, `message_sent`, ...) with content
+  redaction; size-bounded response reads and streamed attachments;
+  the EventSource push goroutine is context-owned and
+  goleak-verified. See [ADR 0004](adr/0004-mail-package.md).

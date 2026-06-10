@@ -73,6 +73,11 @@ func main() {
 		if !strings.HasSuffix(path, ".go") || strings.HasSuffix(path, "_test.go") {
 			return nil
 		}
+		// Internal packages are not importable API; their symbols are
+		// only visible to the parent package (see the doc comment).
+		if strings.Contains(filepath.ToSlash(path), "/internal/") {
+			return nil
+		}
 		exp, viols := auditFile(path)
 		totalExported += exp
 		violations = append(violations, viols...)
@@ -136,7 +141,7 @@ func auditFile(path string) (int, []violation) {
 					if v := checkDoc(s.Name.Name, doc); v != "" {
 						out = append(out, violation{
 							pkg: pkgName, file: displayPath,
-							line: fset.Position(s.Pos()).Line,
+							line:   fset.Position(s.Pos()).Line,
 							symbol: "type " + s.Name.Name, reason: v,
 						})
 					}
@@ -157,7 +162,7 @@ func auditFile(path string) (int, []violation) {
 						if v := checkDoc(name.Name, doc); v != "" {
 							out = append(out, violation{
 								pkg: pkgName, file: displayPath,
-								line: fset.Position(name.Pos()).Line,
+								line:   fset.Position(name.Pos()).Line,
 								symbol: kind + " " + name.Name, reason: v,
 							})
 						}
@@ -185,7 +190,7 @@ func auditFile(path string) (int, []violation) {
 				}
 				out = append(out, violation{
 					pkg: pkgName, file: displayPath,
-					line: fset.Position(d.Pos()).Line,
+					line:   fset.Position(d.Pos()).Line,
 					symbol: kind + " " + d.Name.Name, reason: v,
 				})
 			}

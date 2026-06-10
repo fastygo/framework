@@ -688,3 +688,70 @@ HTML responses.
 
 The store copies input/output bodies, enforces budgets at construction
 time, and starts no goroutines.
+
+### `pkg/mail`
+
+Transport-agnostic email client core: domain types, the `Client`
+contract every mail transport implements, typed errors, and log
+redaction helpers. See `docs/adr/0004-mail-package.md` for scope and
+threat model. The package owns no HTTP routes, sessions, or UI.
+
+- `type Address struct { Name, Email string }` + `func (Address) String() string`
+- `type Envelope struct { From, To, Cc, Bcc, ReplyTo []Address; Subject string; Date time.Time; MessageID string; InReplyTo, References []string }`
+- `type MessageSummary struct { ID, ThreadID string; MailboxIDs []string; Envelope Envelope; Preview string; Flags FlagSet; Size int64; HasAttachments bool }`
+- `type Message struct { MessageSummary; TextBody, HTMLBody string; Attachments []AttachmentInfo }`
+  - `HTMLBody` is untrusted input; sanitize (or sandbox) before rendering.
+- `type AttachmentInfo struct { PartID, Filename, ContentType string; Size int64; Inline bool }`
+- `type Page[T any] struct { Items []T; Total, Offset int64 }`
+- `type Mailbox struct { ID, ParentID, Name string; Role Role; TotalMessages, UnreadMessages int64; SortOrder int }`
+- `type Role string` — `RoleInbox`, `RoleArchive`, `RoleDrafts`, `RoleSent`, `RoleTrash`, `RoleJunk`, `RoleNone`
+- `func FindByRole(boxes []Mailbox, role Role) *Mailbox`
+- `type FlagSet map[string]bool` + `NewFlagSet`, `Has`, `Names`; keywords `FlagSeen`, `FlagFlagged`, `FlagAnswered`, `FlagForwarded`, `FlagDraft`
+- `type Draft struct { From Address; To, Cc, Bcc []Address; Subject, TextBody, HTMLBody string; InReplyTo, References []string; Attachments []OutgoingAttachment }`
+- `type OutgoingAttachment struct { Filename, ContentType string; Open func() (io.ReadCloser, error) }` — content streams at send time
+- `type SendResult struct { MessageID, SentMessageID string }`
+- `type ListOptions struct { Offset int64; Limit int; SortBy SortField; Ascending, UnreadOnly bool }`
+- `type SearchQuery struct { Text, From, To, Subject, MailboxID string; HasAttachment bool; After, Before time.Time }`
+- `type Capabilities struct { Threads, Push, Search bool; MaxUploadSize, MaxMessageSize int64 }`
+- `type Client interface { Mailboxes; Messages; Message; Attachment; SetFlags; Move; Delete; Send; Capabilities; Close }`
+- Optional capability interfaces: `Threader`, `Pusher` (`Watch(ctx) (<-chan ChangeEvent, error)`), `Searcher`
+- `type Authenticator interface { Authenticate(*http.Request) error }` with `BasicAuth` and `TokenAuth` implementations
+- `type Error struct { Op string; Code ErrorCode; Err error }` + `func CodeOf(error) ErrorCode`
+  - codes: `CodeAuth`, `CodeNotFound`, `CodeTooLarge`, `CodeRateLimit`, `CodeUnavailable`, `CodeProtocol`, `CodeUnsupported`
+- `func RedactEmail(string) string`, `func RedactSubject(string) string`
+
+Credentials are injected per request and never stored or logged.
+Attachments are `io.ReadCloser` streams, never buffered whole.
+
+### `pkg/mail/jmap`
+
+Stdlib-only JMAP client (RFC 8620 core, RFC 8621 mail) implementing
+`mail.Client`, `mail.Threader`, `mail.Pusher`, and `mail.Searcher`.
+Stalwart is the reference backend. Wire shapes live in
+`internal/wire` and are not public API.
+
+- `type Options struct { SessionURL string; Auth mail.Authenticator; HTTPClient *http.Client; AccountID string; MaxResponseBytes, MaxBodyBytes int64; InsecureTLS bool }`
+- `func New(ctx context.Context, opts Options) (*Client, error)` — fetches the session resource, verifies the core+mail capabilities, selects the primary mail account
+- `func Discover(host string) (string, error)` — derives the `https://.../.well-known/jmap` session URL; https only, no SRV lookup
+- `type Client struct{ ... }` — all `mail.Client` methods; safe for concurrent use
+
+Behavior notes:
+
+- `Messages` and `Search` batch `Email/query` + `Email/get` into one
+  HTTP round-trip using a back-reference; query order is preserved.
+- `Send` uploads attachments as blobs (streamed), creates the Email in
+  the Drafts mailbox and an `EmailSubmission` in one batch, and uses
+  `onSuccessUpdateEmail` to move the message to Sent and flip keywords.
+- `Watch` consumes the JMAP EventSource stream; the single goroutine is
+  owned by the caller's context, reconnects on transient failures, and
+  closes the channel on cancellation (goleak-verified).
+- All response bodies are size-bounded (`MaxResponseBytes`, default
+  16 MiB); fetched body values are capped per message (`MaxBodyBytes`,
+  default 1 MiB); attachment content streams straight from the
+  download endpoint.
+- `InsecureTLS` is a development-only escape hatch: it emits a
+  Warn-level `mail.audit` event (`insecure_tls_enabled`) when used and
+  is ignored when a custom `HTTPClient` is supplied.
+- Security events (`auth_failed`, `session_loaded`, `message_sent`,
+  `push_started`, `push_stopped`) are structured `mail.audit` slog
+  events; message content and full addresses never reach logs.
