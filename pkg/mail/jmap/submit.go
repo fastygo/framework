@@ -39,14 +39,17 @@ func (c *Client) Send(ctx context.Context, draft mail.Draft) (*mail.SendResult, 
 	// Upload attachments first; each is streamed, never buffered.
 	attachments := make([]map[string]any, 0, len(draft.Attachments))
 	for _, att := range draft.Attachments {
-		reader, err := att.Open()
-		if err != nil {
-			return nil, &mail.Error{Op: op, Code: mail.CodeProtocol, Err: fmt.Errorf("open attachment %q: %w", att.Filename, err)}
+		reader, openErr := att.Open()
+		if openErr != nil {
+			return nil, &mail.Error{Op: op, Code: mail.CodeProtocol, Err: fmt.Errorf("open attachment %q: %w", att.Filename, openErr)}
 		}
 		uploaded, upErr := c.uploadBlob(ctx, att.ContentType, reader)
-		reader.Close()
+		closeErr := reader.Close()
 		if upErr != nil {
 			return nil, upErr
+		}
+		if closeErr != nil {
+			return nil, &mail.Error{Op: op, Code: mail.CodeProtocol, Err: fmt.Errorf("close attachment %q: %w", att.Filename, closeErr)}
 		}
 		attachments = append(attachments, map[string]any{
 			"blobId":      uploaded.BlobID,
@@ -135,7 +138,7 @@ func (c *Client) Send(ctx context.Context, draft mail.Draft) (*mail.SendResult, 
 // validateDraft enforces the Draft contract before any network call.
 func validateDraft(draft mail.Draft) error {
 	if draft.From.Email == "" {
-		return fmt.Errorf("draft has no From address")
+		return fmt.Errorf("draft has no from address")
 	}
 	if len(draft.To)+len(draft.Cc)+len(draft.Bcc) == 0 {
 		return fmt.Errorf("draft has no recipients")
@@ -145,7 +148,7 @@ func validateDraft(draft mail.Draft) error {
 	}
 	for _, att := range draft.Attachments {
 		if att.Filename == "" || att.ContentType == "" || att.Open == nil {
-			return fmt.Errorf("attachment missing filename, content type, or Open")
+			return fmt.Errorf("attachment missing filename, content type, or open")
 		}
 	}
 	return nil

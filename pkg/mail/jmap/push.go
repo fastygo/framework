@@ -75,8 +75,8 @@ func (c *Client) streamEvents(ctx context.Context, eventsURL string, events chan
 		return err
 	}
 	req.Header.Set("Accept", "text/event-stream")
-	if err := c.auth.Authenticate(req); err != nil {
-		return err
+	if authErr := c.auth.Authenticate(req); authErr != nil {
+		return authErr
 	}
 
 	// The shared c.http carries a global timeout that would kill a
@@ -87,7 +87,9 @@ func (c *Client) streamEvents(ctx context.Context, eventsURL string, events chan
 	if err != nil {
 		return err
 	}
-	defer resp.Body.Close()
+	defer func() {
+		_ = resp.Body.Close()
+	}()
 	if resp.StatusCode != http.StatusOK {
 		return fmt.Errorf("eventsource status %d", resp.StatusCode)
 	}

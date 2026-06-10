@@ -22,15 +22,17 @@ func (c *Client) loadSession(ctx context.Context, sessionURL, wantAccount string
 		return &mail.Error{Op: op, Code: mail.CodeProtocol, Err: err}
 	}
 	req.Header.Set("Accept", "application/json")
-	if err := c.auth.Authenticate(req); err != nil {
-		return &mail.Error{Op: op, Code: mail.CodeAuth, Err: err}
+	if authErr := c.auth.Authenticate(req); authErr != nil {
+		return &mail.Error{Op: op, Code: mail.CodeAuth, Err: authErr}
 	}
 
 	resp, err := c.http.Do(req)
 	if err != nil {
 		return &mail.Error{Op: op, Code: mail.CodeUnavailable, Err: err}
 	}
-	defer resp.Body.Close()
+	defer func() {
+		_ = resp.Body.Close()
+	}()
 
 	if resp.StatusCode != http.StatusOK {
 		code := httpStatusCode(resp.StatusCode)

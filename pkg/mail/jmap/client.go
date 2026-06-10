@@ -96,10 +96,10 @@ func auditEvent(ctx context.Context, level slog.Level, event string, attrs ...sl
 // verifies the core and mail capabilities, and selects the account.
 func New(ctx context.Context, opts Options) (*Client, error) {
 	if opts.SessionURL == "" {
-		return nil, &mail.Error{Op: "jmap: connect", Code: mail.CodeProtocol, Err: fmt.Errorf("SessionURL is required")}
+		return nil, &mail.Error{Op: "jmap: connect", Code: mail.CodeProtocol, Err: fmt.Errorf("sessionURL is required")}
 	}
 	if opts.Auth == nil {
-		return nil, &mail.Error{Op: "jmap: connect", Code: mail.CodeAuth, Err: fmt.Errorf("Auth is required")}
+		return nil, &mail.Error{Op: "jmap: connect", Code: mail.CodeAuth, Err: fmt.Errorf("auth is required")}
 	}
 
 	httpClient := opts.HTTPClient

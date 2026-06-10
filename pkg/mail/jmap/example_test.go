@@ -17,7 +17,8 @@ func Example() {
 
 	sessionURL, err := jmap.Discover("mail.example.com")
 	if err != nil {
-		log.Fatal(err)
+		log.Print(err)
+		return
 	}
 
 	client, err := jmap.New(ctx, jmap.Options{
@@ -25,19 +26,22 @@ func Example() {
 		Auth:       mail.BasicAuth{Username: "ada@example.com", Password: "app-password"},
 	})
 	if err != nil {
-		log.Fatal(err)
+		log.Print(err)
+		return
 	}
 	defer client.Close()
 
 	boxes, err := client.Mailboxes(ctx)
 	if err != nil {
-		log.Fatal(err)
+		log.Print(err)
+		return
 	}
 	inbox := mail.FindByRole(boxes, mail.RoleInbox)
 
 	page, err := client.Messages(ctx, inbox.ID, mail.ListOptions{Limit: 20})
 	if err != nil {
-		log.Fatal(err)
+		log.Print(err)
+		return
 	}
 	for _, msg := range page.Items {
 		fmt.Println(msg.Envelope.Subject)

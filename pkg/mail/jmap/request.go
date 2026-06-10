@@ -48,15 +48,17 @@ func (c *Client) batch(ctx context.Context, op string, using []string, calls ...
 	}
 	httpReq.Header.Set("Content-Type", "application/json")
 	httpReq.Header.Set("Accept", "application/json")
-	if err := c.auth.Authenticate(httpReq); err != nil {
-		return nil, &mail.Error{Op: op, Code: mail.CodeAuth, Err: err}
+	if authErr := c.auth.Authenticate(httpReq); authErr != nil {
+		return nil, &mail.Error{Op: op, Code: mail.CodeAuth, Err: authErr}
 	}
 
 	resp, err := c.http.Do(httpReq)
 	if err != nil {
 		return nil, &mail.Error{Op: op, Code: mail.CodeUnavailable, Err: err}
 	}
-	defer resp.Body.Close()
+	defer func() {
+		_ = resp.Body.Close()
+	}()
 
 	body, err := io.ReadAll(io.LimitReader(resp.Body, c.maxResp))
 	if err != nil {
