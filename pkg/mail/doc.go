@@ -18,20 +18,24 @@
 //
 // # Transports
 //
-// Subpackage jmap implements the contract for JMAP servers (RFC 8620 and
-// RFC 8621), with Stalwart as the reference backend. An IMAP+SMTP transport
-// is planned as a separate subpackage behind the same interface (see
-// docs/adr/0004-mail-package.md).
+//   - jmap — JMAP RFC 8620/8621 (reference servers such as Stalwart)
+//   - imap — IMAP + SMTP submit (parity roadmap A+B; see
+//     .project/roadmap-mail-imap-smtp.md and ADR
+//     .project/adr/0001-mail-transport-parity.md)
+//
+// Applications depend on Client (+ optional Threader/Pusher/Searcher), never
+// on a specific server product. Consumer Gmail/Outlook OAuth is out of scope.
+//
+// Shared test fixtures live in subpackage mailtest.
 //
 // # Security contract
 //
 //   - Message bodies are plain strings. HTML bodies are untrusted input;
 //     sanitization is the renderer's responsibility. The package never
 //     wraps bodies in template.HTML.
-//   - Credentials are injected per request through an Authenticator and are
-//     never stored or logged by the package.
+//   - JMAP credentials enter through Authenticator; IMAP/SMTP use
+//     username/password on the transport Options. Secrets are never
+//     logged (see redact helpers).
 //   - Attachments stream through io.ReadCloser and are never buffered
 //     whole in memory.
-//
-// See docs/adr/0004-mail-package.md for the full threat model.
 package mail

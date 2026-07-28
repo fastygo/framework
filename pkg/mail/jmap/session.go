@@ -75,13 +75,9 @@ func (c *Client) loadSession(ctx context.Context, sessionURL, wantAccount string
 		return &mail.Error{Op: op, Code: mail.CodeNotFound, Err: fmt.Errorf("account %q not in session", accountID)}
 	}
 
-	caps := mail.Capabilities{
-		// Threads and search are part of the mandatory JMAP mail
-		// capability; push depends on an advertised EventSource URL.
-		Threads: true,
-		Search:  true,
-		Push:    session.EventSourceURL != "",
-	}
+	_, hasMail := session.Capabilities[wire.CapMail]
+	_, hasSubmission := session.Capabilities[wire.CapSubmission]
+	caps := deriveCapabilities(session, hasMail)
 	var core wire.CoreCapability
 	if raw, ok := session.Capabilities[wire.CapCore]; ok {
 		// Best-effort: a malformed core object only loses limits.
@@ -98,8 +94,22 @@ func (c *Client) loadSession(ctx context.Context, sessionURL, wantAccount string
 
 	auditEvent(ctx, slog.LevelInfo, "session_loaded",
 		slog.String("api_url", session.APIURL),
-		slog.Bool("push", caps.Push))
+		slog.Bool("threads", caps.Threads),
+		slog.Bool("search", caps.Search),
+		slog.Bool("push", caps.Push),
+		slog.Bool("submission", hasSubmission))
 	return nil
+}
+
+// deriveCapabilities maps advertised session features onto mail.Capabilities.
+// Search and Threads follow CapMail (RFC 8621 Email/query + Thread/*).
+// Push follows a non-empty eventSourceUrl only — never assumed.
+func deriveCapabilities(session wire.Session, hasMail bool) mail.Capabilities {
+	return mail.Capabilities{
+		Threads: hasMail,
+		Search:  hasMail,
+		Push:    session.EventSourceURL != "",
+	}
 }
 
 // httpStatusCode maps an HTTP status to a mail.ErrorCode.

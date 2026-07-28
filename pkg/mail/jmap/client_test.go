@@ -37,6 +37,40 @@ func TestSessionLoad(t *testing.T) {
 	}
 }
 
+func TestSessionPushRequiresEventSource(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		_ = json.NewEncoder(w).Encode(map[string]any{
+			"capabilities": map[string]any{
+				wire.CapCore: map[string]any{},
+				wire.CapMail: map[string]any{},
+			},
+			"accounts":        map[string]any{"a1": map[string]any{"name": "a"}},
+			"primaryAccounts": map[string]string{wire.CapMail: "a1"},
+			"apiUrl":          "https://x/api",
+			// no eventSourceUrl
+		})
+	}))
+	t.Cleanup(srv.Close)
+
+	client, err := New(context.Background(), Options{
+		SessionURL: srv.URL,
+		Auth:       mail.BasicAuth{Username: "u", Password: "p"},
+		HTTPClient: srv.Client(),
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Cleanup(func() { _ = client.Close() })
+	caps := client.Capabilities()
+	if !caps.Threads || !caps.Search {
+		t.Errorf("mail caps should follow CapMail: %+v", caps)
+	}
+	if caps.Push {
+		t.Error("Push must be false without eventSourceUrl")
+	}
+}
+
 func TestSessionAuthFailure(t *testing.T) {
 	f := newFakeServer(t)
 	_, err := New(context.Background(), Options{

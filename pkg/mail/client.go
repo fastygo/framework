@@ -7,8 +7,8 @@ import (
 )
 
 // Client is the transport-agnostic mail client contract. Implementations:
-// jmap.Client (Stalwart and other JMAP servers); an IMAP+SMTP transport is
-// planned (docs/adr/0004-mail-package.md).
+// jmap.Client (JMAP servers) and imap.Client (IMAP+SMTP; Framework F1+).
+// Normative method matrix: .project/roadmap-mail-imap-smtp.md (A+B).
 //
 // All methods are safe for concurrent use. Message and mailbox IDs are
 // opaque transport-scoped strings; callers must not parse them.
