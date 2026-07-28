@@ -2,7 +2,8 @@
 // plus SMTP submission for Send.
 //
 // Framework F1 provides the base mail.Client (slice A). F2 adds Searcher.
-// F3 adds Pusher via a dedicated IDLE connection. Threading remains for F4.
+// F3 adds Pusher via a dedicated IDLE connection. F4 adds Threader
+// (THREAD=REFERENCES when available, else client-side header window).
 // Consumer Gmail/Outlook OAuth is out of scope.
 package imap
 
@@ -86,17 +87,19 @@ func (o Options) withDefaults() Options {
 // Client implements mail.Client over a single IMAP connection and per-send
 // SMTP connections. Every IMAP operation is serialized.
 type Client struct {
-	opts   Options
-	imap   *imapclient.Client
-	mu     sync.Mutex
-	caps   mail.Capabilities
-	closed bool
+	opts       Options
+	imap       *imapclient.Client
+	mu         sync.Mutex
+	caps       mail.Capabilities
+	threadRefs bool
+	closed     bool
 }
 
 var (
 	_ mail.Client   = (*Client)(nil)
 	_ mail.Searcher = (*Client)(nil)
 	_ mail.Pusher   = (*Client)(nil)
+	_ mail.Threader = (*Client)(nil)
 )
 
 // New validates options, connects to IMAP, and authenticates the account.
@@ -145,12 +148,13 @@ func New(ctx context.Context, opts Options) (*Client, error) {
 	// Fetch capabilities now so go-imap can select MOVE/UIDPLUS behavior.
 	serverCaps := ic.Caps()
 	return &Client{
-		opts: opts,
-		imap: ic,
+		opts:       opts,
+		imap:       ic,
+		threadRefs: supportsThreadReferences(serverCaps),
 		caps: mail.Capabilities{
-			Search: true,
-			Push:   supportsIdle(serverCaps),
-			// Threads land in F4.
+			Search:  true,
+			Push:    supportsIdle(serverCaps),
+			Threads: true, // client-side always; THREAD=REFERENCES when threadRefs
 		},
 	}, nil
 }

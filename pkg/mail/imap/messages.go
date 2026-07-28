@@ -246,6 +246,9 @@ func summaryFromFetch(mailbox string, item *imapclient.FetchMessageBuffer) mail.
 	}
 	summary.Envelope = envelopeFromIMAP(item.Envelope, item.InternalDate)
 	summary.HasAttachments = len(attachmentsFromBodyStructure(item.BodyStructure)) > 0
+	if root := threadRoot(summary.Envelope.MessageID, summary.Envelope.InReplyTo, summary.Envelope.References); root != "" {
+		summary.ThreadID = encodeThreadID(mailbox, root)
+	}
 	return summary
 }
 

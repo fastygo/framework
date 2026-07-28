@@ -51,8 +51,8 @@ func TestClientIMAPLifecycle(t *testing.T) {
 	})
 
 	caps := client.Capabilities()
-	if !caps.Search || !caps.Push || caps.Threads || caps.MaxUploadSize != 0 || caps.MaxMessageSize != 0 {
-		t.Fatalf("unexpected F3 capabilities: %+v", caps)
+	if !caps.Search || !caps.Push || !caps.Threads || caps.MaxUploadSize != 0 || caps.MaxMessageSize != 0 {
+		t.Fatalf("unexpected F4 capabilities: %+v", caps)
 	}
 	boxes, err := client.Mailboxes(context.Background())
 	if err != nil {
