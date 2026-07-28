@@ -28,8 +28,9 @@ type Client interface {
 	// attachment metadata (but not attachment content).
 	Message(ctx context.Context, id string) (*Message, error)
 
-	// Attachment streams the content of one attachment part. The caller
-	// must close the reader. Content is never buffered by the client.
+	// Attachment returns the content of one attachment part. The caller
+	// must close the reader. Prefer streaming; some transports (IMAP) may
+	// buffer a single part — apps should enforce size policy.
 	Attachment(ctx context.Context, messageID, partID string) (io.ReadCloser, AttachmentInfo, error)
 
 	// SetFlags adds and removes keywords on the given messages.

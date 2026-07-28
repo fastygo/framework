@@ -19,7 +19,7 @@
 // # Transports
 //
 //   - jmap — JMAP RFC 8620/8621 (reference servers such as Stalwart)
-//   - imap — IMAP + SMTP submit (parity roadmap A+B; see
+//   - imap — IMAP + SMTP submit (A+B parity with jmap; see
 //     .project/roadmap-mail-imap-smtp.md and ADR
 //     .project/adr/0001-mail-transport-parity.md)
 //
@@ -36,6 +36,7 @@
 //   - JMAP credentials enter through Authenticator; IMAP/SMTP use
 //     username/password on the transport Options. Secrets are never
 //     logged (see redact helpers).
-//   - Attachments stream through io.ReadCloser and are never buffered
-//     whole in memory.
+//   - Attachment returns an io.ReadCloser. JMAP streams from the download
+//     endpoint; IMAP may buffer one part in memory — enforce size policy
+//     in the application (see .project/architecture-mail.md).
 package mail
