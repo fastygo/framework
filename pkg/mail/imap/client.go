@@ -17,6 +17,7 @@ import (
 	"strconv"
 	"strings"
 	"sync"
+	"time"
 
 	goimap "github.com/emersion/go-imap/v2"
 	"github.com/emersion/go-imap/v2/imapclient"
@@ -87,12 +88,15 @@ func (o Options) withDefaults() Options {
 // Client implements mail.Client over a single IMAP connection and per-send
 // SMTP connections. Every IMAP operation is serialized.
 type Client struct {
-	opts       Options
-	imap       *imapclient.Client
-	mu         sync.Mutex
-	caps       mail.Capabilities
-	threadRefs bool
-	closed     bool
+	opts        Options
+	imap        *imapclient.Client
+	mu          sync.Mutex
+	caps        mail.Capabilities
+	threadRefs  bool
+	closed      bool
+	watchRoot   context.Context
+	watchCancel context.CancelFunc
+	watchWG     sync.WaitGroup
 }
 
 var (
@@ -147,10 +151,13 @@ func New(ctx context.Context, opts Options) (*Client, error) {
 
 	// Fetch capabilities now so go-imap can select MOVE/UIDPLUS behavior.
 	serverCaps := ic.Caps()
+	watchRoot, watchCancel := context.WithCancel(context.Background())
 	return &Client{
-		opts:       opts,
-		imap:       ic,
-		threadRefs: supportsThreadReferences(serverCaps),
+		opts:        opts,
+		imap:        ic,
+		threadRefs:  supportsThreadReferences(serverCaps),
+		watchRoot:   watchRoot,
+		watchCancel: watchCancel,
 		caps: mail.Capabilities{
 			Search:  true,
 			Push:    supportsIdle(serverCaps),
@@ -254,11 +261,30 @@ func (c *Client) Capabilities() mail.Capabilities {
 // Close implements mail.Client.
 func (c *Client) Close() error {
 	c.mu.Lock()
-	defer c.mu.Unlock()
 	if c.closed {
+		c.mu.Unlock()
 		return nil
 	}
 	c.closed = true
+	cancel := c.watchCancel
+	c.mu.Unlock()
+
+	if cancel != nil {
+		cancel()
+	}
+	done := make(chan struct{})
+	go func() {
+		c.watchWG.Wait()
+		close(done)
+	}()
+	select {
+	case <-done:
+	case <-time.After(10 * time.Second):
+		auditEvent(context.Background(), slog.LevelWarn, "watch_close_timeout")
+	}
+
+	c.mu.Lock()
+	defer c.mu.Unlock()
 	logoutErr := c.imap.Logout().Wait()
 	closeErr := c.imap.Close()
 	if logoutErr != nil {

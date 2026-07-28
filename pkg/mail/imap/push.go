@@ -21,7 +21,8 @@ const (
 
 // Watch implements mail.Pusher with a dedicated IMAP connection running IDLE.
 // The primary Client connection stays free for ordinary commands. The returned
-// channel closes when ctx is cancelled or the watcher exits permanently.
+// channel closes when ctx is cancelled, the client is Closed, or the watcher
+// exits permanently.
 //
 // ChangeEvent.MailboxID is the mailbox SELECT'd for IDLE (Options.WatchMailbox
 // or INBOX). Events are mailbox-level only — callers re-query Messages.
@@ -34,38 +35,72 @@ func (c *Client) Watch(ctx context.Context) (<-chan mail.ChangeEvent, error) {
 		return nil, wrapError(op, mail.CodeUnavailable, err)
 	}
 
+	c.mu.Lock()
+	if c.closed {
+		c.mu.Unlock()
+		return nil, &mail.Error{Op: op, Code: mail.CodeUnavailable, Err: fmt.Errorf("client closed")}
+	}
+	if c.watchRoot == nil {
+		c.mu.Unlock()
+		return nil, &mail.Error{Op: op, Code: mail.CodeUnavailable, Err: fmt.Errorf("watch root missing")}
+	}
+	watchCtx, stop := context.WithCancel(c.watchRoot)
+	c.watchWG.Add(1)
+	c.mu.Unlock()
+
 	mailbox := c.opts.WatchMailbox
 	if mailbox == "" {
 		mailbox = defaultWatchMbox
 	}
 	events := make(chan mail.ChangeEvent)
 	go func() {
+		defer c.watchWG.Done()
+		defer stop()
 		defer close(events)
-		auditEvent(ctx, slog.LevelInfo, "push_started",
+
+		// Tie caller cancellation into the client-owned watch context.
+		go func() {
+			select {
+			case <-ctx.Done():
+				stop()
+			case <-watchCtx.Done():
+			}
+		}()
+
+		auditEvent(watchCtx, slog.LevelInfo, "push_started",
 			slog.String("op", op),
 			slog.String("mailbox", mailbox))
-		defer auditEvent(ctx, slog.LevelInfo, "push_stopped",
+		defer auditEvent(context.Background(), slog.LevelInfo, "push_stopped",
 			slog.String("op", op),
 			slog.String("mailbox", mailbox))
 
 		for {
-			if err := c.idleOnce(ctx, mailbox, events); err != nil {
-				if ctx.Err() != nil {
+			if c.isClosed() {
+				return
+			}
+			if err := c.idleOnce(watchCtx, mailbox, events); err != nil {
+				if watchCtx.Err() != nil || c.isClosed() {
 					return
 				}
 				select {
-				case <-ctx.Done():
+				case <-watchCtx.Done():
 					return
 				case <-time.After(idleReconnectDelay):
 				}
 				continue
 			}
-			if ctx.Err() != nil {
+			if watchCtx.Err() != nil || c.isClosed() {
 				return
 			}
 		}
 	}()
 	return events, nil
+}
+
+func (c *Client) isClosed() bool {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	return c.closed
 }
 
 func (c *Client) idleOnce(ctx context.Context, mailbox string, events chan<- mail.ChangeEvent) error {
@@ -105,6 +140,9 @@ func (c *Client) idleOnce(ctx context.Context, mailbox string, events chan<- mai
 
 func (c *Client) openIdleClient(ctx context.Context, mailbox string, events chan<- mail.ChangeEvent) (*imapclient.Client, error) {
 	const op = "imap: IDLE connect"
+	if c.isClosed() {
+		return nil, &mail.Error{Op: op, Code: mail.CodeUnavailable, Err: fmt.Errorf("client closed")}
+	}
 	emit := func(ev mail.ChangeEvent) {
 		select {
 		case events <- ev:
@@ -154,6 +192,10 @@ func (c *Client) openIdleClient(ctx context.Context, mailbox string, events chan
 	if err := ctx.Err(); err != nil {
 		_ = ic.Close()
 		return nil, wrapError(op, mail.CodeUnavailable, err)
+	}
+	if c.isClosed() {
+		_ = ic.Close()
+		return nil, &mail.Error{Op: op, Code: mail.CodeUnavailable, Err: fmt.Errorf("client closed")}
 	}
 	if err := ic.Login(c.opts.Username, c.opts.Password).Wait(); err != nil {
 		_ = ic.Close()
