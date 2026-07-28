@@ -39,6 +39,7 @@ func newIMAPHarness(t *testing.T) *imapHarness {
 		Caps: goimap.CapSet{
 			goimap.CapIMAP4rev1: {},
 			goimap.CapIMAP4rev2: {},
+			goimap.CapIdle:      {},
 		},
 		InsecureAuth: true,
 	})

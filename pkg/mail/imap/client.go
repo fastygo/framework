@@ -2,8 +2,8 @@
 // plus SMTP submission for Send.
 //
 // Framework F1 provides the base mail.Client (slice A). F2 adds Searcher.
-// Push and threading remain for later phases. Consumer Gmail/Outlook OAuth
-// is out of scope.
+// F3 adds Pusher via a dedicated IDLE connection. Threading remains for F4.
+// Consumer Gmail/Outlook OAuth is out of scope.
 package imap
 
 import (
@@ -52,6 +52,9 @@ type Options struct {
 	// DialSMTP overrides implicit-TLS SMTP dialing. It is primarily useful for
 	// tests and may return a plaintext connection.
 	DialSMTP func(ctx context.Context) (net.Conn, error)
+	// WatchMailbox is SELECT'd on the dedicated IDLE connection used by Watch.
+	// Empty defaults to "INBOX".
+	WatchMailbox string
 }
 
 func (o Options) validate() error {
@@ -93,6 +96,7 @@ type Client struct {
 var (
 	_ mail.Client   = (*Client)(nil)
 	_ mail.Searcher = (*Client)(nil)
+	_ mail.Pusher   = (*Client)(nil)
 )
 
 // New validates options, connects to IMAP, and authenticates the account.
@@ -139,14 +143,14 @@ func New(ctx context.Context, opts Options) (*Client, error) {
 	}
 
 	// Fetch capabilities now so go-imap can select MOVE/UIDPLUS behavior.
-	_ = ic.Caps()
+	serverCaps := ic.Caps()
 	return &Client{
 		opts: opts,
 		imap: ic,
 		caps: mail.Capabilities{
-			// IMAP SEARCH is available on all IMAP4 servers we target.
 			Search: true,
-			// Threads/Push land in F3/F4.
+			Push:   supportsIdle(serverCaps),
+			// Threads land in F4.
 		},
 	}, nil
 }
