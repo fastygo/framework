@@ -105,7 +105,8 @@ func TestClientSearch(t *testing.T) {
 		t.Fatalf("hasAttachment: total=%d", withAttach.Total)
 	}
 
-	after := time.Date(2026, 7, 29, 0, 0, 0, 0, time.UTC)
+	// IMAP SINCE uses INTERNALDATE (append time), not the Date header.
+	after := time.Now().UTC().Add(24 * time.Hour)
 	empty, err := client.Search(context.Background(), mail.SearchQuery{
 		Subject: "unique-search-token",
 		After:   after,
