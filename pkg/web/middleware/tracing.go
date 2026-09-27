@@ -3,10 +3,10 @@ package middleware
 import (
 	"net/http"
 
-	"github.com/fastygo/framework/pkg/observability"
+	"github.com/fastygo/framework/pkg/observe"
 )
 
-// TracingMiddleware bridges an observability.Tracer into the HTTP
+// TracingMiddleware bridges an observe.Tracer into the HTTP
 // pipeline. For every request it:
 //
 //  1. Starts a span named "http <METHOD> <PATH>" using tracer.
@@ -17,13 +17,13 @@ import (
 //  4. Defers Span.End so the span closes even on panic (RecoverMiddleware
 //     should sit closer to the handler in the chain).
 //
-// Pass observability.NoopTracer{} (or nil) to disable: the middleware
+// Pass observe.NoopTracer{} (or nil) to disable: the middleware
 // degrades to a passthrough with no allocations.
-func TracingMiddleware(tracer observability.Tracer) Middleware {
+func TracingMiddleware(tracer observe.Tracer) Middleware {
 	if tracer == nil {
 		return func(next http.Handler) http.Handler { return next }
 	}
-	if _, ok := tracer.(observability.NoopTracer); ok {
+	if _, ok := tracer.(observe.NoopTracer); ok {
 		return func(next http.Handler) http.Handler { return next }
 	}
 

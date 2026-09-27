@@ -8,9 +8,9 @@ import (
 	"sort"
 	"time"
 
-	"github.com/fastygo/framework/pkg/observability"
-	"github.com/fastygo/framework/pkg/web/locale"
+	"github.com/fastygo/framework/pkg/observe"
 	"github.com/fastygo/framework/pkg/web/health"
+	"github.com/fastygo/framework/pkg/web/locale"
 	"github.com/fastygo/framework/pkg/web/metrics"
 	webmiddleware "github.com/fastygo/framework/pkg/web/middleware"
 	"github.com/fastygo/framework/pkg/web/security"
@@ -59,13 +59,13 @@ func (a *App) Workers() *WorkerService {
 // security configuration, and worker tasks then materialises a final App
 // in Build().
 type AppBuilder struct {
-	cfg      Config
-	secCfg   security.Config
-	features []Feature
-	mux      *http.ServeMux
-	workers  *WorkerService
-	logger   *slog.Logger
-	locale     locale.LocaleStrategy
+	cfg           Config
+	secCfg        security.Config
+	features      []Feature
+	mux           *http.ServeMux
+	workers       *WorkerService
+	logger        *slog.Logger
+	locale        locale.LocaleStrategy
 	localeSPAMode bool
 
 	staticPrefix string
@@ -78,7 +78,7 @@ type AppBuilder struct {
 	metricsRegistry *metrics.Registry
 	metricsPath     string
 
-	tracer observability.Tracer
+	tracer observe.Tracer
 }
 
 // New constructs a new AppBuilder with default security configuration and
@@ -256,15 +256,15 @@ func (b *AppBuilder) AddHealthChecker(c health.Checker) *AppBuilder {
 	return b
 }
 
-// WithTracer installs an observability.Tracer. When set (and not the
+// WithTracer installs an observe.Tracer. When set (and not the
 // no-op), the builder inserts TracingMiddleware at the outer edge of
 // the request pipeline so every request opens a span and downstream
 // LoggerMiddleware can decorate log lines with trace_id/span_id.
 //
-// Pass observability.NoopTracer{} explicitly only when you want to
+// Pass observe.NoopTracer{} explicitly only when you want to
 // document the choice; otherwise simply skip the call — the builder
 // treats nil as no-op.
-func (b *AppBuilder) WithTracer(t observability.Tracer) *AppBuilder {
+func (b *AppBuilder) WithTracer(t observe.Tracer) *AppBuilder {
 	b.tracer = t
 	return b
 }

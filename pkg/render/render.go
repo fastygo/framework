@@ -1,15 +1,18 @@
-package web
+// Package render writes templ components to an HTTP response.
+// It lives outside the framework root module so applications that do not
+// render templ do not compile github.com/a-h/templ.
+package render
 
 import (
 	"bytes"
 	"context"
-	"encoding/json"
 	"fmt"
 	"hash/fnv"
 	"net/http"
 
-	"github.com/fastygo/framework/pkg/cache"
 	"github.com/a-h/templ"
+
+	"github.com/fastygo/framework/pkg/cache"
 )
 
 // Render executes a templ component into an in-memory buffer, sets the
@@ -73,14 +76,4 @@ func htmlETag(value []byte) string {
 	_, _ = hasher.Write(value)
 	sum := hasher.Sum64()
 	return fmt.Sprintf("\"%x\"", sum)
-}
-
-// WriteJSON sets a JSON content type, writes status, and JSON-encodes
-// payload. It does not buffer: a marshalling failure mid-stream produces
-// a partial body — keep payload simple (no custom MarshalJSON that may panic).
-func WriteJSON(w http.ResponseWriter, status int, payload any) error {
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
-	w.WriteHeader(status)
-	enc := json.NewEncoder(w)
-	return enc.Encode(payload)
 }

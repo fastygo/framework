@@ -57,7 +57,7 @@ var thresholds = map[string]float64{
 
 	// Infrastructure with full test suites.
 	"github.com/fastygo/framework/pkg/cache":          90.0,
-	"github.com/fastygo/framework/pkg/observability":  80.0,
+	"github.com/fastygo/framework/pkg/observe":        80.0,
 	"github.com/fastygo/framework/pkg/web/health":     90.0,
 	"github.com/fastygo/framework/pkg/web/instant":    90.0,
 	"github.com/fastygo/framework/pkg/web/metrics":    80.0,

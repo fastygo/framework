@@ -10,7 +10,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/fastygo/framework/pkg/observability"
+	"github.com/fastygo/framework/pkg/observe"
 )
 
 // fixedTracer is a deterministic Tracer used by the integration test:
@@ -24,15 +24,15 @@ func (fixedSpan) End() {}
 
 type fixedTracerKey struct{}
 
-func (fixedTracer) Start(ctx context.Context, _ string) (context.Context, observability.Span) {
+func (fixedTracer) Start(ctx context.Context, _ string) (context.Context, observe.Span) {
 	return context.WithValue(ctx, fixedTracerKey{}, true), fixedSpan{}
 }
 
-func (fixedTracer) SpanContextFromContext(ctx context.Context) observability.SpanContext {
+func (fixedTracer) SpanContextFromContext(ctx context.Context) observe.SpanContext {
 	if ctx.Value(fixedTracerKey{}) == nil {
-		return observability.SpanContext{}
+		return observe.SpanContext{}
 	}
-	return observability.SpanContext{TraceID: "deadbeef", SpanID: "cafef00d"}
+	return observe.SpanContext{TraceID: "deadbeef", SpanID: "cafef00d"}
 }
 
 func TestApp_Tracer_PropagatesIntoLogger(t *testing.T) {

@@ -5,14 +5,8 @@
 // pipeline that converts markdown to HTML once at startup, and a Lookup API
 // returning a ready-to-serve PageRender keyed by locale and slug.
 //
-// This package previously lived under github.com/fastygo/framework/pkg/web/content.
-// It moved here in v0.2.1 ahead of being extracted into its own module
-// (planned: github.com/fastygo/content-markdown) so applications that
-// do not need markdown rendering stop pulling in github.com/yuin/goldmark
-// transitively. The framework core (pkg/app, pkg/web, pkg/auth, ...)
-// remains free of any markdown dependency.
-//
-// The import path inside this monorepo is github.com/fastygo/framework/pkg/content-markdown.
+// This package is its own module, github.com/fastygo/framework/pkg/content-markdown,
+// so the framework root does not pull in github.com/yuin/goldmark.
 // The package identifier is contentmarkdown so user code typically aliases it:
 //
 //	import md "github.com/fastygo/framework/pkg/content-markdown"

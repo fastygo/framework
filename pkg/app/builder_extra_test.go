@@ -14,7 +14,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/fastygo/framework/pkg/observability"
+	"github.com/fastygo/framework/pkg/observe"
 	"github.com/fastygo/framework/pkg/web/health"
 	"github.com/fastygo/framework/pkg/web/metrics"
 )
@@ -122,7 +122,7 @@ func TestBuilder_WithMetricsEndpoint_LazilyCreatesRegistry(t *testing.T) {
 
 func TestBuilder_WithTracer_StoresTracer(t *testing.T) {
 	t.Parallel()
-	tr := observability.NoopTracer{}
+	tr := observe.NoopTracer{}
 	b := New(Config{AppBind: "127.0.0.1:0"}).WithTracer(tr)
 	if b.tracer != tr {
 		t.Errorf("WithTracer must store the tracer")

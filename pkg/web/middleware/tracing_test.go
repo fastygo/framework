@@ -7,7 +7,7 @@ import (
 	"sync/atomic"
 	"testing"
 
-	"github.com/fastygo/framework/pkg/observability"
+	"github.com/fastygo/framework/pkg/observe"
 )
 
 // stubTracer is a minimal Tracer that injects a fixed SpanContext
@@ -26,15 +26,15 @@ func (s stubSpan) End() { s.t.ended.Add(1) }
 
 type tracerCtxKey struct{}
 
-func (st *stubTracer) Start(ctx context.Context, _ string) (context.Context, observability.Span) {
+func (st *stubTracer) Start(ctx context.Context, _ string) (context.Context, observe.Span) {
 	return context.WithValue(ctx, tracerCtxKey{}, true), stubSpan{t: st}
 }
 
-func (st *stubTracer) SpanContextFromContext(ctx context.Context) observability.SpanContext {
+func (st *stubTracer) SpanContextFromContext(ctx context.Context) observe.SpanContext {
 	if ctx.Value(tracerCtxKey{}) == nil {
-		return observability.SpanContext{}
+		return observe.SpanContext{}
 	}
-	return observability.SpanContext{TraceID: st.traceID, SpanID: st.spanID}
+	return observe.SpanContext{TraceID: st.traceID, SpanID: st.spanID}
 }
 
 func TestTracingMiddleware_PopulatesCorrelation(t *testing.T) {
@@ -73,7 +73,7 @@ func TestTracingMiddleware_NoopTracerIsPassthrough(t *testing.T) {
 	t.Parallel()
 
 	called := false
-	h := TracingMiddleware(observability.NoopTracer{})(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	h := TracingMiddleware(observe.NoopTracer{})(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		called = true
 		if c := CorrelationFromContext(r.Context()); c.TraceID != "" {
 			t.Errorf("noop tracer leaked correlation: %+v", c)

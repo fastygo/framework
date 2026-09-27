@@ -1,4 +1,4 @@
-// Package observability defines the framework's tracing contract.
+// Package observe defines the framework's tracing contract.
 //
 // Goal: let an application enrich every log line with trace_id/span_id
 // (so log queries can pivot to a Tempo/Jaeger trace) without forcing
@@ -14,7 +14,7 @@
 // This split keeps the framework dependency footprint at exactly one
 // indirect dependency (go.uber.org/goleak, used in tests only) while
 // still offering first-class tracing integration when needed.
-package observability
+package observe
 
 import "context"
 
