@@ -3,8 +3,10 @@
 [![ci](https://github.com/fastygo/framework/actions/workflows/ci.yml/badge.svg)](https://github.com/fastygo/framework/actions/workflows/ci.yml)
 
 A small, opinionated Go framework for the HTTP process: composition, sessions,
-middleware, and graceful shutdown. Templ rendering, markdown, fonts, view data,
-and mail are separate modules and are not required by the root `go.mod`.
+middleware, and graceful shutdown. Fonts and mail are separate modules in this
+repository. Templ rendering, markdown, and view data live in
+[`github.com/fastygo/modules`](https://github.com/fastygo/modules) and are not
+required by the root `go.mod`.
 
 **UI stack for new apps:** [`github.com/fastygo/templ`](https://github.com/fastygo/templ)
 (primitives + composites) on top of this framework. Reference shell:
@@ -51,11 +53,8 @@ they import.
 │   ├── core/                     # CQRS dispatcher, errors, behaviors
 │   ├── observe/                  # tracing interface, no SDK
 │   └── web/                      # middleware, security, health, locale, JSON
-├── pkg/render/                   # separate module: templ Render
-├── pkg/content-markdown/         # separate module: goldmark pages
 ├── pkg/fonts/                    # separate module: Outfit files
 ├── pkg/mail/                     # separate module: IMAP and JMAP
-├── pkg/web/view/                 # separate module: theme and language data
 ├── scripts/
 └── go.work                       # local workspace only
 ```
@@ -66,18 +65,15 @@ they import.
 |---|---|---|
 | `pkg/app` | `AppBuilder`, `Feature`, optional interfaces (`Initializer`, `Closer`, `HealthChecker`, `BackgroundProvider`), config, worker service | Foundation of every app |
 | `pkg/auth` | HMAC-signed cookie sessions, OpenID Connect client | Use it for SSO and demo login flows |
-| `pkg/cache` | Sharded TTL cache | Used by `pkg/render` |
+| `pkg/cache` | Sharded TTL cache | Used by `github.com/fastygo/modules/render` |
 | `pkg/core` | Domain errors, base entities | Tiny, no third-party deps |
 | `pkg/core/cqrs` | Dispatcher with pipeline behaviors | Optional — features may use it or not |
 | `pkg/observe` | `Tracer` interface and no-op | No tracing SDK |
 | `pkg/web` | JSON, error handler | Does not import templ |
-| `pkg/render` | `Render`, `CachedRender` | Own module. Requires `github.com/a-h/templ` |
-| `pkg/content-markdown` | Markdown pages pre-rendered at startup | Own module. Requires goldmark |
 | `pkg/web/i18n` | Generic embedded JSON locale store | Used by every example with i18n |
 | `pkg/web/locale` | Request locale negotiator (query, cookie, Accept-Language) | Pure helper |
 | `pkg/web/middleware` | request-id, logger, panic recovery | Wired in by `AppBuilder` |
 | `pkg/web/security` | secure headers, body limit, antibot, ratelimit, secure file server | Configurable, opt-out friendly |
-| `pkg/web/view` | Shared layout / theme / language-toggle data types | Own module |
 | `pkg/fonts` | Outfit font files | Own module |
 | `pkg/mail` | IMAP and JMAP client | Own module |
 
@@ -130,8 +126,8 @@ framework module and `go build ./...` on every example.
 ## Pre-requisites
 
 - Go `1.25.0` or newer
-- Bun `1.3+` (for example CSS + JS asset builds)
-- [`templ`](https://templ.guide/installation): `go install github.com/a-h/templ/cmd/templ@v0.3.1001`
+- Bun `1.3+` (for example CSS + JS asset builds). Bun is not a Go dependency.
+- Templ rendering comes from [`github.com/fastygo/modules/render`](https://github.com/fastygo/modules). An application that generates templates pins CLI and library together: `go get -tool github.com/a-h/templ/cmd/templ@v0.3.1001`, then `go tool templ`.
 
 ## Releasing the framework
 

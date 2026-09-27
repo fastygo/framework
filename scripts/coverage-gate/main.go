@@ -62,13 +62,11 @@ var thresholds = map[string]float64{
 	"github.com/fastygo/framework/pkg/web/instant":    90.0,
 	"github.com/fastygo/framework/pkg/web/metrics":    80.0,
 	"github.com/fastygo/framework/pkg/web/middleware": 80.0,
-	"github.com/fastygo/framework/pkg/web/view":       80.0,
 
-	// Lower bar — rendering and locale loaders are exercised mostly
-	// via integration. Tracked so regressions still get noticed.
-	"github.com/fastygo/framework/pkg/content-markdown": 65.0,
-	"github.com/fastygo/framework/pkg/web/i18n":         60.0,
-	"github.com/fastygo/framework/pkg/web/locale":       70.0,
+	// Lower bar — locale loaders are exercised mostly via integration.
+	// Tracked so regressions still get noticed.
+	"github.com/fastygo/framework/pkg/web/i18n":   60.0,
+	"github.com/fastygo/framework/pkg/web/locale": 70.0,
 }
 
 // defaultThreshold is used for any package not listed in thresholds.

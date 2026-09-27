@@ -42,18 +42,10 @@ coverage-gate: coverage
 
 ci: lint-ci coverage-gate
 
-# Build every example. Useful as a smoke test for the framework API surface.
+# Example sites are not part of this module.
 examples:
-	bun install
-	@for example in examples/*/; do \
-		if [ -f "$${example}go.mod" ]; then \
-			echo "==> building $${example}"; \
-			(cd "$${example}" && bun run vendor:assets && bun run build:css && templ generate ./... && go build ./...) || exit 1; \
-		fi; \
-	done
+	@echo "example sites are not in this repository"
 
 verify:
 	go build ./pkg/...
-	templ generate ./examples/...
-	go build ./examples/...
-	go test ./pkg/web/...
+	go test ./pkg/...

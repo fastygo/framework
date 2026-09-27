@@ -6,6 +6,13 @@ and the project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Changed
+
+- Templ rendering, markdown pages, and theme/language view data moved to
+  [`github.com/fastygo/modules`](https://github.com/fastygo/modules).
+  Import `github.com/fastygo/modules/render`, `github.com/fastygo/modules/markdown`,
+  and `github.com/fastygo/modules/view`.
+
 ### Added
 - **Phase 3.3 — coverage gate in CI.** New cross-platform Go program
   `scripts/coverage-gate` parses a `coverage.out` profile (no shell,

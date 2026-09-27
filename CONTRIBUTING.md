@@ -19,11 +19,10 @@ or split.
    round-trips, no goroutine, cache, or stack leaks. Long-lived
    resources need a `Stop` / `Cleanup` / `Close` path that is
    actually wired into `App.Run`.
-3. **No unnecessary external dependencies.** The framework's direct
-   dependencies fit on one line: `github.com/a-h/templ`,
-   `github.com/yuin/goldmark` (markdown only, opt-in via
-   `pkg/content-markdown`), and `go.uber.org/goleak` (test-only).
-   New direct dependencies require an ADR.
+3. **No unnecessary external dependencies.** The root module's direct
+   dependency is `go.uber.org/goleak` (test-only). Templ and goldmark
+   live in `github.com/fastygo/modules`. New direct dependencies
+   require an ADR.
 
 ---
 
@@ -31,13 +30,13 @@ or split.
 
 ```text
 pkg/                    public framework library (this is what's released)
-examples/<name>/        five reference apps; each is its own Go module
+pkg/fonts, pkg/mail     nested modules; they do not replace the root
 docs/                   long-form documentation, including ADRs in docs/adr/
 scripts/                small helper programs (no business logic)
 .project/               local planning notes; gitignored on this branch
-go.work                 development-time link between pkg/ and examples/
+go.work                 development-time link for the nested modules
 .golangci.yml           lint configuration (disable-all + a curated set)
-.github/workflows/ci.yml CI: framework lint+test, then build every example
+.github/workflows/ci.yml CI: framework test and vet with GOWORK=off
 ```
 
 The framework module **never** imports anything outside its own
@@ -54,12 +53,12 @@ The framework module **never** imports anything outside its own
 |-----------------------|------------|----------------------------------------------|
 | Go                    | 1.25.x     | matches `go.mod`; required for new analyzers (`waitgroup`, `hostport`) |
 | `golangci-lint`       | v1.64.x    | matches `.golangci.yml` and the CI workflow  |
-| `templ`               | v0.3.1001  | only needed if you touch examples            |
+| `templ`               | v0.3.1001  | application tool; same module as the library in `github.com/fastygo/modules/render` |
 | `make`                | any GNU    | optional on Windows (`scripts/preflight.sh` is the portable fallback) |
 
 ```bash
 go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.64.5
-go install github.com/a-h/templ/cmd/templ@v0.3.1001
+go get -tool github.com/a-h/templ/cmd/templ@v0.3.1001
 ```
 
 ### 3.2. Clone and verify

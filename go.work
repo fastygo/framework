@@ -2,9 +2,6 @@ go 1.25.0
 
 use (
 	.
-	./pkg/content-markdown
 	./pkg/fonts
 	./pkg/mail
-	./pkg/render
-	./pkg/web/view
 )

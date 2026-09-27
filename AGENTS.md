@@ -2,7 +2,7 @@
 
 The root module is the process: `pkg/app` (`Handler`, `Run`), `pkg/core`, `pkg/auth`, HTTP middleware, security, health, and cache.
 
-Templ rendering, markdown, fonts, site-shell view data, and mail are separate modules under `pkg/`. Do not add their dependencies back to the root `go.mod`.
+Fonts and mail are separate modules under `pkg/`. Templ rendering, markdown, and site-shell view data live in `github.com/fastygo/modules`. Do not add templ, goldmark, or those packages back to the root `go.mod`.
 
 ## Rules
 
@@ -10,7 +10,7 @@ Templ rendering, markdown, fonts, site-shell view data, and mail are separate mo
 2. Do not import product schemas, FormSet, Codex, or Panel.
 3. `pkg/observe` is the tracing interface. Do not add an OpenTelemetry SDK to this module.
 4. Comments and documentation are written in English.
-5. Consumers pin a published tag. No local `replace` outside this repo's nested modules.
+5. Consumers pin a published tag. Nested modules in this repo do not use a local `replace`.
 
 Run before completion:
 

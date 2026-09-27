@@ -116,7 +116,7 @@ if [[ "$BUILD_EXAMPLES" == "1" ]]; then
 		echo
 		echo "=== preflight: examples SKIPPED ==="
 		echo "templ not found. Install with:"
-		echo "  go install github.com/a-h/templ/cmd/templ@v0.3.1001"
+		echo "  go get -tool github.com/a-h/templ/cmd/templ@v0.3.1001"
 	elif ! command -v bun >/dev/null 2>&1; then
 		echo
 		echo "=== preflight: examples SKIPPED ==="
