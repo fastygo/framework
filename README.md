@@ -2,8 +2,9 @@
 
 [![ci](https://github.com/fastygo/framework/actions/workflows/ci.yml/badge.svg)](https://github.com/fastygo/framework/actions/workflows/ci.yml)
 
-A small, opinionated Go framework for building server-rendered websites
-and dashboards on top of `net/http` and [`a-h/templ`](https://templ.guide/).
+A small, opinionated Go framework for the HTTP process: composition, sessions,
+middleware, and graceful shutdown. Templ rendering, markdown, fonts, view data,
+and mail are separate modules and are not required by the root `go.mod`.
 
 **UI stack for new apps:** [`github.com/fastygo/templ`](https://github.com/fastygo/templ)
 (primitives + composites) on top of this framework. Reference shell:
@@ -43,30 +44,20 @@ they import.
 
 ```
 .
-├── pkg/                          # the framework — pure library module
-│   ├── app/                      # AppBuilder, Feature, Initializer, Closer, ...
+├── pkg/                          # root module: process, HTTP, sessions
+│   ├── app/                      # AppBuilder, Handler, Run, workers
 │   ├── auth/                     # cookie sessions + OpenID Connect client
 │   ├── cache/                    # sharded TTL cache
 │   ├── core/                     # CQRS dispatcher, errors, behaviors
-│   ├── fonts/                    # bundled Outfit fonts (used by examples)
-│   └── web/
-│       ├── content/              # markdown content library
-│       ├── i18n/                 # generic embedded JSON loader
-│       ├── locale/               # request locale negotiator
-│       ├── middleware/           # request id, logger, recover
-│       ├── render.go             # templ render + cached render
-│       ├── security/             # headers, ratelimit, antibot, secure FS
-│       └── view/                 # shared view-model structs
-│
-├── examples/
-│   ├── landing/                  # one-page marketing landing
-│   ├── web/                      # marketing site + i18n + optional SSO
-│   ├── blog/                     # markdown-driven blog
-│   ├── docs/                     # localized docs site
-│   └── dashboard/                # auth + sidebar + contacts CRUD
-│
-├── scripts/                      # framework-level scripts
-└── go.work                       # local workspace (not used by consumers)
+│   ├── observe/                  # tracing interface, no SDK
+│   └── web/                      # middleware, security, health, locale, JSON
+├── pkg/render/                   # separate module: templ Render
+├── pkg/content-markdown/         # separate module: goldmark pages
+├── pkg/fonts/                    # separate module: Outfit files
+├── pkg/mail/                     # separate module: IMAP and JMAP
+├── pkg/web/view/                 # separate module: theme and language data
+├── scripts/
+└── go.work                       # local workspace only
 ```
 
 ## What is in `pkg/` (and what is not)
@@ -75,17 +66,20 @@ they import.
 |---|---|---|
 | `pkg/app` | `AppBuilder`, `Feature`, optional interfaces (`Initializer`, `Closer`, `HealthChecker`, `BackgroundProvider`), config, worker service | Foundation of every app |
 | `pkg/auth` | HMAC-signed cookie sessions, OpenID Connect client | Use it for SSO and demo login flows |
-| `pkg/cache` | Sharded TTL cache | Used by `web.CachedRender` |
+| `pkg/cache` | Sharded TTL cache | Used by `pkg/render` |
 | `pkg/core` | Domain errors, base entities | Tiny, no third-party deps |
 | `pkg/core/cqrs` | Dispatcher with pipeline behaviors | Optional — features may use it or not |
-| `pkg/web` | `templ` render helper, `CachedRender`, JSON, error handler | Stays UI-agnostic |
-| `pkg/content-markdown` | Markdown library that pre-renders pages at startup (will be extracted to `github.com/fastygo/content-markdown`) | Used by `examples/blog` and `examples/docs` |
+| `pkg/observe` | `Tracer` interface and no-op | No tracing SDK |
+| `pkg/web` | JSON, error handler | Does not import templ |
+| `pkg/render` | `Render`, `CachedRender` | Own module. Requires `github.com/a-h/templ` |
+| `pkg/content-markdown` | Markdown pages pre-rendered at startup | Own module. Requires goldmark |
 | `pkg/web/i18n` | Generic embedded JSON locale store | Used by every example with i18n |
 | `pkg/web/locale` | Request locale negotiator (query, cookie, Accept-Language) | Pure helper |
 | `pkg/web/middleware` | request-id, logger, panic recovery | Wired in by `AppBuilder` |
 | `pkg/web/security` | secure headers, body limit, antibot, ratelimit, secure file server | Configurable, opt-out friendly |
-| `pkg/web/view` | Shared layout / theme / language-toggle data types | UI-kit agnostic |
-| `pkg/fonts` | Embedded Outfit font files | Convenience for examples and apps that bundle Outfit |
+| `pkg/web/view` | Shared layout / theme / language-toggle data types | Own module |
+| `pkg/fonts` | Outfit font files | Own module |
+| `pkg/mail` | IMAP and JMAP client | Own module |
 
 The framework **does not** ship templates, JSON locale bundles, demo
 features, or a default UI kit. Those concerns live in `examples/*` (which
@@ -172,7 +166,7 @@ Highlights:
   `goleak` + `golangci-lint` + `go vet` in CI.
 - **v0.2.0** — observability without the SDK tax: `pkg/web/health`,
   `pkg/web/metrics` (manual Prometheus expfmt), interface-only
-  `pkg/observability` tracer, structured `auth.audit` events. Zero
+  tracer (now `pkg/observe`), structured `auth.audit` events. Zero
   new external dependencies. See
   [`docs/OBSERVABILITY.md`](./docs/OBSERVABILITY.md) for the operator
   guide and [`docs/12-FACTOR.md`](./docs/12-FACTOR.md) for the full
